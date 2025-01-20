@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/01/20 11:47:06 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/01/20 12:03:12 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,13 @@ typedef struct s_token {
         int             type;
 } t_token;                                        
 
+typedef struct s_data {                                  
+        t_cmd           *cmd_lst;                                          
+        t_varenv        *varenv_lst;
+        t_token         *tok_lst;
+        int             lst_exit;
+        char            **histo;
+} t_data;  
 
 //--------------------- FONCTION -----------------------------
 
