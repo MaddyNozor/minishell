@@ -1,27 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   lexing.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/01/20 15:13:34 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/01/20 19:35:39 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef LEXING_H
+# define LEXING_H
 
 //--------------------- INCLUDES -----------------------------
 # include "../libft/libft.h" // libft mairivie
 # include <unistd.h> //
 # include <stdlib.h> //
+# include <stdbool.h> // type bool
 # include <stdio.h> // printf pour les tests
 
 //--------------------- DEFINES -----------------------------
 # define FAILURE 1
 # define SUCCESS 0 
+
+//--TOKEN_TYPE
+# define BLANK 0
+# define REDIRECT_OUT 1
+# define APPEND_OUT 2
+# define REDIRECT_IN 3
+# define HEREDOC 4
+# define PIPE 5
+# define VAR_ENV 6
+# define WORD 7
+# define SIMPLE_Q 8
+# define DOUBLE_Q 9
 
 //--------------------- STRUCTURES -----------------------------
 
@@ -50,6 +63,11 @@ typedef struct s_varenv {
         bool            hiden;
 } t_varenv;
 
+typedef struct s_protoken {                                  
+        char            *content;                                           
+        int             type;
+} t_protoken;  
+
 typedef struct s_token {                                  
         char            *content;                                           
         struct s_token  *next;
@@ -66,6 +84,12 @@ typedef struct s_data {
 } t_data;  
 
 //--------------------- FONCTION -----------------------------
-//C'est SARA
+
+t_token	*ft_tok_new(void *content, int type);
+t_token	*ft_toklast(t_token *lst);
+void	ft_tokadd_back(t_token **lst, t_token *new);
+// t_token	*ft_token_new(void *content, int type);
+t_token *ft_lexing(t_token *lst_token, char *line);
+t_token *ft_chevron(char *line, int i);
 
 #endif
