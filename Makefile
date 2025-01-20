@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+         #
+#    By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/10 15:29:24 by mairivie          #+#    #+#              #
-#    Updated: 2025/01/12 17:41:50 by mairivie         ###   ########.fr        #
+#    Updated: 2025/01/20 17:11:33 by sabellil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ COMPIL = cc
 CFLAGS = -Wall -Wextra -Werror -g3 -I.
 
 SRC_DIR = source/
-SRC_LIST = main.c 
+SRC_LIST = init_shell.c 
 SRC = $(addprefix $(SRC_DIR), $(SRC_LIST))
 
 OBJ_DIR = obj/

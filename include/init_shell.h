@@ -1,23 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   init_shell.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/01/20 13:42:23 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/01/20 17:06:06 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef INIT_SHELL_H
+# define INIT_SHELL_H
 
 //--------------------- INCLUDES -----------------------------
 # include "../libft/libft.h" // libft mairivie
 # include <unistd.h> //
 # include <stdlib.h> //
 # include <stdio.h> // printf pour les tests
+# include <stdbool.h>//++
 
 //--------------------- DEFINES -----------------------------
 # define FAILURE 1
