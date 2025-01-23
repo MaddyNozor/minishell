@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/01/23 13:09:22 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/01/23 15:09:10 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ t_token    *ft_chevron(char *line, int i, t_token *new_token)
 }
 
 
-t_token  *ft_lexing(t_data *data, char *line)
+t_token  *ft_lexing(t_token *tok_lst, char *line)
 {
     int i;
     t_token *new;
@@ -65,11 +65,14 @@ t_token  *ft_lexing(t_data *data, char *line)
             //     new = ft_varenv(line, i);
                 // while(ft_isprintable(line[i]) == true)
                 //     content = ft_word(line, i);
-            printf("content = %s, type : %d, size_content : %zu  \n", new->content, new->type, ft_strlen(new->content));
-            ft_tokadd_back(&data->tok_lst, new);
+            // printf("content = %s, type : %d, prev : %p, next : %p  \n", new->content, new->type, new->next, new->prev);
+            ft_tokadd_back(&tok_lst, new);
+            printf("content = %s, type : %d, prev : %p, next : %p  \n", new->content, new->type, new->next, new->prev);
             i = i + ft_strlen(new->content);
-            free(new);
+            //new->prev = new;
+            new = new->next;
         }
     }
-    return(data->tok_lst);
+            free(new);
+    return(tok_lst);
 }

@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/01/23 13:07:11 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/01/23 14:56:00 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,15 @@ t_data  *ft_init_data(t_data *data)
 int main()
 {
     t_data  *data;
-    char    *line = ">>|||<    <<|>|>>";
+    char    *line = "<<|>|>>";
     
     data = NULL;
     data = ft_init_data(data);
     if (data == NULL)
         return (FAILURE);
     printf("line =%s\n", line);
-    printf("next =%p\n", data->tok_lst);
-    data->tok_lst = ft_lexing(data, line);
+    printf("adresse start liste token =%p\n", data->tok_lst);
+    data->tok_lst = ft_lexing(data->tok_lst, line);
     free(data);
     return (SUCCESS);
 }
