@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/01/20 19:35:39 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/01/23 12:42:01 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,8 @@ t_token	*ft_tok_new(void *content, int type);
 t_token	*ft_toklast(t_token *lst);
 void	ft_tokadd_back(t_token **lst, t_token *new);
 // t_token	*ft_token_new(void *content, int type);
-t_token *ft_lexing(t_token *lst_token, char *line);
-t_token *ft_chevron(char *line, int i);
+t_token *ft_lexing(t_data *data, char *line);
+t_token *ft_chevron(char *line, int i, t_token *new_token);
+bool    ft_is_whitespace(char c);
 
 #endif

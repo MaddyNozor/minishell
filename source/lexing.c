@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/01/20 19:42:03 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/01/23 13:09:22 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,37 +17,36 @@
 // # define REDIRECT_IN 3
 // # define HEREDOC 4
 
-t_token    *ft_chevron(char *line, int i)
+bool    ft_is_whitespace(char c)
 {
-    t_token *new;
-    
-    new = malloc(sizeof(t_token));
-    if (new == NULL)
-        return (NULL);
-    ft_bzero(new, sizeof(t_token));
-    // content = NULL;
+    if (c == ' ' || (c >= '\t' && c <= '\r'))
+        return (true);
+    else
+        return (false);
+}
+t_token    *ft_chevron(char *line, int i, t_token *new_token)
+{
     if (line[i] == '>')
     {
         if  (line[i+1] == '>')
-            // content = ">>";
-            ft_tok_new(">>", APPEND_OUT);
+            new_token=ft_tok_new(">>", APPEND_OUT);
         else
-            // content = ">";
-            ft_tok_new(">", REDIRECT_OUT);
+            new_token=ft_tok_new(">", REDIRECT_OUT);
     }
     if (line[i] == '<')
     {
         if  (line[i+1] == '<')
-            // content = "<<";
-            ft_tok_new("<<", HEREDOC);
+            new_token=ft_tok_new("<<", HEREDOC);
         else
-            // content = "<";
-            ft_tok_new("<", REDIRECT_IN);
+            new_token=ft_tok_new("<", REDIRECT_IN);
     }
-    return(new);
+    if  (line[i] == '|')
+        new_token=ft_tok_new("|", PIPE);
+    return(new_token);
 }
 
-t_token  *ft_lexing(t_token *lst_token, char *line)
+
+t_token  *ft_lexing(t_data *data, char *line)
 {
     int i;
     t_token *new;
@@ -56,18 +55,21 @@ t_token  *ft_lexing(t_token *lst_token, char *line)
     new = NULL;
     while(line[i])
     {
-        if (line[i] == '<' || line[i] == '<')
-            new = ft_chevron(line, i);
-        // if (line[i] == '|')
-        //     content = ft_pipe(line, i);
-        // if (ft_is_whitespace(line[i]) == true)
-        //     content = ft_whitespace(line, i);
-        // if (line[i] == '$')
-        //     content = ft_varenv(line, i);
-        // while(ft_isprintable(line[i]) == true)
-        //     content = ft_word(line, i);
-        i++;
+        if (ft_is_whitespace(line[i]) == true)
+             i++;
+        else 
+        {
+            if (line[i] == '<' || line[i] == '>' || line[i] == '|')
+                new = ft_chevron(line, i, new);
+            // if (line[i] == '$')
+            //     new = ft_varenv(line, i);
+                // while(ft_isprintable(line[i]) == true)
+                //     content = ft_word(line, i);
+            printf("content = %s, type : %d, size_content : %zu  \n", new->content, new->type, ft_strlen(new->content));
+            ft_tokadd_back(&data->tok_lst, new);
+            i = i + ft_strlen(new->content);
+            free(new);
+        }
     }
-    ft_tokadd_back(&lst_token, new);
-    return(lst_token);
+    return(data->tok_lst);
 }

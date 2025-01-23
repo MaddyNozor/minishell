@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/01/20 17:29:50 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/01/23 13:07:11 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,15 @@ t_data  *ft_init_data(t_data *data)
 int main()
 {
     t_data  *data;
-    int i = 1;
-    char    *line = ">><<<>>>";
-    char *content = NULL;
+    char    *line = ">>|||<    <<|>|>>";
     
     data = NULL;
     data = ft_init_data(data);
     if (data == NULL)
         return (FAILURE);
-    content = ft_chevron(line, i);
-    printf("line =%s content =%s\n", line, content);
+    printf("line =%s\n", line);
+    printf("next =%p\n", data->tok_lst);
+    data->tok_lst = ft_lexing(data, line);
     free(data);
     return (SUCCESS);
 }
