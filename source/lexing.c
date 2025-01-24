@@ -6,11 +6,12 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/01/23 15:09:10 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/01/24 18:09:50 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../include/lexing.h"
+# include "../include/init_shell.h"
 
 // # define REDIRECT_OUT 1
 // # define APPEND_OUT 2
@@ -45,14 +46,29 @@ t_token    *ft_chevron(char *line, int i, t_token *new_token)
     return(new_token);
 }
 
+/// tempo pour test
+/// @param lst pointeur sur la tete de la liste
+void	print_list(t_token *lst)
+{
+    while (lst)
+    {
+        printf("Token: %s, Type: %d, Prev: %p, Actual %p, Next: %p\n",
+               lst->content, lst->type, lst->prev, lst, lst->next);
+        lst = lst->next;
+    }
+    printf("----\n");
+}
 
-t_token  *ft_lexing(t_token *tok_lst, char *line)
+
+t_token  *lexer(char *line)
 {
     int i;
+    t_token *new_start;
     t_token *new;
     
     i = 0;
     new = NULL;
+    new_start = NULL;
     while(line[i])
     {
         if (ft_is_whitespace(line[i]) == true)
@@ -65,14 +81,10 @@ t_token  *ft_lexing(t_token *tok_lst, char *line)
             //     new = ft_varenv(line, i);
                 // while(ft_isprintable(line[i]) == true)
                 //     content = ft_word(line, i);
-            // printf("content = %s, type : %d, prev : %p, next : %p  \n", new->content, new->type, new->next, new->prev);
-            ft_tokadd_back(&tok_lst, new);
-            printf("content = %s, type : %d, prev : %p, next : %p  \n", new->content, new->type, new->next, new->prev);
+            ft_tokadd_back(&new_start, new);
+            print_list(new_start);
             i = i + ft_strlen(new->content);
-            //new->prev = new;
-            new = new->next;
         }
     }
-            free(new);
-    return(tok_lst);
+    return(new_start);
 }

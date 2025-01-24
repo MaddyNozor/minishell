@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/01/24 14:30:07 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/01/24 16:30:04 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/init_shell.h"
+#include "../include/lexing.h"
 
 int	main(int ac, char **av, char **envp)
 {

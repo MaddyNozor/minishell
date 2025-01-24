@@ -6,11 +6,12 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/01/20 19:36:08 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/01/24 17:13:22 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../include/lexing.h"
+# include "../include/init_shell.h"
 
 /* DESC: Allocate with malloc and return a new token. 
  *  Init token->content with whatever is in 'content' 
@@ -61,6 +62,8 @@ void	ft_tokadd_back(t_token **lst, t_token *new)
 
 	if (new == NULL)
 		return ;
+	new->prev = NULL;
+	new->next = NULL;
 	if (!*lst)
 		*lst = new;
 	else

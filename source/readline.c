@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:41:57 by sabellil          #+#    #+#             */
-/*   Updated: 2025/01/24 14:37:50 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/01/24 18:34:54 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/init_shell.h"
+#include "../include/lexing.h"
 
 // void init_signals(void)
 // {
@@ -18,12 +19,12 @@
 //     signal(SIGQUIT, SIG_IGN);      // ignorer ctrl+\
 // }
 
-t_token *lexer(char *input)
-{
-    (void)input;
-	printf("Hey\n");
-    return NULL; // Implémentation à compléter
-}
+// t_token *lexer(char *input)
+// {
+//     (void)input;
+// 	printf("Hey\n");
+//     return NULL; // Implémentation à compléter
+// }
 
 t_cmd *parser(t_token *tok)
 {
@@ -76,17 +77,23 @@ void	free_cmd_list(t_cmd *list)
 	}
 }
 
-void	free_token_list(t_token *list)
+void	free_token_list(t_token **list)
 {
-	t_token	*tmp;
+	t_token	*tmp_current;
+	t_token	*tmp_next;
 
-	while (list)
+	if(!list || !*list)
+		return;
+
+	tmp_current = *list;
+	while (tmp_current)
 	{
-		tmp = list;
-		list = list->next;
-		free(tmp->content);
-		free(tmp);
+		tmp_next = tmp_current->next;
+		//free(tmp_current->content);
+		free(tmp_current);
+		tmp_current = tmp_next;
 	}
+	*list = NULL;
 }
 
 void	ft_start_minishell(t_data *data, char **envp)
@@ -112,8 +119,8 @@ void	ft_start_minishell(t_data *data, char **envp)
 				free_cmd_list(data->cmd_lst);
 				data->cmd_lst = NULL;
 			}
-			free_token_list(data->tok_lst);
-			data->tok_lst = NULL;
+			free_token_list(&data->tok_lst);
+			//data->tok_lst = NULL;
 		}
 	}
 }
