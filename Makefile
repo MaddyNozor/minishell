@@ -6,11 +6,9 @@
 #    By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/10 15:29:24 by mairivie          #+#    #+#              #
-#    Updated: 2025/01/20 17:11:33 by sabellil         ###   ########.fr        #
+#    Updated: 2025/01/24 13:41:27 by sabellil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
-# Variables
 
 NAME = minishell
 
@@ -18,36 +16,35 @@ COMPIL = cc
 CFLAGS = -Wall -Wextra -Werror -g3 -I.
 
 SRC_DIR = source/
-SRC_LIST = init_shell.c 
+SRC_LIST = executer.c init_shell_utils.c init_shell.c main.c readline.c
 SRC = $(addprefix $(SRC_DIR), $(SRC_LIST))
 
 OBJ_DIR = obj/
-OBJ_LIST = $(addprefix $(OBJ_DIR), $(SRC_LIST:.c=.o))
+OBJ_LIST = $(SRC_LIST:.c=.o)
+OBJ = $(addprefix $(OBJ_DIR), $(OBJ_LIST))
 
 LIBFT_DIR = libft/
 LIBFT = $(LIBFT_DIR)libft.a
 
-# Règles
-
 all: $(LIBFT) $(NAME)
 
 $(LIBFT):
-	make -C $(LIBFT_DIR)
+	@$(MAKE) -C $(LIBFT_DIR)
 
-$(NAME): $(OBJ_LIST) $(LIBFT)
-	$(COMPIL) $(CFLAGS) $^ -o $@ $(LIBFT) -lm
+$(NAME): $(OBJ) $(LIBFT)
+	$(COMPIL) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME) -lreadline -lm
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
-	mkdir -p $(OBJ_DIR)
+	@mkdir -p $(OBJ_DIR)
 	$(COMPIL) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -rf $(OBJ_DIR)
-	make clean -C $(LIBFT_DIR)
+	@rm -rf $(OBJ_DIR)
+	@$(MAKE) clean -C $(LIBFT_DIR)
 
 fclean: clean
-	rm -f $(NAME)
-	make fclean -C $(LIBFT_DIR)
+	@rm -f $(NAME)
+	@$(MAKE) fclean -C $(LIBFT_DIR)
 
 re: fclean all
 

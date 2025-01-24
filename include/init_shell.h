@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/01/20 17:06:06 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/01/24 13:09:47 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <stdlib.h> //
 # include <stdio.h> // printf pour les tests
 # include <stdbool.h>//++
+#include <readline/readline.h>
+#include <readline/history.h>
 
 //--------------------- DEFINES -----------------------------
 # define FAILURE 1
@@ -68,4 +70,22 @@ typedef struct s_data {
 
 //--------------------- FONCTION -----------------------------
 
+//SHELL INITIALIZATION
+t_varenv    *init_varenv(char **envp);
+void    init_minimalist_env(t_varenv **varenv_lst);
+void    init_existing_env(t_varenv **varenv_lst, char **envp);
+void    create_varenv(t_varenv **varenv_lst, char *name, char *value, bool hiden);
+
+
+//READLINE MAIN LOOP
+void    ft_start_minishell(t_data *data, char **envp);
+void    free_token_list(t_token *list);
+// t_token *lexer(char *input);
+// t_cmd   *parser(t_token *tok);
+// void	executer(t_data *data, char **envp);
+
+// //EXECUTER
+// void	executer(t_data *data, char **envp);
+// void	executer_simple_cmd(t_cmd *cmd, t_data *data, char **envp);
+// bool	is_builtin(const char *cmd_value);
 #endif
