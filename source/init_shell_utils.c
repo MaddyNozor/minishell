@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:37:21 by sabellil          #+#    #+#             */
-/*   Updated: 2025/01/24 13:38:23 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/01/24 14:33:55 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void	create_varenv(t_varenv **varenv_lst, char *name, char *value,
 		bool hiden)
 {
 	t_varenv	*new_node;
-	t_varenv	*current_node;
 
 	new_node = malloc(sizeof(t_varenv));
 	if (!new_node)

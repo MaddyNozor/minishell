@@ -6,11 +6,36 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:38:39 by sabellil          #+#    #+#             */
-/*   Updated: 2025/01/24 13:46:25 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/01/24 14:33:31 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/init_shell.h"
+
+// Placeholder pour la fonction exec_simple_builtin
+void exec_simple_builtin(t_cmd *cmd, t_data *data)
+{
+    (void)cmd;
+    (void)data;
+    // TODO: Implémenter la gestion des commandes built-in
+}
+
+// Placeholder pour la fonction exec_simple_extern_cmd
+void exec_simple_extern_cmd(t_cmd *cmd, t_data *data, char **envp)
+{
+    (void)cmd;
+    (void)data;
+    (void)envp;
+    // TODO: Implémenter la gestion des commandes externes
+}
+
+// Placeholder pour la fonction executer_pipeline_cmd
+void executer_pipeline_cmd(t_cmd *cmd_lst, char **envp)
+{
+    (void)cmd_lst;
+    (void)envp;
+    // TODO: Implémenter la gestion des pipelines
+}
 
 bool	is_builtin(const char *cmd_value)
 {

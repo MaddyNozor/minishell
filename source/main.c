@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/01/24 13:54:00 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/01/24 14:30:07 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,6 @@ int	main(int ac, char **av, char **envp)
 	ft_bzero(&data, sizeof(t_data));
 	data.varenv_lst = init_varenv(envp);
 	ft_start_minishell(&data, envp);
-	ft_free_all(data);
+	// ft_free_all(data);
 	return (0);
 }
