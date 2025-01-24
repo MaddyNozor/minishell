@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 14:00:05 by sabellil          #+#    #+#             */
-/*   Updated: 2025/01/24 13:38:19 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/01/24 13:56:54 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	init_minimalist_env(t_varenv **varenv_lst)
 	if (!pwd)
 		return ;
 	create_varenv(varenv_lst, "PWD", pwd, false);
-	create_varenv(varenv_lst, "SHLVL", "1", false);       
+	create_varenv(varenv_lst, "SHLVL", "1", false);
 	create_varenv(varenv_lst, "_", "/usr/bin/env", false);
 	free(pwd);
 }

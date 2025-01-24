@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:41:57 by sabellil          #+#    #+#             */
-/*   Updated: 2025/01/24 13:42:00 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/01/24 13:53:07 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 char	*read_user_input(void)
 {
-	char *input;
+	char	*input;
 
 	input = readline("minishell$ ");
 	if (!input)
@@ -30,7 +30,7 @@ char	*read_user_input(void)
 		exit(0);
 	}
 	if (*input)
-		add_history(input);//TODO : ne pas oublier de free history quand exit ou ctrl-d
+		add_history(input); // TODO : free history quand exit ou ctrl-d
 	return (input);
 }
 
@@ -71,7 +71,7 @@ void	free_token_list(t_token *list)
 
 void	ft_start_minishell(t_data *data, char **envp)
 {
-	char    *input;
+	char	*input;
 
 	while (1)
 	{
@@ -79,7 +79,7 @@ void	ft_start_minishell(t_data *data, char **envp)
 		if (*input == '\0')
 		{
 			free(input);
-			continue;
+			continue ;
 		}
 		data->tok_lst = lexer(input);
 		free(input);

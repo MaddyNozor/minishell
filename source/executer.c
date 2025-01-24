@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:38:39 by sabellil          #+#    #+#             */
-/*   Updated: 2025/01/24 13:38:49 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/01/24 13:46:25 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 bool	is_builtin(const char *cmd_value)
 {
-	const char	*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit", NULL};
+	const char	*builtins[] = {
+		"echo", "cd", "pwd", "export", "unset", "env", "exit", NULL
+	};
 	int			i;
 
 	i = 0;
@@ -29,7 +31,7 @@ bool	is_builtin(const char *cmd_value)
 
 void	executer_simple_cmd(t_cmd *cmd, t_data *data, char **envp)
 {
-	if (cmd = NULL || cmd->value == NULL)
+	if (cmd == NULL || cmd->value == NULL)
 		return ;
 	if (is_builtin(cmd->value))
 		exec_simple_builtin(cmd, data); //TODO
