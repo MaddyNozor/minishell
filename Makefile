@@ -6,7 +6,7 @@
 #    By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/10 15:29:24 by mairivie          #+#    #+#              #
-#    Updated: 2025/01/24 13:41:27 by sabellil         ###   ########.fr        #
+#    Updated: 2025/01/24 14:17:34 by sabellil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,13 @@ COMPIL = cc
 CFLAGS = -Wall -Wextra -Werror -g3 -I.
 
 SRC_DIR = source/
-SRC_LIST = executer.c init_shell_utils.c init_shell.c main.c readline.c
+SRC_LIST =  main.c \
+			executer.c \
+			init_shell_utils.c \
+			init_shell.c \
+			readline.c \
+			token_utils.c \
+			lexing.c
 SRC = $(addprefix $(SRC_DIR), $(SRC_LIST))
 
 OBJ_DIR = obj/
