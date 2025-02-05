@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/01/24 17:13:22 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/02/05 16:52:15 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,20 @@ void	ft_tokadd_back(t_token **lst, t_token *new)
 	last->next = new;
 	}
 	return ;
+}
+t_token *init_type_token_with_x_char_of_line(
+    int type, t_token *token, int x, char *line, int i)
+{
+    char *content;
+    
+    content = ft_substr(line, i, x);
+    if (content == NULL)
+        return (NULL);
+    token = ft_tok_new(content, type);
+    if (token == NULL)
+    {
+        free(content);
+        return (NULL);
+    }
+    return(token);
 }
