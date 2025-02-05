@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/01/24 16:37:13 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/02/05 10:17:34 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@
 # include <stdio.h> // printf pour les tests
 
 //--------------------- DEFINES -----------------------------
-# define FAILURE 1
-# define SUCCESS 0 
+# define FAILURE 0
+# define FALSE 0
+# define SUCCESS 1 
+# define TRUE 1
 
 //--TOKEN_TYPE
 # define BLANK 0

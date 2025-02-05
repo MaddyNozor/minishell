@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/01/24 17:54:11 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/02/05 10:19:52 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,23 @@
 #include <readline/history.h>
 
 //--------------------- DEFINES -----------------------------
-# define FAILURE 1
-# define SUCCESS 0 
+# define FAILURE 0
+# define FALSE 0
+# define SUCCESS 1 
+# define TRUE 1
+
+//--TOKEN_TYPE
+# define BLANK 0
+# define REDIRECT_OUT 1
+# define APPEND_OUT 2
+# define REDIRECT_IN 3
+# define HEREDOC 4
+# define PIPE 5
+# define VAR_ENV 6
+# define WORD 7
+# define SIMPLE_Q 8
+# define DOUBLE_Q 9
+# define LAST_EXIT 10
 
 //--------------------- STRUCTURES -----------------------------
 
