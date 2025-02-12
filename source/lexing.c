@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/02/05 17:42:01 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/02/12 17:35:27 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,19 +105,41 @@ t_token    *token_type_operators(char *line, int i, t_token *new_token)
 
 t_token    *token_type_varenv(char *line, int i, t_token *new_token)
 {
+    int len_varenv;
+
     if  (line[i + 1] == '?')
         new_token = init_type_token_with_x_char_of_line(
             LAST_EXIT, new_token, 2, line, i);
+    else if ( line[i + 1] >= '0' && line[i + 1] <= '9')
+        new_token = init_type_token_with_x_char_of_line(
+            VAR_ENV, new_token, 2, line, i);
     else if (line[i + 1] != '_' && ft_isalpha(line[i + 1]) == FALSE)
         new_token = init_type_token_with_x_char_of_line(
             WORD, new_token, 1, line, i);
-            //TODO: regler les var env avec des chiffres
-    else if (ft_isalnum (line[i + 1]) == TRUE && ft_isalpha(line[i + 1]) == FALSE)
-        new_token = init_type_token_with_x_char_of_line(
-            VAR_ENV, new_token, 2, line, i);
     else
+    {
+        len_varenv = 2;
+        while (ft_isalnum(line[i + len_varenv]) || line[i + len_varenv] == '_')
+            len_varenv++;
         new_token = init_type_token_with_x_char_of_line(
-            WORD, new_token, 1, line, i);
+            VAR_ENV, new_token, len_varenv, line, i);
+    }
+    if (new_token == NULL)
+        return (NULL);
+    return(new_token);
+}
+
+t_token    *token_type_word(char *line, int i, t_token *new_token)
+{
+    int len;
+
+    len = 1;
+    while (line[i + len] != '<' && line[i + len] != '|' 
+        && line[i + len] != '>' && ft_is_whitespace(line[i]) == true 
+        && line[i + len] != '$')
+        len++;
+    new_token = init_type_token_with_x_char_of_line(
+        WORD, new_token, len, line, i);
     if (new_token == NULL)
         return (NULL);
     return(new_token);
@@ -136,6 +158,22 @@ void	print_list(t_token *lst)
     printf("----\n");
 }
 
+// int check_lexing(t_token *head_of_list)
+// {
+//     t_token *current_token;
+    
+//     if (head_of_list->type == PIPE)
+//         return(FAILURE);  
+//     current_token = head_of_list;
+//     while (current_token->next != NULL)
+//     {
+//         if token->type == OPERATOR
+//             if token+1->type == OPERATOR
+//                 return (FAILURE);
+//         current->token = current_token->next;
+//     }
+//     return(SUCCESS);
+// }
 
 t_token  *lexer(char *line)
 {
@@ -156,14 +194,16 @@ t_token  *lexer(char *line)
                 new_token = token_type_operators(line, i, new_token);
             else if (line[i] == '$')
                 new_token = token_type_varenv(line, i, new_token);
-                // while(ft_isprintable(line[i]) == true)
-                //     content = ft_word(line, i);
-            // if (lst->content == NULL)
-            //     return(NULL, ft_free);
+            else
+                new_token = token_type_word(line, i, new_token);
             ft_tokadd_back(&head_of_list, new_token);
             print_list(head_of_list);
             i = i + ft_strlen(new_token->content);
         }
+    }
+    if (check_lexing(head_of_list) == FAILURE)
+    {
+        head_of_list = NULL;        
     }
     return(head_of_list);
 }
