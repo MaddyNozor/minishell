@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/02/17 12:50:16 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/02/17 14:19:08 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,14 +134,16 @@ void	print_list(t_token *lst)
                lst->content, lst->type);
         lst = lst->next;
     }
-    printf("----\n");
+    printf("--List Printed--\n");
 }
 
 int check_lexing(t_token *head_of_list)
 {
     t_token *current_token;
     
-    if (head_of_list->type == PIPE)
+    if (head_of_list == NULL)
+        return SUCCESS;
+    else if (head_of_list->type == PIPE)
         return(FAILURE);  
     current_token = head_of_list;
     while (current_token->next != NULL)
