@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/02/14 17:13:38 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/02/17 12:50:16 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,27 +97,26 @@ t_token    *token_type_word(char *line, int i, t_token *new_token)
     int len;
     int quote_open;
     char    type_of_quote;
-    int len_quote;
 
-    len = 1;
+    len = 0;
     quote_open = false;
-    while (ft_stop_the_count(line[i + len]) == false) 
-        //&& quote_open == false)
+    while (line[i + len] && ft_stop_the_count(line[i + len]) == false) 
     {
-        len_quote = 1;
         if(line[i + len] == '\'' || line[i + len] == '\"')
         {
             quote_open = true;
             type_of_quote = line[i + len];
-            while(line[i + len + len_quote] != type_of_quote)
-                len_quote++;
-            if(line[i + len + len_quote] != type_of_quote)
-                quote_open = false;    
+            ft_printf("type of quote: %c\n", type_of_quote);
+            len++;
+            while(line[i + len] && line[i + len] != type_of_quote)
+                len++;
+            if(!line[i + len])
+                return (ft_printf("rajoute une quote !\n"), NULL);
+            if(line[i + len] == type_of_quote)
+                quote_open = false;
         }
-        len = len + len_quote;
+        len++;
     }
-    if(quote_open == true)
-        return (ft_printf("rajoute une quote !\n"), NULL);
     new_token = init_type_token_with_x_char_of_line(
         WORD, new_token, len, line, i);
     if (new_token == NULL) //TODO: QUestion, si l'init fail, new token sera deja == NULL non ? besoin de proteger en dessous quand meme ?
