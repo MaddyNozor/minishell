@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:41:57 by sabellil          #+#    #+#             */
-/*   Updated: 2025/02/17 14:30:10 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/02/19 13:03:32 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	free_token_list(t_token **list)
 	while (tmp_current)
 	{
 		tmp_next = tmp_current->next;
-		//free(tmp_current->content);
+		free(tmp_current->content);
 		free(tmp_current);
 		tmp_current = tmp_next;
 	}

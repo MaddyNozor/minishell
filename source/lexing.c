@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/02/17 14:19:08 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/02/19 13:11:40 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,10 @@ int check_lexing(t_token *head_of_list)
     {
         if (is_an_operator(current_token->type) == true)
             if (is_an_operator(current_token->next->type) == true)
+            {
+                free_token_list(&head_of_list);
                 return (FAILURE);
+            }
         current_token = current_token->next;
     }
     return(SUCCESS);
