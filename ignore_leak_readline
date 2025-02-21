@@ -1,0 +1,23 @@
+{
+   ignore_readline_leaks
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libreadline.so.*
+}
+
+{
+   ignore_ls_leaks
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   obj:/bin/ls
+}
+
+{
+   ignore_ls_leaks
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   obj:/usr/bin/ls
+}

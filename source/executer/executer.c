@@ -6,43 +6,18 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:38:39 by sabellil          #+#    #+#             */
-/*   Updated: 2025/01/24 14:33:31 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/02/21 13:26:14 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/init_shell.h"
-
-// Placeholder pour la fonction exec_simple_builtin
-void exec_simple_builtin(t_cmd *cmd, t_data *data)
-{
-    (void)cmd;
-    (void)data;
-    // TODO: Implémenter la gestion des commandes built-in
-}
-
-// Placeholder pour la fonction exec_simple_extern_cmd
-void exec_simple_extern_cmd(t_cmd *cmd, t_data *data, char **envp)
-{
-    (void)cmd;
-    (void)data;
-    (void)envp;
-    // TODO: Implémenter la gestion des commandes externes
-}
-
-// Placeholder pour la fonction executer_pipeline_cmd
-void executer_pipeline_cmd(t_cmd *cmd_lst, char **envp)
-{
-    (void)cmd_lst;
-    (void)envp;
-    // TODO: Implémenter la gestion des pipelines
-}
+#include "../../include/init_shell.h"
 
 bool	is_builtin(const char *cmd_value)
 {
+	int			i;
 	const char	*builtins[] = {
 		"echo", "cd", "pwd", "export", "unset", "env", "exit", NULL
 	};
-	int			i;
 
 	i = 0;
 	while (builtins[i])
@@ -54,20 +29,20 @@ bool	is_builtin(const char *cmd_value)
 	return (false);
 }
 
-void	executer_simple_cmd(t_cmd *cmd, t_data *data, char **envp)
+void	executer_simple_cmd(t_cmd *cmd, t_data *data)
 {
 	if (cmd == NULL || cmd->value == NULL)
 		return ;
 	if (is_builtin(cmd->value))
-		exec_simple_builtin(cmd, data); //TODO
+		exec_simple_builtin(cmd, data);
 	else
-		exec_simple_extern_cmd(cmd, data, envp); //TODO
+		exec_simple_extern_cmd(cmd, data);
 }
 
-void	executer(t_data *data, char **envp)
+void	executer(t_data *data)
 {
 	if (data->cmd_lst->next == NULL)
-		executer_simple_cmd(data->cmd_lst, data, envp);
+		executer_simple_cmd(data->cmd_lst, data);
 	else
-		executer_pipeline_cmd(data->cmd_lst, envp);//TODO
+		executer_pipeline_cmd(data->cmd_lst, data);
 }
