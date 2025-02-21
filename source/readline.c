@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:41:57 by sabellil          #+#    #+#             */
-/*   Updated: 2025/02/19 13:03:32 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/02/21 14:29:27 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,6 @@ void	ft_start_minishell(t_data *data, char **envp)
 				data->cmd_lst = NULL;
 			}
 			free_token_list(&data->tok_lst);
-			//data->tok_lst = NULL;
 		}
 	}
 }
