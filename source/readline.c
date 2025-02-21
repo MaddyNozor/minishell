@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:41:57 by sabellil          #+#    #+#             */
-/*   Updated: 2025/02/21 14:29:27 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/02/21 15:06:21 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,25 +75,6 @@ void	free_cmd_list(t_cmd *list)
 		free(tmp->argv);
 		free(tmp);
 	}
-}
-
-void	free_token_list(t_token **list)
-{
-	t_token	*tmp_current;
-	t_token	*tmp_next;
-
-	if(!list || !*list)
-		return;
-
-	tmp_current = *list;
-	while (tmp_current)
-	{
-		tmp_next = tmp_current->next;
-		free(tmp_current->content);
-		free(tmp_current);
-		tmp_current = tmp_next;
-	}
-	*list = NULL;
 }
 
 void	ft_start_minishell(t_data *data, char **envp)

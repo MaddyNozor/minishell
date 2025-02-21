@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_token.c                                      :+:      :+:    :+:   */
+/*   lex_utils_token.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/02/21 14:29:00 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/02/21 15:06:34 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,23 @@ t_token *init_type_token_with_x_char_of_line(
         return (NULL);
     }
     return(token);
+}
+
+void	free_token_list(t_token **list)
+{
+	t_token	*tmp_current;
+	t_token	*tmp_next;
+
+	if(!list || !*list)
+		return;
+
+	tmp_current = *list;
+	while (tmp_current)
+	{
+		tmp_next = tmp_current->next;
+		free(tmp_current->content);
+		free(tmp_current);
+		tmp_current = tmp_next;
+	}
+	*list = NULL;
 }

@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/02/21 14:40:56 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/02/21 15:10:36 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@
 # define SUCCESS 1
 # define TRUE 1
 
-//--TOKEN_TYPE
+
+//--TOKEN_TYPE_LEXING
 # define BLANK 0
 # define REDIRECT_OUT 1
 # define APPEND_OUT 2
@@ -40,6 +41,19 @@
 # define SIMPLE_Q 8
 # define DOUBLE_Q 9
 # define LAST_EXIT 10
+
+// //--TOKEN_TYPE_LEXING
+// # define BLANK 0
+// # define REDIRECT_OUT 1
+// # define APPEND_OUT 2
+// # define REDIRECT_IN 3
+// # define HEREDOC 4
+// # define PIPE 5
+// # define VAR_ENV 6
+// # define WORD 7
+// # define SIMPLE_Q 8
+// # define DOUBLE_Q 9
+// # define LAST_EXIT 10
 
 //--------------------- STRUCTURES -----------------------------
 
@@ -98,11 +112,9 @@ void						create_varenv(t_varenv **varenv_lst, char *name,
 
 // READLINE MAIN LOOP
 void						ft_start_minishell(t_data *data, char **envp);
-void						free_token_list(t_token **list);
 t_token						*lexer(char *input);
 // t_cmd   *parser(t_token *tok);
 // void	executer(t_data *data, char **envp);
-
 
 // LEXING
 // utils
@@ -116,6 +128,7 @@ t_token						*ft_toklast(t_token *lst);
 void						ft_tokadd_back(t_token **lst, t_token *new);
 t_token						*init_type_token_with_x_char_of_line(int type,
 								t_token *token, int x, char *line, int i);
+void						free_token_list(t_token **list);
 // id_and_create_token
 t_token						*token_type_operators(char *line, int i,
 								t_token *new_token);
