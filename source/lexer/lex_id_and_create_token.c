@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   lex_id_and_create_token.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/02/21 15:55:20 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/02/21 18:44:53 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/init_shell.h"
+#include "../../include/init_shell.h"
 
 t_token	*token_type_operators(char *line, int i, t_token *new_token)
 {

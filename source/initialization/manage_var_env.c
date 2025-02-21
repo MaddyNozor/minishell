@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   manage_var_env.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:37:21 by sabellil          #+#    #+#             */
-/*   Updated: 2025/02/21 14:14:38 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/02/21 18:44:52 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/init_shell.h"
+#include "../../include/init_shell.h"
 
 // char	**convert_env_list_to_array(t_varenv *varenv_lst)//avirer
 // {

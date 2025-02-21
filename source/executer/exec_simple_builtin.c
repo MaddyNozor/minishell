@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec_simple_builtin.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 15:44:00 by sabellil          #+#    #+#             */
-/*   Updated: 2025/02/21 15:00:54 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/02/21 18:44:51 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/init_shell.h"
+#include "../../include/init_shell.h"
 
 void	execute_builtin(t_cmd *cmd, t_data *data)
 {

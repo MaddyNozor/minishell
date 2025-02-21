@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   lexing.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/02/21 15:55:27 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/02/21 18:44:54 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/init_shell.h"
+#include "../../include/init_shell.h"
 
 /// tempo pour test
 /// @param lst pointeur sur la tete de la liste

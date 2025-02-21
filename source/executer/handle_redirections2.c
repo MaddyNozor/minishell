@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirections2.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 12:36:45 by sabellil          #+#    #+#             */
-/*   Updated: 2025/02/21 14:13:20 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/02/21 18:44:52 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/init_shell.h"
+#include "../../include/init_shell.h"
 
 void	setup_io_redirections(int heredoc_fd, int pipe_in, int pipe_fd[2],
 	t_cmd *cmd)

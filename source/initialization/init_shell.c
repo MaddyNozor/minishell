@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 14:00:05 by sabellil          #+#    #+#             */
-/*   Updated: 2025/01/24 13:56:54 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/02/21 18:43:15 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/init_shell.h"
+#include "../../include/init_shell.h"
 
 void	init_existing_env(t_varenv **varenv_lst, char **envp)
 {

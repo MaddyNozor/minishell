@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:46:35 by sabellil          #+#    #+#             */
-/*   Updated: 2025/02/21 14:14:19 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/02/21 18:44:51 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/init_shell.h"
+#include "../../include/init_shell.h"
 
 void	ft_echo(t_cmd *cmd)
 {
