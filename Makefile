@@ -6,7 +6,7 @@
 #    By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/10 15:29:24 by mairivie          #+#    #+#              #
-#    Updated: 2025/02/21 14:58:58 by sabellil         ###   ########.fr        #
+#    Updated: 2025/02/21 15:54:26 by sabellil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,8 +36,11 @@ SRC_LIST =  main.c \
             initialization/manage_var_env_utils.c \
             initialization/manage_var_env.c \
             initialization/readline.c \
-            token_utils.c \
-            lexing.c
+            lexer/lex_id_and_create_token.c \
+            lexer/lex_utils_token.c \
+            lexer/lex_utils_type_char_detector.c \
+            lexer/lexing_checker.c \
+            lexer/lexing.c \
 SRC = $(addprefix $(SRC_DIR), $(SRC_LIST))
 
 OBJ_DIR = obj/
@@ -50,7 +53,7 @@ LIBFT = $(LIBFT_DIR)libft.a
 all: $(LIBFT) $(NAME)
 
 $(LIBFT):
-	@$(MAKE) -C $(LIBFT_DIR)
+	$(MAKE) -C $(LIBFT_DIR)
 
 $(NAME): $(OBJ) $(LIBFT)
 	$(COMPIL) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME) -lreadline -lm

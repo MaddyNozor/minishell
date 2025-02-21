@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/02/21 15:09:58 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/02/21 15:57:18 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,43 @@
 # include <string.h>
 
 //--------------------- DEFINES -----------------------------
+# define FAILURE_L 0 //TODO: traque des success et failure dans le lexing
+# define FALSE 0
+# define SUCCESS_L 1
+# define TRUE 1
+
 # define FAILURE 1
 # define SUCCESS 0
 # define REDIR_IN 1
 # define REDIR_OUT 2
 # define REDIR_APPEND 3
 # define REDIR_HEREDOC 4
+
+//--TOKEN_TYPE_LEXING
+# define BLANK 0
+# define REDIRECT_OUT 1
+# define APPEND_OUT 2
+# define REDIRECT_IN 3
+# define HEREDOC 4
+# define PIPE 5
+# define VAR_ENV 6
+# define WORD 7
+# define SIMPLE_Q 8
+# define DOUBLE_Q 9
+# define LAST_EXIT 10
+
+// //--TOKEN_TYPE_LEXING
+// # define BLANK 0
+// # define REDIRECT_OUT 1
+// # define APPEND_OUT 2
+// # define REDIRECT_IN 3
+// # define HEREDOC 4
+// # define PIPE 5
+// # define VAR_ENV 6
+// # define WORD 7
+// # define SIMPLE_Q 8
+// # define DOUBLE_Q 9
+// # define LAST_EXIT 10
 
 //--------------------- STRUCTURES -----------------------------
 
@@ -99,6 +130,34 @@ void		free_token_list(t_token *list);
 
 // READLINE MAIN LOOP
 void		ft_start_minishell(t_data *data);
+
+//LEXING
+//Lexer
+t_token						*lexer(char *line);
+
+// utils
+bool						ft_is_whitespace(char c);
+int							have_to_close_tok(char c);
+int							is_an_operator(int type);
+
+// utils token
+t_token						*ft_tok_new(void *content, int type);
+t_token						*ft_toklast(t_token *lst);
+void						ft_tokadd_back(t_token **lst, t_token *new);
+t_token						*init_type_token_with_x_char_of_line(int type,
+								t_token *token, int x, char *line, int i);//TODO trop de variables
+void						free_token_list_l(t_token **list);//A modifier
+// id_and_create_token
+t_token						*token_type_operators(char *line, int i,
+								t_token *new_token);
+t_token						*token_type_varenv(char *line, int i,
+								t_token *new_token);
+t_token						*token_type_word(char *line, int i,
+								t_token *new_token);
+t_token						*create_token(char *line, int i,
+								t_token *new_token);
+// checker
+int							check_lexing(t_token *head_of_list);
 
 // EXECUTER
 void		executer(t_data *data);

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_utils.c                                      :+:      :+:    :+:   */
+/*   lex_utils_token.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/01/20 19:36:08 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/02/21 16:01:39 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../include/lexing.h"
+# include "../include/init_shell.h"
 
 /* DESC: Allocate with malloc and return a new token. 
  *  Init token->content with whatever is in 'content' 
@@ -28,8 +28,8 @@ t_token	*ft_tok_new(void *content, int type)
 		return (NULL);
 	new->content = content;
 	new->next = NULL;
-    new->prev = NULL;
-    new->type = type;
+	new->prev = NULL;
+	new->type = type;
 	return (new);
 }
 
@@ -61,13 +61,49 @@ void	ft_tokadd_back(t_token **lst, t_token *new)
 
 	if (new == NULL)
 		return ;
+	new->prev = NULL;
+	new->next = NULL;
 	if (!*lst)
 		*lst = new;
 	else
 	{
 	last = ft_toklast(*lst);
-    new->prev = last;
+	new->prev = last;
 	last->next = new;
 	}
 	return ;
+}
+t_token *init_type_token_with_x_char_of_line(
+    int type, t_token *token, int x, char *line, int i)
+{
+    char *content;
+    
+    content = ft_substr(line, i, x);
+    if (content == NULL)
+        return (NULL);
+    token = ft_tok_new(content, type);
+    if (token == NULL)
+    {
+        free(content);
+        return (NULL);
+    }
+    return(token);
+}
+
+void	free_token_list(t_token **list)
+{
+	t_token	*tmp_current;
+	t_token	*tmp_next;
+
+	if(!list || !*list)
+		return ;
+	tmp_current = *list;
+	while (tmp_current)
+	{
+		tmp_next = tmp_current->next;
+		free(tmp_current->content);
+		free(tmp_current);
+		tmp_current = tmp_next;
+	}
+	*list = NULL;
 }
