@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/02/21 15:57:18 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/02/24 13:33:10 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,11 @@ typedef struct s_varenv
 
 typedef struct s_token
 {
-	char			*content;
 	struct s_token	*next;
 	struct s_token	*prev;
+	char			*content;
 	int				type;
+	int				nb_quote;
 }	t_token;
 
 typedef struct s_data

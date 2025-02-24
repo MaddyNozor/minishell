@@ -6,11 +6,11 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/02/24 12:10:40 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/02/24 13:33:34 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../include/init_shell.h"
+# include "../../include/init_shell.h"
 
 /* DESC: Allocate with malloc and return a new token. 
  *  Init token->content with whatever is in 'content' 
@@ -30,6 +30,7 @@ t_token	*ft_tok_new(void *content, int type)
 	new->next = NULL;
 	new->prev = NULL;
 	new->type = type;
+	new->nb_quote = 0;
 	return (new);
 }
 

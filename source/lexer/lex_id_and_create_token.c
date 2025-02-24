@@ -6,35 +6,84 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/02/21 18:44:53 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/02/24 16:23:41 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
 
-t_token	*token_type_operators(char *line, int i, t_token *new_token)
+// t_token	*token_type_operators(char *line, int i, t_token *new_token)
+// {
+// 	if (line[i] == '<')
+// 	{
+// 		if (line[i + 1] == '<')
+// 			new_token = init_type_token_with_x_char_of_line(HEREDOC, new_token,
+// 					2, line, i);
+// 		else
+// 			new_token = init_type_token_with_x_char_of_line(REDIRECT_IN,
+// 					new_token, 1, line, i);
+// 	}
+// 	else if (line[i] == '>')
+// 	{
+// 		if (line[i + 1] == '>')
+// 			new_token = init_type_token_with_x_char_of_line(APPEND_OUT,
+// 					new_token, 2, line, i);
+// 		else
+// 			new_token = init_type_token_with_x_char_of_line(REDIRECT_OUT,
+// 					new_token, 1, line, i);
+// 	}
+// 	else if (line[i] == '|')
+// 		new_token = init_type_token_with_x_char_of_line(PIPE, new_token, 1,
+// 				line, i);
+// 	if (new_token == NULL)
+// 		return (NULL);
+// 	return (new_token);
+// }
+
+int	ft_size_according_to_type(type)
 {
+	int size;
+
+	size = 1;
+	if(type == HEREDOC || type == APPEND_OUT)
+		size = 2;
+	return(size);
+}
+
+int ft_type_detector(char *line, int i)
+{
+	int type;
+
+	type = BLANK;
 	if (line[i] == '<')
 	{
 		if (line[i + 1] == '<')
-			new_token = init_type_token_with_x_char_of_line(HEREDOC, new_token,
-					2, line, i);
+			type = HEREDOC;
 		else
-			new_token = init_type_token_with_x_char_of_line(REDIRECT_IN,
-					new_token, 1, line, i);
+			type = REDIRECT_IN;
 	}
 	else if (line[i] == '>')
 	{
 		if (line[i + 1] == '>')
-			new_token = init_type_token_with_x_char_of_line(APPEND_OUT,
-					new_token, 2, line, i);
+			type = APPEND_OUT;
 		else
-			new_token = init_type_token_with_x_char_of_line(REDIRECT_OUT,
-					new_token, 1, line, i);
+			type = REDIRECT_OUT;
 	}
 	else if (line[i] == '|')
-		new_token = init_type_token_with_x_char_of_line(PIPE, new_token, 1,
-				line, i);
+		type = PIPE;
+	return(type);
+}
+
+
+t_token	*token_type_operators(char *line, int i, t_token *new_token)
+{
+	int	size_content;
+	int type;
+
+	type = ft_type_detector(line, i);
+	size_content = ft_size_according_to_type(type);
+	new_token = init_type_token_with_x_char_of_line(type, new_token, 
+		size_content, line, i);
 	if (new_token == NULL)
 		return (NULL);
 	return (new_token);
@@ -77,7 +126,7 @@ t_token	*token_type_word(char *line, int i, t_token *new_token)
 		if (line[i + len] == '\'' || line[i + len] == '\"')
 		{
 			type_of_quote = line[i + len];
-			ft_printf("type of quote: %c\n", type_of_quote);
+			new_token->nb_quote++;
 			len++;
 			while (line[i + len] && line[i + len] != type_of_quote)
 				len++;

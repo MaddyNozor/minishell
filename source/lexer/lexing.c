@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/02/21 18:44:54 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/02/24 16:20:31 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_token	*lexer(char *line)
 	t_token	*new_token;
 
 	i = 0;
-	new_token = NULL;
+	new_token = ft_tok_new(NULL, 0);
 	head_of_list = NULL;
 	while (line[i])
 	{
@@ -39,7 +39,7 @@ t_token	*lexer(char *line)
 			i++;
 		else
 		{
-			new_token = create_token(line, i, new_token);
+			new_token = create_token(line, i, new_token);//fonctionne sans newtoken ???
 			ft_tokadd_back(&head_of_list, new_token);
 			i = i + ft_strlen(new_token->content);
 		}
