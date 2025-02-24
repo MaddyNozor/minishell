@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:41:57 by sabellil          #+#    #+#             */
-/*   Updated: 2025/02/21 18:44:53 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/02/24 12:18:38 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@
 //     signal(SIGQUIT, SIG_IGN);      // ignorer ctrl+\
 // }
 
-t_token *lexer(char *input)
-{
-    (void)input;
-	printf("Hey\n");
-    return (NULL); // Implémentation à compléter
-}
+// t_token *lexer(char *input)
+// {
+//     (void)input;
+// 	printf("Hey\n");
+//     return (NULL); // Implémentation à compléter
+// }
 
 t_cmd	*parser(t_token *tok)
 {
@@ -61,7 +61,7 @@ void	ft_start_minishell(t_data *data)
 		}
 		data->tok_lst = lexer(input);
 		free(input);
-		free_token_list(&data->tok_lst);
+		free_token_list(data->tok_lst);
 		if (data->tok_lst)
 		{
 			data->cmd_lst = parser(data->tok_lst);
@@ -71,7 +71,7 @@ void	ft_start_minishell(t_data *data)
 				free_cmd_list(data->cmd_lst);
 				data->cmd_lst = NULL;
 			}
-			free_token_list(&data->tok_lst);
+			free_token_list(data->tok_lst);
 		}
 	}
 }

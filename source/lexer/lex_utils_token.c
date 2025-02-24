@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lex_utils_token.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/02/21 16:01:39 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/02/24 12:10:40 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,14 +90,14 @@ t_token *init_type_token_with_x_char_of_line(
     return(token);
 }
 
-void	free_token_list(t_token **list)
+void	free_token_list(t_token *list)
 {
 	t_token	*tmp_current;
 	t_token	*tmp_next;
 
-	if(!list || !*list)
+	if(!list)
 		return ;
-	tmp_current = *list;
+	tmp_current = list;
 	while (tmp_current)
 	{
 		tmp_next = tmp_current->next;
@@ -105,5 +105,5 @@ void	free_token_list(t_token **list)
 		free(tmp_current);
 		tmp_current = tmp_next;
 	}
-	*list = NULL;
+	list = NULL;
 }

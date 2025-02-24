@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+         #
+#    By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/10 15:29:24 by mairivie          #+#    #+#              #
-#    Updated: 2025/02/21 15:54:26 by sabellil         ###   ########.fr        #
+#    Updated: 2025/02/24 12:05:30 by mairivie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,8 @@ SRC_LIST =  main.c \
             lexer/lex_utils_token.c \
             lexer/lex_utils_type_char_detector.c \
             lexer/lexing_checker.c \
-            lexer/lexing.c \
+            lexer/lexing.c 
+                     
 SRC = $(addprefix $(SRC_DIR), $(SRC_LIST))
 
 OBJ_DIR = obj/
