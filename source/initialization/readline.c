@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:41:57 by sabellil          #+#    #+#             */
-/*   Updated: 2025/02/24 12:59:09 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/02/24 19:17:46 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,10 @@ void	ft_start_minishell(t_data *data)
 		}
 		data->tok_lst = lexer(input);
 		free(input);
+		if (data->tok_lst)
+			data->tok_lst = ft_spot_the_quotes(data);//TODO peut etre meme pas besoin du dat_tok_lst = ? Comme l'adresse du premier noeud va rester la meme 
+		
 		free_token_list(data->tok_lst);//TODO a virer une fois parsing fonctionnel
-		// if (data->tok_lst)
 		// {
 		// 	data->cmd_lst = parser(data->tok_lst);
 		// 	if (data->cmd_lst)

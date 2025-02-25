@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/02/24 13:33:10 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/02/24 18:50:14 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,8 +145,8 @@ int							is_an_operator(int type);
 t_token						*ft_tok_new(void *content, int type);
 t_token						*ft_toklast(t_token *lst);
 void						ft_tokadd_back(t_token **lst, t_token *new);
-t_token						*init_type_token_with_x_char_of_line(int type,
-								t_token *token, int x, char *line, int i);//TODO trop de variables
+t_token						*init_type_token_with_x_char_of_line(int type, int x, 
+								char *line, int i);
 void						free_token_list_l(t_token **list);//A modifier
 // id_and_create_token
 t_token						*token_type_operators(char *line, int i,
@@ -159,6 +159,9 @@ t_token						*create_token(char *line, int i,
 								t_token *new_token);
 // checker
 int							check_lexing(t_token *head_of_list);
+
+//PARSING
+t_token *ft_spot_the_quotes(t_data *data);
 
 // EXECUTER
 void		executer(t_data *data);

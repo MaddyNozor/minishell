@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/02/24 16:20:31 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/02/25 13:19:40 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	print_list(t_token *lst)
 {
 	while (lst)
 	{
-		printf("Token: %s, Type: %d\n", lst->content, lst->type);
+		printf("Token: %s, Type: %d nb_quotes: %d\n", lst->content, lst->type, lst->nb_quote);
 		lst = lst->next;
 	}
 	printf("--List Printed--\n");
@@ -31,7 +31,6 @@ t_token	*lexer(char *line)
 	t_token	*new_token;
 
 	i = 0;
-	new_token = ft_tok_new(NULL, 0);
 	head_of_list = NULL;
 	while (line[i])
 	{
@@ -39,7 +38,7 @@ t_token	*lexer(char *line)
 			i++;
 		else
 		{
-			new_token = create_token(line, i, new_token);//fonctionne sans newtoken ???
+			new_token = create_token(line, i, new_token);
 			ft_tokadd_back(&head_of_list, new_token);
 			i = i + ft_strlen(new_token->content);
 		}

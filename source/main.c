@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/02/24 13:18:38 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/02/24 16:53:38 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int	main(int ac, char **av, char **envp)
 {
 	t_data	data;
+	
 	if (ac != 1)
 		return (1);
 	(void)av;
