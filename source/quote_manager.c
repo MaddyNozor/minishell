@@ -12,13 +12,9 @@
 
 #include "../include/init_shell.h"
 
-
-//peut etre qu'ici utiliser ft_trim tout court pourrait marcher comme on aura
-//jamais plus d'une quote de chaque cote en fermeture
-//'dfdf' =1 'dfg''=invalid ''dfg''=2 paires 'd'f'g'=2paires
-// '""'=1 'sdkjfhksdfdsf"""""""""""""'=1 'sdkjfhksdfdsf" ' """"""'=invalid (3')
-
-char	*ft_trim_quote(char const *s1, char const q)//ca c'est pour les quotes simples, prevoir version quotes simples et doubles
+//Vire uniquement les quotes en debut et fin de token. 
+//Pour les token multiquotes c'est pqs qdqpté.
+char	*ft_trim_quote(char const *s1, char const q)//pour quotes simples, prevoir doubles
 {
     size_t	start;
     size_t	end;
@@ -46,6 +42,7 @@ char	*ft_trim_quote(char const *s1, char const q)//ca c'est pour les quotes simp
     return (new_s);
 }
 
+/*
 char *ft_cut_a_slice(char *content, int i)
 {
     char *slice;
@@ -114,7 +111,7 @@ char *ft_glue_the_slices_again(t_list *list_slice)
     return(new_content);  
 }
 
-/*
+
 avancer juqu'a trouver une quote
 copie de l'eventuelle parti avant la quote
 copie de la partie entre les deux quotes simples
@@ -131,10 +128,154 @@ reprendre la boucle a partir de la position de l'ancienne quote
 lorsque bout du content, fusionner tous les morceaux ensemble dans le bon ordre.
 free les blocs qui stochqient temporqirement les morceaux
 return le nouveau content
+
+
+char *ft_cut_a_slice(char *content, int *i)
+{
+    char *slice;
+    int start;
+    char quote;
+
+    start = *i;
+    if (content[*i] && content[*i] != '\'' && content[*i] != '"')
+    {
+        while (content[*i] && content[*i] != '\'' && content[*i] != '"')
+            (*i)++;
+        return (ft_substr(content, start, *i - start)); // Retourne la partie hors-quotes
+    }
+    quote = content[*i]; // Détecte si c'est ' ou "
+    (*i)++; // Passe la quote ouvrante
+    start = *i;
+    while (content[*i] && content[*i] != quote)
+        (*i)++;
+    slice = ft_substr(content, start, *i - start);
+    if (!slice)
+        return (NULL);
+    slice = ft_trim_quote(slice, quote); // Supprime la quote ouvrante et fermante
+    if (content[*i] == quote)
+        (*i)++; // Passe la quote fermante
+    return (slice);
+}
 */
 
+char *ft_expand_and_trim(char *slice)
+{
+    (void)slice;
+    return(NULL);
+}
+
+
+char *ft_cut_normal_text(char *content, int *i)
+{
+    int start = *i;
+    
+    while (content[*i] && content[*i] != '\'' && content[*i] != '"')
+        (*i)++;
+    return (ft_substr(content, start, *i - start));
+}
+
+char *ft_cut_quoted_text(char *content, int *i)
+{
+    char quote = content[*i];
+    int start;
+    
+    start = *i;
+    (*i)++;
+    while (content[*i] && content[*i] != quote)
+        (*i)++;
+    char *slice = ft_substr(content, start + 1, *i - start);
+    if (!slice)
+        return (NULL);
+    if (quote == '"')
+        slice = ft_expand_and_trim(slice); // Expansion pour les ""
+    else
+        slice = ft_trim_quote(slice, quote); // Trim pour les ''
+    if (content[*i] == quote)
+        (*i)++; // Passe la quote fermante
+    return (slice);
+}
+
+char *ft_cut_a_slice(char *content, int *i)
+{
+    char *slice;
+
+    slice = NULL;
+    if (content[*i] == '\'' || content[*i] == '"')
+        slice = ft_cut_quoted_text(content, i); // Gère les quotes
+    else
+        slice = ft_cut_normal_text(content, i); // Gère le texte normal
+    if (slice == NULL)
+        return (NULL);
+    return (slice);
+}
+
+void ft_stock_the_slice(t_list **stock_list, char *slice)
+{
+    t_list *new_node;
+
+    if (!slice || !*slice) // Vérifie que le slice n'est pas NULL ou vide
+    {
+        free(slice);
+        return;
+    }
+    new_node = ft_lstnew(slice);
+    if (!new_node)
+    {
+        free(slice);
+        return;
+    }
+    ft_lstadd_back(stock_list, new_node);
+}
+
+char *ft_glue_the_slices_again(t_list *list_slice)
+{
+    char *new_content;
+    char *temp;
+    t_list *current;
+
+    if (!list_slice)
+        return (ft_strdup("")); // Évite un NULL
+
+    new_content = ft_strdup("");
+    if (!new_content)
+        return (NULL);
+    
+    current = list_slice;
+    while (current)
+    {
+        temp = ft_strjoin(new_content, current->content);
+        free(new_content);
+        new_content = temp;
+        if (!new_content)
+            return (NULL); // Sécurise contre un échec d'allocation
+        current = current->next;
+    }
+    return (new_content);
+}
 
 char    *ft_quote_manager(char *actual_content)
+{
+    t_list  *stock_list;
+    char    *new_content;
+    char    *slice;
+    int     i;
+
+    stock_list = NULL;
+    i = 0;
+    while (actual_content[i])
+    {
+        slice = ft_cut_a_slice(actual_content, &i); // Découpe un morceau et avance i
+        ft_stock_the_slice(&stock_list, slice); // Ajoute à la liste chaînée
+    }
+    new_content = ft_glue_the_slices_again(stock_list); // Recompose la string
+    ft_lstclear(&stock_list, free); // Nettoie la liste temporaire
+
+    free(actual_content); // Libère l'ancien contenu
+    return (new_content);
+}
+
+
+/*char    *ft_quote_manager(char *actual_content)
 {
     char    *new_content;
     int     i;
@@ -156,9 +297,7 @@ char    *ft_quote_manager(char *actual_content)
     ft_printf("after trim %s \n", new_content);
     free(actual_content);
     return(new_content);
-}
-
-
+}*/
 
 t_token *ft_spot_the_quotes(t_data *data)
 {
@@ -172,7 +311,11 @@ t_token *ft_spot_the_quotes(t_data *data)
 		if (cur_token->type == WORD)
         {
             if(cur_token->nb_quote > 0)
+            {
+                ft_printf("before: %s \n", cur_token->content);
                 cur_token->content = ft_quote_manager(cur_token->content);
+                ft_printf("after: %s \n", cur_token->content);
+            }
         }
 		cur_token = cur_token->next;
 	}

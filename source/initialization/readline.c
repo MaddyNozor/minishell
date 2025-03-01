@@ -15,7 +15,7 @@
 // void init_signals(void)
 // {
 //     signal(SIGINT, handle_sigint);  // gestion de ctrl+C
-//     signal(SIGQUIT, SIG_IGN);      // ignorer ctrl+\
+//     signal(SIGQUIT, SIG_IGN);      // ignorer ctrl+ backslash
 // }
 
 // t_token *lexer(char *input)
