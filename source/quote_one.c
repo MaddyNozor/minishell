@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/03 14:57:57 by codespace        ###   ########.fr       */
+/*   Updated: 2025/03/03 17:00:23 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,29 +58,101 @@ char	*ft_trim_quote(char const *s1, char const q)//pour quotes simples, prevoir 
     return (new_s);
 }
 
-char *ft_expand_and_trim(char *slice)
+/*
+t_token	*token_type_varenv(char *line, int i, t_token *new_token)
+{
+	int	len_varenv;
+
+	if (line[i + 1] == '?')
+		new_token = init_type_token_with_x_char_of_line(LAST_EXIT, 2,
+				line, i);
+	else if (line[i + 1] >= '0' && line[i + 1] <= '9')
+		new_token = init_type_token_with_x_char_of_line(VAR_ENV, 2,
+				line, i);
+	else if (line[i + 1] != '_' && ft_isalpha(line[i + 1]) == FALSE)
+		new_token = init_type_token_with_x_char_of_line(WORD, 1,
+				line, i);
+	else
+	{
+		len_varenv = 2;
+		while (ft_isalnum(line[i + len_varenv]) || line[i + len_varenv] == '_')
+			len_varenv++;
+		new_token = init_type_token_with_x_char_of_line(VAR_ENV,
+				len_varenv, line, i);
+	}
+	if (new_token == NULL)
+		return (NULL);
+	return (new_token);
+}
+*/
+
+char *ft_expand_var(char *var_found, t_varenv *varenv)
+{
+    char *prefix = "[VARENV:";
+    char *suffix = "]";
+    char *temp;
+    char *fake_var_env;
+
+    (void)varenv; // On ignore pour l'instant la vraie expansion
+
+    temp = ft_strjoin(prefix, var_found); // "[VARENV:" + var_found
+    fake_var_env = ft_strjoin(temp, suffix); // "[VARENV:var_found]"
+
+    free(temp);
+    return (fake_var_env);
+}
+
+char *ft_find_and_expand_var(char *str, int *i, t_varenv *varenv)
+{
+    int     start;
+    int     len_var;
+    char    *var_found;
+    char    *expanded_value;
+
+    start = *i;
+    len_var = 1; // On commence à 1 car '$' est déjà inclus
+    if (str[start + 1] == '?' || ft_isdigit(str[start + 1]) == true)
+        len_var = 2;
+    else if (str[start + 1] == '_' || ft_isalpha(str[start + 1]))
+    {
+        len_var++;
+        while (ft_isalnum(str[start + len_var]) || str[start + len_var] == '_')
+            len_var++;
+    }
+    var_found = ft_substr(str, start, len_var); // inclu le $ c'est important pour moi
+    if (!var_found)
+        return (NULL);
+    expanded_value = ft_expand_var(var_found, varenv); // Trouve la valeur de la variable - fake pour l'instant
+    free(var_found);
+    *i += len_var; 
+    return (expanded_value); 
+}
+
+char *ft_search_var_to_expand_then_trim(char *slice)
 {
     t_list *dbl_qt_lst;
     char *expanded;
     int i;
+    t_varenv *fake_varenv;
     
+    fake_varenv = NULL;
     dbl_qt_lst = NULL;
     i = 0;
     while (slice[i])
     {
         if (slice[i] == '$')
-        slice = ft_expand_var(slice, &i);
+            slice = ft_find_and_expand_var(slice, &i, fake_varenv);
         else
-        slice = ft_cut_normal_text(slice, &i);
+            slice = ft_cut_normal_text(slice, &i);
         if (slice == NULL)
-        return (NULL);
+            return (NULL);
         ft_stock_the_slice(&dbl_qt_lst, slice);
     }
     expanded = ft_glue_the_slices_again(dbl_qt_lst);
     if (expanded == NULL)
-    return (NULL);
-    ft_lstclear(&dbl_qt_lst, free);
-    free(slice);
+        return (NULL);
+//    ft_lstclear(&dbl_qt_lst, free); on masque ca pour l'instant car double free
+//    free(slice);
     return (expanded);
 }
 
@@ -97,20 +169,19 @@ char *ft_cut_quoted_text(char *content, int *i)
 {
     char quote = content[*i];
     int start;
+    char *slice;
     
     start = *i;
     (*i)++;
     while (content[*i] && content[*i] != quote)
         (*i)++;
-    char *slice = ft_substr(content, start + 1, *i - start);
+    slice = ft_substr(content, start + 1, *i - start);
     if (!slice)
         return (NULL);
     if (quote == '\'')
        slice = ft_trim_quote(slice, quote); // Trim pour les '' peut-être que ft_subtrim suffit 
     else
-        slice = ft_expand_and_trim(slice); // Expansion pour les ""
-//    if (content[*i] == quote)
-//        (*i)++; // Passe la quote fermante 
+        slice = ft_search_var_to_expand_then_trim(slice); // Expansion pour les ""
     return (slice);
 }
 /*
