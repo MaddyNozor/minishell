@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipeline_cmd.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:04:30 by sabellil          #+#    #+#             */
-/*   Updated: 2025/02/21 18:44:51 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/02/24 16:56:14 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,12 @@ void	handle_parent_process_pipeline(pid_t pid, t_cmd *data, int *pipe_in,
 	int	status;
 
 	(void)data;
-	fprintf(stderr, "Je vais attendre le processus enfant\n");
+	// fprintf(stderr, "Je vais attendre le processus enfant\n");
 	waitpid(pid, &status, 0);
 	while (wait(NULL) > 0)
 		;
 	close(pipe_fd[1]);
-	fprintf(stderr, "Je viens de close le pipe_fd1\n");
+	// fprintf(stderr, "Je viens de close le pipe_fd1\n");
 	*pipe_in = pipe_fd[0];
 }
 

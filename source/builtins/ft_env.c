@@ -1,36 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_echo.c                                          :+:      :+:    :+:   */
+/*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/11 15:46:35 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/03 12:40:19 by sabellil         ###   ########.fr       */
+/*   Created: 2025/03/03 12:38:18 by sabellil          #+#    #+#             */
+/*   Updated: 2025/03/03 12:38:21 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
 
-void	ft_echo(t_cmd *cmd)
+void	ft_env(t_data *data, t_cmd *cmd)
 {
-	int		i;
-	int		newline;
+	t_varenv	*current;
 
-	i = 1;
-	newline = 1;
-	if (cmd->argc > 1 && ft_strncmp(cmd->argv[1], "-n", 3) == 0)
+	if (cmd->argv[1] != NULL)
 	{
-		newline = 0;
-		i = 2;
+		fprintf(stderr, "bash: %s: command not found\n", cmd->argv[1]);
+		_exit(127);
 	}
-	while (cmd->argv[i])
+	if (!data->varenv_lst)
 	{
-		write(STDOUT_FILENO, cmd->argv[i], ft_strlen(cmd->argv[i]));
-		if (cmd->argv[i + 1])
-			write(STDOUT_FILENO, " ", 1);
-		i++;
+		fprintf(stderr, "bash: env: environment not available\n");
+		_exit(1);
 	}
-	if (newline)
-		write(STDOUT_FILENO, "\n", 1);
+	current = data->varenv_lst;
+	while (current)
+	{
+		if (current->value)
+			printf("%s=%s\n", current->name, current->value);
+		current = current->next;
+	}
 }

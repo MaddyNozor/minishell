@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+         #
+#    By: ecole <ecole@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/10 15:29:24 by mairivie          #+#    #+#              #
-#    Updated: 2025/02/24 12:05:30 by mairivie         ###   ########.fr        #
+#    Updated: 2025/02/27 18:11:58 by ecole            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,9 @@ CFLAGS = -Wall -Wextra -Werror -g3 -I include
 SRC_DIR = source/
 SRC_LIST =  main.c \
             builtins/ft_echo.c \
+            builtins/ft_pwd.c \
+            builtins/ft_env.c \
+            builtins/ft_cd.c \
             executer/exec_pipeline_cmd.c \
             executer/exec_simple_builtin.c \
             executer/exec_simple_extern.c \
@@ -40,7 +43,14 @@ SRC_LIST =  main.c \
             lexer/lex_utils_token.c \
             lexer/lex_utils_type_char_detector.c \
             lexer/lexing_checker.c \
-            lexer/lexing.c 
+            lexer/lexing.c \
+            parser/token_eof.c \
+            parser/parsing_loop.c \
+            parser/queue.c \
+            parser/token_pipe.c \
+            parser/token_redirections.c \
+            parser/token_var_env.c \
+            parser/token_word.c \
                      
 SRC = $(addprefix $(SRC_DIR), $(SRC_LIST))
 

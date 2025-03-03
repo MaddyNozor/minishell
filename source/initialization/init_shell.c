@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ecole <ecole@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 14:00:05 by sabellil          #+#    #+#             */
-/*   Updated: 2025/02/21 18:43:15 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/02/27 18:07:28 by ecole            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,37 @@ t_varenv	*init_varenv(char **envp)
 		init_minimalist_env(&varenv_lst);
 	else
 		init_existing_env(&varenv_lst, envp);
+	// t_varenv *tmp = varenv_lst;//Pour verifier les varenv existantes
+	// 	printf("---- Environnement chargé ----\n");
+	// 	while (tmp)
+	// 	{
+	// 		printf("%s=%s\n", tmp->name, tmp->value);
+	// 		tmp = tmp->next;
+	// 	}
+	// 	printf("-----------------------------\n");
 	return (varenv_lst);
 }
+
+// Fonction pour dupliquer `envp`
+char	**dup_env(char **envp)
+{
+	int		i;
+	char	**new_env;
+
+	// Compter le nombre de variables d'environnement
+	for (i = 0; envp[i]; i++);
+	new_env = malloc((i + 1) * sizeof(char *));
+	if (!new_env)
+		return (NULL);
+
+	// Copier chaque variable
+	for (i = 0; envp[i]; i++)
+		new_env[i] = strdup(envp[i]);
+	new_env[i] = NULL;
+
+	return (new_env);
+}
+
 
 // //TEST INIT_SHELL a utiliser avec init_shell.c et init_shell_utils.c
 // void print_varenv(t_varenv *varenv_lst)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ecole <ecole@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:38:39 by sabellil          #+#    #+#             */
-/*   Updated: 2025/02/21 13:26:14 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/02/26 17:18:59 by ecole            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	executer_simple_cmd(t_cmd *cmd, t_data *data)
 
 void	executer(t_data *data)
 {
+	printf("Je suis dans executer\n");
 	if (data->cmd_lst->next == NULL)
 		executer_simple_cmd(data->cmd_lst, data);
 	else

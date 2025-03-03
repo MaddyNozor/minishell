@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/02/21 15:57:18 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/03 12:27:57 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,9 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <string.h>
+# include <limits.h> // pour PATH_MAX dans ft_pwd
+
+
 
 //--------------------- DEFINES -----------------------------
 # define FAILURE_L 0 //TODO: traque des success et failure dans le lexing
@@ -110,6 +113,18 @@ typedef struct s_data
 	char		**histo;
 }	t_data;
 
+typedef struct s_node
+{
+    char            *content;
+    struct s_node   *next;
+} t_node;
+
+typedef struct s_queue
+{
+    t_node  *head;
+    t_node  *tail;
+} t_queue;
+
 //--------------------- FONCTIONS -----------------------------
 
 // SHELL INITIALIZATION
@@ -158,6 +173,7 @@ t_token						*create_token(char *line, int i,
 								t_token *new_token);
 // checker
 int							check_lexing(t_token *head_of_list);
+
 
 // EXECUTER
 void		executer(t_data *data);
@@ -217,5 +233,47 @@ void		free_tab(char **tab);
 
 // BUILT-IN COMMANDS
 void		ft_echo(t_cmd *cmd);
+void		ft_pwd(void);
+void		ft_env(t_data *data, t_cmd *cmd);
+char		**dup_env(char **envp);
+void ft_cd(t_cmd *cmd, t_varenv *varenv);
+
+// PARSER (On remonte le tout a la fin)
+
+// PARSER - QUEUE
+void transfer_queue_to_argv(t_queue *queue, t_cmd *cmd);
+void enqueue_token(t_queue *queue, char *content);
+t_queue *init_queue();
+
+// PARSER - MAIN LOOP
+// t_cmd	*parser(t_token *tok);
+t_cmd *parser(t_token *tok, t_varenv *varenv_lst);
+// void	handle_tokens(t_token *tok, t_cmd **cmd_list);//remplacee pour tester var env
+void handle_tokens(t_token *tok, t_cmd **cmd_list, t_varenv *varenv_lst);
+t_cmd	*init_cmd_structs();
+
+// PARSER - TOKEN_PIPE
+void handle_token_pipe(t_cmd **current_cmd, t_queue *queue);
+
+// PARSER - TOKEN_VAR_ENV
+void handle_var_env(t_token *tok, t_queue *queue, t_cmd *current_cmd, t_varenv *varenv);
+void replace_var(t_token *tok, char *new_content);
+bool ft_var_exists(char *var_name, t_varenv *varenv);
+char *ft_expand(char *var_name, t_varenv *varenv);
+
+// PARSER - TOKEN_EOF
+
+// PARSER - TOKEN_REDIRECTIONS
+void handle_redirections(t_token *tok, t_cmd **current_cmd, t_varenv *varenv);
+void handle_redirect_out(t_token *tok, t_cmd **current_cmd, t_varenv *varenv);
+// void handle_append_out(t_token *tok, t_cmd **current_cmd, t_varenv *varenv);
+// void handle_redirect_in(t_token *tok, t_cmd **current_cmd, t_varenv *varenv);
+void handle_heredoc(t_token *tok, t_cmd **current_cmd, t_varenv *varenv);
+
+//PARSER c'est faux mais j'en ai besoin pour make
+// void handle_token_word(t_queue *queue, char *content, t_cmd *current_cmd);
+void handle_token_word(t_queue *queue, t_token **tok, t_cmd *current_cmd);
+
+void handle_EOF(t_queue *queue, t_cmd *current_cmd);
 
 #endif

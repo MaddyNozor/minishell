@@ -1,36 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_echo.c                                          :+:      :+:    :+:   */
+/*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/11 15:46:35 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/03 12:40:19 by sabellil         ###   ########.fr       */
+/*   Created: 2025/03/03 12:38:32 by sabellil          #+#    #+#             */
+/*   Updated: 2025/03/03 12:40:06 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/init_shell.h"
+#include "init_shell.h"
 
-void	ft_echo(t_cmd *cmd)
+void	ft_pwd(void)
 {
-	int		i;
-	int		newline;
+	char	*cwd;
 
-	i = 1;
-	newline = 1;
-	if (cmd->argc > 1 && ft_strncmp(cmd->argv[1], "-n", 3) == 0)
+	cwd = getcwd(NULL, 0);
+	if (cwd)
 	{
-		newline = 0;
-		i = 2;
+		printf("%s\n", cwd);
+		free(cwd);
 	}
-	while (cmd->argv[i])
+	else
 	{
-		write(STDOUT_FILENO, cmd->argv[i], ft_strlen(cmd->argv[i]));
-		if (cmd->argv[i + 1])
-			write(STDOUT_FILENO, " ", 1);
-		i++;
+		perror("pwd");
 	}
-	if (newline)
-		write(STDOUT_FILENO, "\n", 1);
 }

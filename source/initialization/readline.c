@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:41:57 by sabellil          #+#    #+#             */
-/*   Updated: 2025/02/24 12:18:38 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/02/25 15:44:36 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,6 @@
 //     signal(SIGINT, handle_sigint);  // gestion de ctrl+C
 //     signal(SIGQUIT, SIG_IGN);      // ignorer ctrl+\
 // }
-
-// t_token *lexer(char *input)
-// {
-//     (void)input;
-// 	printf("Hey\n");
-//     return (NULL); // Implémentation à compléter
-// }
-
-t_cmd	*parser(t_token *tok)
-{
-	(void)tok;
-	return (NULL);
-}
 
 char	*read_user_input(void)
 {
@@ -47,31 +34,67 @@ char	*read_user_input(void)
 	return (input);
 }
 
-void	ft_start_minishell(t_data *data)
+void ft_start_minishell(t_data *data)
 {
-	char	*input;
+    char *input;
 
-	while (1)
-	{
-		input = read_user_input();
-		if (*input == '\0')
-		{
-			free(input);
-			continue ;
-		}
-		data->tok_lst = lexer(input);
-		free(input);
-		free_token_list(data->tok_lst);
-		if (data->tok_lst)
-		{
-			data->cmd_lst = parser(data->tok_lst);
-			if (data->cmd_lst)
-			{
-				executer(data);
-				free_cmd_list(data->cmd_lst);
-				data->cmd_lst = NULL;
-			}
-			free_token_list(data->tok_lst);
-		}
-	}
+    while (1)
+    {
+        input = read_user_input();
+        if (*input == '\0')
+        {
+            free(input);
+            continue;
+        }
+        data->tok_lst = lexer(input);
+        free(input);
+        if (data->tok_lst)
+        {
+            data->cmd_lst = parser(data->tok_lst, data->varenv_lst);
+            if (data->cmd_lst)
+            {
+                printf("On rentre dans executer\n");
+                executer(data);
+                free_cmd_list(data->cmd_lst);
+                data->cmd_lst = NULL;
+            }
+            free_token_list(data->tok_lst);
+        }
+    }
 }
+// void	ft_start_minishell(t_data *data)// la fonction de base
+// {
+// 	char	*input;
+
+// 	while (1)
+// 	{
+// 		input = read_user_input();
+// 		if (*input == '\0')
+// 		{
+// 			free(input);
+// 			continue ;
+// 		}
+// 		data->tok_lst = lexer(input);
+// 		free(input);
+// 		// free_token_list(data->tok_lst);
+// 		if (data->tok_lst)
+// 		{
+// 			data->cmd_lst = parser(data->tok_lst);
+// 			// printf("Executing data:");
+// 			// t_cmd *tmp_cmd = data->cmd_lst;
+// 			// while (tmp_cmd)
+// 			// {
+// 			// 	printf("Command: %s, argc: %d", tmp_cmd->value, tmp_cmd->argc);
+// 			// 	tmp_cmd = tmp_cmd->next;
+// 			// }
+// 			if (data->cmd_lst)
+// 			{
+// 				printf("On rentre dans executer\n");
+// 				executer(data);
+// 				free_cmd_list(data->cmd_lst);
+// 				data->cmd_lst = NULL;
+// 			}
+// 			free_token_list(data->tok_lst);
+// 		}
+// 	}
+// }
