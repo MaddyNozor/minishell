@@ -160,7 +160,15 @@ t_token						*create_token(char *line, int i,
 // checker
 int							check_lexing(t_token *head_of_list);
 
-//PARSING
+//PARSING QUOTES
+char	*ft_trim_quote(char const *s1, char const q);
+char *ft_glue_the_slices_again(t_list *list_slice);
+char *ft_expand_and_trim(char *slice);
+char *ft_cut_normal_text(char *content, int *i);
+char *ft_cut_quoted_text(char *content, int *i);
+char *ft_cut_a_slice(char *content, int *i);
+void ft_stock_the_slice(t_list **stock_list, char *slice);
+char    *ft_quote_manager(char *actual_content);
 t_token *ft_spot_the_quotes(t_data *data);
 
 // EXECUTER
