@@ -6,21 +6,39 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/03 14:50:42 by codespace        ###   ########.fr       */
+/*   Updated: 2025/03/05 11:19:36 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/init_shell.h"
 
+/* ************************************************************************** */
+/* This file contains functions for handling quoted strings.                 */
+/* WARNING: Input strings must have valid quotes!                            */
+/* - Every opening quote must have a corresponding closing quote.            */
+/* - Unclosed or invalid quotes must be filtered OUT BEFORE calling these.   */
+/* - Do NOT pass unverified strings to these functions.                      */
+/* Any changes to the parsing logic must ensure this condition is met.       */
+/* ************************************************************************** */
+
 char *ft_cut_a_slice(char *content, int *i)
 {
     char *slice;
+    char type_of_quote;
     
     slice = NULL;
+    type_of_quote = BLANK;
     if (content[*i] == '\'' || content[*i] == '"')
+    {
+        ft_printf("cut a slice quoted \n");
+        type_of_quote = content[*i];
         slice = ft_cut_quoted_text(content, i);
+    }
     else
-        slice = ft_cut_normal_text(content, i);
+    {
+        ft_printf("cut a slice normal \n");
+        slice = ft_cut_normal_text(content, i, type_of_quote);
+    }
     if (slice == NULL)
         return (NULL);
     return (slice);
@@ -32,7 +50,7 @@ void ft_stock_the_slice(t_list **stock_list, char *slice)
     
     if (!slice || !*slice) // Vérifie que le slice n'est pas NULL ou vide
     {
-        free(slice);
+        free(slice); //free stock list non, comme ca veut dire que malloc a echoue pour la slice non ?
         return;
     }
     new_node = ft_lstnew(slice);
@@ -51,22 +69,22 @@ char *ft_glue_the_slices_again(t_list *list_slice)
     t_list *current;
 
     if (!list_slice)
-        return (ft_strdup("")); // Évite un NULL
-
+        return (ft_strdup("")); // Évite un NULL. ??????? WHY ???
     new_content = ft_strdup("");
     if (!new_content)
         return (NULL);
-    
+    temp = NULL;
     current = list_slice;
     while (current)
     {
         temp = ft_strjoin(new_content, current->content);
-        free(new_content);
-        new_content = temp;
-        if (!new_content)
+        if (temp == NULL)
             return (NULL); // Sécurise contre un échec d'allocation
+        new_content = temp;
+//      free(temp ?????);
         current = current->next;
     }
+    //free toute la list_slice d'ailleurs on en a plus besoin je crois
     return (new_content);
 }
 

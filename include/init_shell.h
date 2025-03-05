@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/03 15:52:36 by codespace        ###   ########.fr       */
+/*   Updated: 2025/03/04 13:03:48 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@ int							check_lexing(t_token *head_of_list);
 char	*ft_trim_quote(char const *s1, char const q);
 char *ft_glue_the_slices_again(t_list *list_slice);
 char *ft_search_var_to_expand_then_trim(char *slice);
-char *ft_cut_normal_text(char *content, int *i);
+char *ft_cut_normal_text(char *content, int *i, char type_of_quote);
 char *ft_cut_quoted_text(char *content, int *i);
 char *ft_cut_a_slice(char *content, int *i);
 void ft_stock_the_slice(t_list **stock_list, char *slice);

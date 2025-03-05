@@ -6,11 +6,20 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/03 17:00:23 by codespace        ###   ########.fr       */
+/*   Updated: 2025/03/05 11:16:17 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/init_shell.h"
+
+/* ************************************************************************** */
+/* This file contains functions for handling quoted strings.                 */
+/* WARNING: Input strings must have valid quotes!                            */
+/* - Every opening quote must have a corresponding closing quote.            */
+/* - Unclosed or invalid quotes must be filtered OUT BEFORE calling these.   */
+/* - Do NOT pass unverified strings to these functions.                      */
+/* Any changes to the parsing logic must ensure this condition is met.       */
+/* ************************************************************************** */
 
 /*
 char *ft_cut_a_slice(char *content, int *i)
@@ -131,6 +140,7 @@ char *ft_find_and_expand_var(char *str, int *i, t_varenv *varenv)
 char *ft_search_var_to_expand_then_trim(char *slice)
 {
     t_list *dbl_qt_lst;
+    char *subslice;
     char *expanded;
     int i;
     t_varenv *fake_varenv;
@@ -141,41 +151,49 @@ char *ft_search_var_to_expand_then_trim(char *slice)
     while (slice[i])
     {
         if (slice[i] == '$')
-            slice = ft_find_and_expand_var(slice, &i, fake_varenv);
+            subslice = ft_find_and_expand_var(slice, &i, fake_varenv);
         else
-            slice = ft_cut_normal_text(slice, &i);
-        if (slice == NULL)
+            subslice = ft_cut_normal_text(slice, &i, '"');
+        if (subslice == NULL)
             return (NULL);
-        ft_stock_the_slice(&dbl_qt_lst, slice);
+        ft_stock_the_slice(&dbl_qt_lst, subslice);
     }
     expanded = ft_glue_the_slices_again(dbl_qt_lst);
     if (expanded == NULL)
         return (NULL);
-//    ft_lstclear(&dbl_qt_lst, free); on masque ca pour l'instant car double free
-//    free(slice);
+    ft_lstclear(&dbl_qt_lst, free); //on masque ca pour l'instant car double free
+    free(slice);
     return (expanded);
 }
 
-char *ft_cut_normal_text(char *content, int *i)
+char *ft_cut_normal_text(char *content, int *i, char type_of_quote)
 {
-    int start = *i;
-    
-    while (content[*i] && content[*i] != '\'' && content[*i] != '"')
-    (*i)++;
-    return (ft_substr(content, start, *i - start));
-}
-
-char *ft_cut_quoted_text(char *content, int *i)
-{
-    char quote = content[*i];
     int start;
     char *slice;
     
     start = *i;
+    slice = NULL;
+    while (content[*i] && content[*i] != type_of_quote)
+        (*i)++;
+    slice = ft_substr(content, start, *i - start);
+    if (slice == NULL)
+        return (NULL);
+    return (slice);
+}
+
+char *ft_cut_quoted_text(char *content, int *i)
+{
+    char quote; //endeux lignes plizzz
+    int start;
+    char *slice;
+    
+    quote = content[*i];
+    start = *i;
     (*i)++;
     while (content[*i] && content[*i] != quote)
         (*i)++;
-    slice = ft_substr(content, start + 1, *i - start);
+    slice = ft_substr(content, start, *i - start + 1); // pk mon start +1 la si je veux d'abord avoir mon fragments a quote ?
+    ft_printf("slice cut quote : %s \n", slice);
     if (!slice)
         return (NULL);
     if (quote == '\'')
