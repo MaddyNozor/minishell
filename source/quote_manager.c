@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/06 11:22:51 by codespace        ###   ########.fr       */
+/*   Updated: 2025/03/06 11:35:32 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char *ft_cut_a_slice(char *content, int *i)
     {    
         quote_type = content[*i];
         slice = ft_cut_quoted_text(content, i);
-        (*i)++;
+    //    (*i)++;
     }
     else
         slice = ft_cut_normal_text(content, i, quote_type);
@@ -55,14 +55,11 @@ char *ft_glue_the_slices_again(t_list *list_slice)
     char *new_content;
     char *temp;
     t_list *current;
-
     if (!list_slice)
         return (ft_strdup("")); // Évite un NULL
-
     new_content = ft_strdup("");
     if (!new_content)
         return (NULL);
-    
     current = list_slice;
     while (current)
     {
@@ -82,7 +79,7 @@ char    *ft_quote_manager(char *actual_content)
     char    *new_content;
     char    *slice;
     int     i;
-
+    
     stock_list = NULL;
     i = 0;
     while (actual_content[i])
@@ -92,7 +89,6 @@ char    *ft_quote_manager(char *actual_content)
     }
     new_content = ft_glue_the_slices_again(stock_list); // Recompose la string
     ft_lstclear(&stock_list, free); // Nettoie la liste temporaire
-
     free(actual_content); // Libère l'ancien contenu
     return (new_content);
 }

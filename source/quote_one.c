@@ -6,27 +6,11 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/06 11:17:50 by codespace        ###   ########.fr       */
+/*   Updated: 2025/03/06 11:40:09 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/init_shell.h"
-
-/*
-char *ft_cut_a_slice(char *content, int *i)
-{
-    char *slice;
-    
-    slice = NULL;
-    if (content[*i] == '\'' || content[*i] == '"')
-        slice = ft_cut_quoted_text(content, i);
-    else
-        slice = ft_cut_normal_text(content, i);
-    if (slice == NULL)
-        return (NULL);
-    return (slice);
-}
-*/
 
 //Vire uniquement les quotes en debut et fin de token. 
 //Pour les token multiquotes c'est pqs qdqpté.
@@ -113,21 +97,6 @@ char *ft_cut_normal_text(char *content, int *i, char quote_type)
     return (slice);
 }
 
-/*char *ft_cut_normal_text(char *content, int *i, char type_of_quote)
-{
-    int start;
-    char *slice;
-    
-    start = *i;
-    slice = NULL;
-    while (content[*i] && content[*i] != type_of_quote)
-        (*i)++;
-    slice = ft_substr(content, start, *i - start);
-    if (slice == NULL)
-        return (NULL);
-    return (slice);
-}*/
-
 char *ft_cut_quoted_text(char *content, int *i)
 {
     char quote;
@@ -146,32 +115,6 @@ char *ft_cut_quoted_text(char *content, int *i)
        slice = ft_trim_quote(slice, quote); // Trim pour les '' peut-être que ft_subtrim suffit 
 //    else
 //        slice = ft_expand_and_trim(slice); // Expansion pour les ""
-//    if (content[*i] == quote)
-//        (*i)++; // Passe la quote fermante 
+    (*i)++; // Passe la quote fermante sur le content
     return (slice);
 }
-
-/*
-char *ft_cut_a_slice(char *content, int i)
-{
-    char *slice;
-    int start;
-    //type_of_quote
-    
-    slice = NULL;
-    start = i;
-    while(content[i] != '\'')// une des deux quotes
-        i++;
-    //type_of_quote = content[i]
-    if (i - start != 0)
-    {
-        slice = ft_substr(content, start, i);
-        return (slice);
-    }
-    while(content[i] != '\'') // type of quote
-        i++;
-    slice = ft_substr(content, start, (i - start));
-    slice = ft_trim_quote(slice, '\''); //peut-etre type of quote directement ?
-    return (slice);
-}
-*/
