@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/07 10:04:53 by codespace        ###   ########.fr       */
+/*   Updated: 2025/03/07 11:28:46 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,16 +78,16 @@ char *ft_cut_normal_text(char *content, int *i, char quote_type)
     
     start = *i;
     slice = NULL;
-    ft_printf("normal text \n");
+    //ft_printf("normal text \n");
     if (quote_type == BLANK)
     {
-        ft_printf("blank quote \n");
+        //ft_printf("blank quote \n");
         while (content[*i] && content[*i] != '\'' && content[*i] != '"')
             (*i)++;
     }
     else
     {
-        ft_printf("quote : %c \n", quote_type);
+        //ft_printf("quote : %c \n", quote_type);
         while (content[*i] && content[*i] != quote_type)
             (*i)++;
     }
@@ -104,7 +104,7 @@ char *ft_cut_quoted_text(char *content, int *i)
     
     quote = content[*i];
     start = *i;
-    ft_printf("quoted text %c \n", quote);
+    //ft_printf("quoted text %c \n", quote);
     (*i)++;
     while (content[*i] && content[*i] != quote)
         (*i)++;
