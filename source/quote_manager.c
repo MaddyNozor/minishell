@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/06 14:27:31 by codespace        ###   ########.fr       */
+/*   Updated: 2025/03/07 16:14:36 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ t_token *ft_spot_the_quotes(t_data *data)
 {
     t_token *cur_token;
     t_token *head_of_list;
+    //char    *content_with_quote;
 
     cur_token = data->tok_lst;
     head_of_list = data->tok_lst;
@@ -106,6 +107,7 @@ t_token *ft_spot_the_quotes(t_data *data)
             if(cur_token->nb_quote > 0)
             {
                 ft_printf("before: %s \n", cur_token->content);
+                
                 cur_token->content = ft_quote_manager(cur_token->content);
                 ft_printf("after: %s \n", cur_token->content);
             }
