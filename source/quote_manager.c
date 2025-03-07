@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/06 11:35:32 by codespace        ###   ########.fr       */
+/*   Updated: 2025/03/06 14:27:31 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ char *ft_cut_a_slice(char *content, int *i)
     {    
         quote_type = content[*i];
         slice = ft_cut_quoted_text(content, i);
-    //    (*i)++;
     }
     else
         slice = ft_cut_normal_text(content, i, quote_type);

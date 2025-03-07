@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/05 18:36:12 by codespace        ###   ########.fr       */
+/*   Updated: 2025/03/07 10:09:02 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,11 @@ char *ft_cut_a_slice(char *content, int *i);
 void ft_stock_the_slice(t_list **stock_list, char *slice);
 char    *ft_quote_manager(char *actual_content);
 t_token *ft_spot_the_quotes(t_data *data);
+char    *ft_varenv_manager(char *string);
+char	*ft_varenv_slicing(char *content, int *i);
+char    *ft_cut_varenv(char *content, int *i);
+char	*ft_expand_varenv(char *var_found);
+char	*ft_cut_normal_text_but_varenv(char *content, int *i);
 
 // EXECUTER
 void		executer(t_data *data);

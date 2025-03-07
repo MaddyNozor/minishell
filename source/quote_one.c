@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/06 11:40:09 by codespace        ###   ########.fr       */
+/*   Updated: 2025/03/07 10:04:53 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,10 +111,9 @@ char *ft_cut_quoted_text(char *content, int *i)
     char *slice = ft_substr(content, start + 1, *i - start);
     if (!slice)
         return (NULL);
-//    if (quote == '\'')
-       slice = ft_trim_quote(slice, quote); // Trim pour les '' peut-être que ft_subtrim suffit 
-//    else
-//        slice = ft_expand_and_trim(slice); // Expansion pour les ""
+    if (quote == '"')
+        slice = ft_varenv_manager(slice);
+    slice = ft_trim_quote(slice, quote); // Trim pour les '' peut-être que ft_subtrim suffit 
     (*i)++; // Passe la quote fermante sur le content
     return (slice);
 }

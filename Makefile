@@ -6,7 +6,7 @@
 #    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/10 15:29:24 by mairivie          #+#    #+#              #
-#    Updated: 2025/03/03 15:06:46 by codespace        ###   ########.fr        #
+#    Updated: 2025/03/07 10:27:06 by codespace        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,7 +42,8 @@ SRC_LIST =  main.c \
             lexer/lexing_checker.c \
             lexer/lexing.c \
             quote_manager.c \
-            quote_one.c
+            quote_one.c \
+            quote_two.c
                      
 SRC = $(addprefix $(SRC_DIR), $(SRC_LIST))
 
