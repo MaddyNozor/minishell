@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 15:44:00 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/03 12:15:26 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/08 18:44:18 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void	execute_builtin(t_cmd *cmd, t_data *data)
 		ft_env(data, cmd);
 	else if (ft_strncmp(cmd->value, "cd", 3) == 0)
 		ft_cd(cmd, data->varenv_lst);
+	else if (ft_strncmp(cmd->value, "exit", 5) == 0)
+			ft_exit(cmd, data);
 	else
 		printf("Oops je l'ai pas encore code celui la!\n");
 	// else if (ft_strncmp(cmd->value, "export", 7) == 0)
@@ -30,25 +32,33 @@ void	execute_builtin(t_cmd *cmd, t_data *data)
 	// else if (ft_strncmp(cmd->value, "unset", 6) == 0)
 	// 	ft_unset(cmd, data);
 
-	// else if (ft_strncmp(cmd->value, "exit", 5) == 0)
-	// 	ft_exit(cmd);
 }
 
 void	exec_simple_builtin_dir(t_cmd *cmd, t_data *data)
 {
 	int	saved_stdout;
 	int	saved_stdin;
+	int input_fd;
 
 	(void)data;
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
 	apply_redirections(cmd->redirection);
+	
+	input_fd = open(cmd->redirection->file_name, O_RDONLY);	// 🔥 Vérifier immédiatement si la redirection d'entrée a échoué
+	if (input_fd == -1)
+	{
+		fprintf(stderr, "bash: %s: No such file or directory\n", cmd->redirection->file_name);
+		return ;
+	}
 	execute_builtin(cmd, data);
 	dup2(saved_stdin, STDIN_FILENO);
 	dup2(saved_stdout, STDOUT_FILENO);
 	close(saved_stdin);
 	close(saved_stdout);
 }
+
+
 
 void	exec_simple_builtin_heredoc(t_cmd *cmd, t_data *data)
 {

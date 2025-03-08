@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirections.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 13:46:25 by sabellil          #+#    #+#             */
-/*   Updated: 2025/02/21 18:44:52 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/08 17:49:38 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,24 +72,58 @@ void	handle_heredoc_and_input(int heredoc_fd, int input_fd)
 	}
 }
 
-void	handle_input_redirection(t_redirection *redirection,
-								int *input_fd,
-								t_redirection **last_heredoc,
-								bool *input_redir_found)
+// void	handle_input_redirection(t_redirection *redirection,
+// 								int *input_fd,
+// 								t_redirection **last_heredoc,
+// 								bool *input_redir_found)//la base
+// {
+// 	t_redirection	*current;
+
+// 	current = redirection;
+// 	while (current)
+// 	{
+// 		if (current->type == REDIR_IN)
+// 		{
+// 			*input_fd = open(current->file_name, O_RDONLY);
+// 			if (*input_fd == -1)
+// 			{
+// 				fprintf(stderr, "bash: %s: No such file or directory\n",
+// 					current->file_name);
+// 				exit(1);
+// 			}
+// 			dup2(*input_fd, STDIN_FILENO);
+// 			close(*input_fd);
+// 			*input_redir_found = true;
+// 		}
+// 		else if (current->type == REDIR_HEREDOC)
+// 			*last_heredoc = current;
+// 		current = current->next;
+// 	}
+// }
+
+void	handle_input_redirection(t_redirection *redirection, int *input_fd,
+		t_redirection **last_heredoc, bool *input_redir_found)
 {
 	t_redirection	*current;
 
 	current = redirection;
 	while (current)
 	{
+		printf("🔎 Vérification dans handle_input_redirection : type actuel = %d (REDIR_IN attendu: %d)\n",
+		current->type, REDIR_IN);
 		if (current->type == REDIR_IN)
 		{
+			printf("Je suis rentre dnas handle input redirection\n");
+			printf("🔍 Tentative d'ouverture de %s en mode lecture seule\n",
+					current->file_name);
 			*input_fd = open(current->file_name, O_RDONLY);
 			if (*input_fd == -1)
 			{
 				fprintf(stderr, "bash: %s: No such file or directory\n",
-					current->file_name);
-				exit(1);
+						current->file_name);
+				*input_redir_found = false;
+				return ;
+				// ⏹️ Stoppe immédiatement la fonction et empêche la création de `test1`
 			}
 			dup2(*input_fd, STDIN_FILENO);
 			close(*input_fd);
@@ -105,6 +139,7 @@ void	handle_heredoc_redirection(t_redirection *last_heredoc, int *heredoc_fd)
 {
 	if (!last_heredoc)
 		return ;
+	printf("Je suis entré dans handle_heredoc_redirection\n");
 	*heredoc_fd = open(last_heredoc->file_name, O_RDONLY);
 	if (*heredoc_fd == -1)
 	{
@@ -113,4 +148,10 @@ void	handle_heredoc_redirection(t_redirection *last_heredoc, int *heredoc_fd)
 	}
 	dup2(*heredoc_fd, STDIN_FILENO);
 	close(*heredoc_fd);
+	// 🔥 Restaurer l'entrée standard après exécution du heredoc
+	int fd_stdin = dup(STDIN_FILENO); // Sauvegarde de STDIN
+	dup2(fd_stdin, STDIN_FILENO);     // Restauration de STDIN après execve()
+	close(fd_stdin);                 
+		// Fermeture du descripteur de fichier temporaire
+	printf("✅ STDIN restauré après heredoc.\n");
 }

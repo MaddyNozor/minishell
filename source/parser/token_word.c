@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:19:05 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/03 12:47:07 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/08 16:03:24 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,7 @@ void	handle_token_word(t_queue *queue, t_token **tok, t_cmd *current_cmd)
 				current_cmd->argc);
 	}
 	*tok = current_tok; // maj du pointeur pour handle_tokens
+	printf("🔍 handle_token_word : tok->content = %s, current_cmd->value = %s\n",
+		(*tok)->content, current_cmd->value);
+ 
 }

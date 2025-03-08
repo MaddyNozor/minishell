@@ -6,11 +6,13 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 16:10:03 by sabellil          #+#    #+#             */
-/*   Updated: 2025/02/21 13:47:11 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/08 19:06:40 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
+#include <sys/stat.h>  // 🔥 Ajoute cette ligne en haut de ton fichier
+
 
 void	close_redirections(t_redirection *redirection)
 {
@@ -20,48 +22,47 @@ void	close_redirections(t_redirection *redirection)
 	curr = redirection;
 	while (curr)
 	{
-		if (curr->type == REDIR_IN
-			|| curr->type == REDIR_OUT
-			|| curr->type == REDIR_APPEND
-			|| curr->type == REDIR_HEREDOC)
+		fd = open(curr->file_name, O_RDONLY);
+		if (fd != -1)
 		{
-			fd = open(curr->file_name, O_RDONLY);
-			if (fd != -1)
-			{
-				close(fd);
-				printf("✅ Fichier %s fermé avec succès\n", curr->file_name);
-			}
-			else
-				printf("❌ Impossible d'ouvrir %s pour fermeture\n",
-					curr->file_name);
+			// printf("🔴 Fermeture de %s (fd: %d)\n", curr->file_name, fd);
+			close(fd);
 		}
+		// else
+		// 	printf("⚠️ Impossible d'ouvrir %s pour fermeture\n", curr->file_name);
 		curr = curr->next;
 	}
-	if (dup2(STDIN_FILENO, STDIN_FILENO) != -1)
-		close(STDIN_FILENO);
 }
-
-void	apply_redirections(t_redirection *redirection)
+void	apply_redirections(t_redirection *redirection)// REPRENDRE ICI POUR LES EXTENRES TOUCH,,,,
 {
-	int				last_output_fd;
-	int				heredoc_fd;
-	int				input_fd;
-	t_redirection	*last_heredoc;
-	bool			input_redir_found;
+	int	last_output_fd;
+	int	input_fd;
+	t_redirection *current = redirection;
 
 	last_output_fd = -1;
-	heredoc_fd = -1;
 	input_fd = -1;
-	last_heredoc = NULL;
-	input_redir_found = false;
-	handle_output_redirections(redirection, &last_output_fd);
-	handle_input_redirection(redirection, &input_fd, &last_heredoc,
-		&input_redir_found);
-	if (!input_redir_found)
-		handle_heredoc_redirection(last_heredoc, &heredoc_fd);
-	if (last_output_fd != -1)
+
+	while (current)
 	{
-		dup2(last_output_fd, STDOUT_FILENO);
-		close(last_output_fd);
+		if (current->type == REDIR_IN)
+		{
+			// printf("🔍 Tentative d'ouverture de %s en mode lecture seule\n", current->file_name);
+			input_fd = open(current->file_name, O_RDONLY);
+			if (input_fd == -1)
+			{
+				// printf("Envoye de puis apply redirections :\n");
+				// fprintf(stderr, "bash: %s: No such file or directory\n", current->file_name);
+				break;
+			}
+			dup2(input_fd, STDIN_FILENO);
+			close(input_fd);
+		}
+		current = current->next;
 	}
+	if (input_fd == -1)
+	{
+		// printf("⛔ Erreur sur la redirection d'entrée, on annule `>`.\n");
+		return;
+	}
+	handle_output_redirections(redirection, &last_output_fd);
 }

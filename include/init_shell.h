@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/03 12:27:57 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/08 18:30:48 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,14 @@
 # define SUCCESS_L 1
 # define TRUE 1
 
-# define FAILURE 1
+# define FAILURE 1 
 # define SUCCESS 0
-# define REDIR_IN 1
-# define REDIR_OUT 2
-# define REDIR_APPEND 3
+# define REDIR_IN 3
+# define REDIR_OUT 1
+# define REDIR_APPEND 2
 # define REDIR_HEREDOC 4
 
-//--TOKEN_TYPE_LEXING
+//--TOKEN_TYPE_LEXING 
 # define BLANK 0
 # define REDIRECT_OUT 1
 # define APPEND_OUT 2
@@ -236,7 +236,8 @@ void		ft_echo(t_cmd *cmd);
 void		ft_pwd(void);
 void		ft_env(t_data *data, t_cmd *cmd);
 char		**dup_env(char **envp);
-void ft_cd(t_cmd *cmd, t_varenv *varenv);
+void 		ft_cd(t_cmd *cmd, t_varenv *varenv);
+void		ft_exit(t_cmd *cmd, t_data *data);
 
 // PARSER (On remonte le tout a la fin)
 
@@ -265,10 +266,10 @@ char *ft_expand(char *var_name, t_varenv *varenv);
 
 // PARSER - TOKEN_REDIRECTIONS
 void handle_redirections(t_token *tok, t_cmd **current_cmd, t_varenv *varenv);
-void handle_redirect_out(t_token *tok, t_cmd **current_cmd, t_varenv *varenv);
+// void handle_redirect_out(t_token *tok, t_cmd **current_cmd, t_varenv *varenv);//devenus static
 // void handle_append_out(t_token *tok, t_cmd **current_cmd, t_varenv *varenv);
 // void handle_redirect_in(t_token *tok, t_cmd **current_cmd, t_varenv *varenv);
-void handle_heredoc(t_token *tok, t_cmd **current_cmd, t_varenv *varenv);
+// void handle_heredoc(t_token *tok, t_cmd **current_cmd, t_varenv *varenv);/devenus static
 
 //PARSER c'est faux mais j'en ai besoin pour make
 // void handle_token_word(t_queue *queue, char *content, t_cmd *current_cmd);

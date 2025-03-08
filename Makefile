@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ecole <ecole@student.42.fr>                +#+  +:+       +#+         #
+#    By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/10 15:29:24 by mairivie          #+#    #+#              #
-#    Updated: 2025/02/27 18:11:58 by ecole            ###   ########.fr        #
+#    Updated: 2025/03/08 12:27:17 by sabellil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ SRC_LIST =  main.c \
             builtins/ft_pwd.c \
             builtins/ft_env.c \
             builtins/ft_cd.c \
+            builtins/ft_exit.c \
             executer/exec_pipeline_cmd.c \
             executer/exec_simple_builtin.c \
             executer/exec_simple_extern.c \

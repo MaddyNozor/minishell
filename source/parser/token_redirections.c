@@ -6,13 +6,13 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:19:35 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/03 12:46:12 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/08 18:08:55 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
 
-void	handle_heredoc(t_token *tok, t_cmd **current_cmd, t_varenv *varenv)
+static void	handle_heredoc(t_token *tok, t_cmd **current_cmd, t_varenv *varenv, int redir_type)
 {
 	t_redirection	*redir;
 	char			*expanded_value;
@@ -21,7 +21,7 @@ void	handle_heredoc(t_token *tok, t_cmd **current_cmd, t_varenv *varenv)
 	redir = malloc(sizeof(t_redirection));
 	if (!redir)
 		return ;
-	redir->type = HEREDOC; // Stocke le type de redirection
+	redir->type = redir_type; // Stocke le type de redirection
 	redir->next = NULL;
 	(*current_cmd)->redirection = redir;
 		// Lier la redirection à la commande actuelle
@@ -64,19 +64,19 @@ void	handle_heredoc(t_token *tok, t_cmd **current_cmd, t_varenv *varenv)
 		tok = tok->next;
 	}
 }
-
-void	handle_redirect_out(t_token *tok, t_cmd **current_cmd, t_varenv *varenv)
+static void	handle_redirect(t_token *tok, t_cmd **current_cmd, t_varenv *varenv, int redir_type)
 {
 	t_redirection	*redir;
+	t_redirection	*last_redir;
 	char			*filename;
 	char			*expanded_value;
 
 	redir = malloc(sizeof(t_redirection));
 	if (!redir)
 		return ;
-	redir->type = REDIR_OUT;
+	redir->type = redir_type;
 	redir->next = NULL;
-	(*current_cmd)->redirection = redir;
+
 	if (tok->next && (tok->next->type == WORD || tok->next->type == VAR_ENV))
 	{
 		if (tok->next->type == WORD)
@@ -97,39 +97,33 @@ void	handle_redirect_out(t_token *tok, t_cmd **current_cmd, t_varenv *varenv)
 			{
 				fprintf(stderr, "bash: %s: ambiguous redirect\n",
 						tok->next->content);
-				return ;
+				free(redir);
+				return;
 			}
 		}
 		tok = tok->next->next;
-		while (tok && tok->type == WORD)
-		{
-			printf("OUI token est un token_word a stocker en queue\n");
-			enqueue_token(init_queue(), tok->content);
-			(*current_cmd)->argc++;
-			printf("Added argument: %s, new argc: %d\n", tok->content,
-					(*current_cmd)->argc);
-		}
 	}
+
+	// 🔥 Chaînage correct : ajouter à la fin au lieu d'écraser l'existant
+	if (!(*current_cmd)->redirection)
+		(*current_cmd)->redirection = redir;
 	else
-		handle_tokens(tok->next, current_cmd, varenv);
+	{
+		last_redir = (*current_cmd)->redirection;
+		while (last_redir->next)
+			last_redir = last_redir->next;
+		last_redir->next = redir;
+	}
 }
 
 void	handle_redirections(t_token *tok, t_cmd **current_cmd, t_varenv *varenv)
 {
-	// On traite chaque type de redirection en fonction du type du token
-	if (tok->type == REDIRECT_OUT) //OK
-		handle_redirect_out(tok, current_cmd, varenv);
-	else if (tok->type == APPEND_OUT) //OK
-	{
-		// handle_append_out(tok, current_cmd, varenv); 
-			// A supprimer apres verif que > et >> se traitent de la meme facon
-		handle_redirect_out(tok, current_cmd, varenv);
-	}
-	else if (tok->type == REDIRECT_IN) //TODO: verifier comportement
-	{
-		printf("Je gere < apres\n");
-		// handle_redirect_in(tok, current_cmd, varenv);
-	}
-	else if (tok->type == HEREDOC) //OK
-		handle_heredoc(tok, current_cmd, varenv);
+	if (tok->type == REDIRECT_OUT)
+		handle_redirect(tok, current_cmd, varenv, REDIR_OUT);
+	else if (tok->type == APPEND_OUT)
+		handle_redirect(tok, current_cmd, varenv, REDIR_APPEND);
+	else if (tok->type == REDIRECT_IN)
+		handle_redirect(tok, current_cmd, varenv, REDIR_IN);
+	else if (tok->type == HEREDOC)
+		handle_heredoc(tok, current_cmd, varenv, REDIR_HEREDOC);
 }

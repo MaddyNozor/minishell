@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:41:57 by sabellil          #+#    #+#             */
-/*   Updated: 2025/02/25 15:44:36 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/08 16:18:08 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,18 @@
 char	*read_user_input(void)
 {
 	char	*input;
+    if (isatty(STDIN_FILENO) == 0)//Pour pas avoir le reste d'un heredoc passe en prompt
+    {
+        printf("⏩ STDIN est fermé, on le rouvre !\n");
+        int new_stdin = open("/dev/tty", O_RDONLY);
+        if (new_stdin == -1)
+        {
+            perror("Erreur réouverture STDIN");
+            exit(1);
+        }
+        dup2(new_stdin, STDIN_FILENO);
+        close(new_stdin);
+    }
 
 	input = readline("minishell$ ");
 	if (!input)
@@ -53,7 +65,6 @@ void ft_start_minishell(t_data *data)
             data->cmd_lst = parser(data->tok_lst, data->varenv_lst);
             if (data->cmd_lst)
             {
-                printf("On rentre dans executer\n");
                 executer(data);
                 free_cmd_list(data->cmd_lst);
                 data->cmd_lst = NULL;

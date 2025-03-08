@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:04:30 by sabellil          #+#    #+#             */
-/*   Updated: 2025/02/24 16:56:14 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/08 19:42:59 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	execute_external_cmd(t_cmd *cmd, t_data *data)
 	char	*cmd_path;
 	char	**env_array;
 
+	printf("On passe par la fonction execute_external_cmd\n");
 	cmd_path = find_cmd_path(cmd->value, data->varenv_lst);
 	if (!cmd_path || access(cmd_path, X_OK) == -1)
 	{
@@ -31,8 +32,21 @@ void	execute_external_cmd(t_cmd *cmd, t_data *data)
 		free(cmd_path);
 		exit(127);
 	}
+	printf("🚀 Avant execve(), est-ce que %s existe ? %d\n",
+       cmd->argv[1], access(cmd->argv[1], F_OK) == 0);
+	printf("🔍 Vérification après heredoc : commande reçue = %s\n", cmd->value);
 	execve(cmd_path, cmd->argv, env_array);
+	if (strcmp(cmd->value, "clear") == 0)
+{
+    printf("\033[H\033[J");  // 🔥 Code ANSI pour redessiner l'écran après clear
+    rl_on_new_line();
+    rl_replace_line("", 0);
+    rl_redisplay();
+}
+
 	perror("execve failed");
+	write(1, "'n", 1);
+	printf("Processus enfant termine avec erreur\n");
 	free(cmd_path);
 	free_tab(env_array);
 	exit(127);
@@ -42,13 +56,20 @@ void	handle_child_process_pipeline(t_cmd *cmd, t_data *data, int pipe_in,
 		int pipe_fd[2])
 {
 	int	heredoc_fd;
+	int input_fd;
 
 	heredoc_fd = -1;
 	setup_heredoc_fd(cmd, &heredoc_fd);
 	setup_io_redirections(heredoc_fd, pipe_in, pipe_fd, cmd);
 	apply_redirections(cmd->redirection);
-	if (is_builtin(cmd->value))
+	if (is_builtin(cmd->value))// Ajout pour bien fermer si le fichier apres builtin < nexiste pas, potentiellement inutle 
 	{
+		input_fd = open(cmd->redirection->file_name, O_RDONLY);	// 🔥 Vérifier immédiatement si la redirection d'entrée a échoué
+		if (input_fd == -1)
+		{
+			fprintf(stderr, "bash: %s: No such file or directory\n", cmd->redirection->file_name);
+			exit(1);  // ⏹️ On quitte immédiatement pour empêcher toute exécution
+		}
 		execute_builtin(cmd, data);
 		exit(0);
 	}
