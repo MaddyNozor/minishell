@@ -6,13 +6,13 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/08 16:12:16 by codespace        ###   ########.fr       */
+/*   Updated: 2025/03/08 19:24:23 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/init_shell.h"
 
-char    *ft_varenv_manager(char *string)
+char    *ft_varenv_manager(char *string, t_varenv *lst) //t_varenv
 {
     t_list  *stock_list;
     char    *new_content;
@@ -23,7 +23,7 @@ char    *ft_varenv_manager(char *string)
     i = 0;
     while (string[i])
     {
-        slice = ft_varenv_slicing(string, &i); // Découpe un morceau et avance i
+        slice = ft_varenv_slicing(string, &i, lst); // Découpe un morceau et avance i
         ft_stock_the_slice(&stock_list, slice); // Ajoute à la liste chaînée
     }
     new_content = ft_glue_the_slices_again(stock_list); // Recompose la string
@@ -32,7 +32,7 @@ char    *ft_varenv_manager(char *string)
     return (new_content);
 }
 
-char *ft_varenv_slicing(char *content, int *i)
+char *ft_varenv_slicing(char *content, int *i, t_varenv *lst) //varenv
 {
     char *slice;
     
@@ -40,8 +40,8 @@ char *ft_varenv_slicing(char *content, int *i)
     if (content[*i] == '$')
     {    
         slice = ft_cut_varenv(content, i);
-        slice = ft_fake_expand_varenv(slice);
-//        slice = ft_expand_varenv(slice, t_varenv *varenv)
+//       slice = ft_fake_expand_varenv(slice);
+        slice = ft_expand_varenv(slice, lst);
     }
     else
         slice = ft_cut_normal_text_but_varenv(content, i);
@@ -75,20 +75,6 @@ char    *ft_cut_varenv(char *content, int *i)
     if (!slice)
         return (NULL);
     return (slice);
-}
-
-char *ft_expand_varenv(char *var_found) // t_varenv *varenv
-{
-    char *prefix = "[VARENV:";
-    char *suffix = "]";
-    char *temp;
-    char *fake_var_env;
-
-    temp = ft_strjoin(prefix, var_found); // "[VARENV:" + var_found
-    fake_var_env = ft_strjoin(temp, suffix); // "[VARENV:var_found]"
-
-    free(temp);
-    return (fake_var_env);
 }
 
 char *ft_cut_normal_text_but_varenv(char *content, int *i)

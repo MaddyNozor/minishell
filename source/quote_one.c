@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/07 18:31:38 by codespace        ###   ########.fr       */
+/*   Updated: 2025/03/08 18:04:22 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ char *ft_cut_normal_text(char *content, int *i, char quote_type)
     return (slice);
 }
 
-char *ft_cut_quoted_text(char *content, int *i)//need data here
+char *ft_cut_quoted_text(char *content, int *i, t_varenv *lst, bool prev_hd) //heredoc avant / T_varenv
 {
     char quote;
     int start;
@@ -81,11 +81,10 @@ char *ft_cut_quoted_text(char *content, int *i)//need data here
     while (content[*i] && content[*i] != quote)
         (*i)++;
     slice = ft_substr(content, start + 1, *i - start);
-    printf("adresse: %p\n", slice);
     if (!slice)
         return (NULL);
-    if (quote == '"') //&& token precedent pas un heredoc
-        slice = ft_varenv_manager(slice);
+    if (quote == '"' && prev_hd == false)
+        slice = ft_varenv_manager(slice, lst); // + t_varenv
     tmp = ft_trim_quote(slice, quote);
     free(slice);
     slice = tmp;

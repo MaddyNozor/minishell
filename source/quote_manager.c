@@ -6,13 +6,13 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/07 16:14:36 by codespace        ###   ########.fr       */
+/*   Updated: 2025/03/08 19:23:39 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/init_shell.h"
 
-char *ft_cut_a_slice(char *content, int *i)
+char *ft_cut_a_slice(char *content, int *i, t_varenv *lst, bool prev_hd)
 {
     char *slice;
     char quote_type;
@@ -22,7 +22,7 @@ char *ft_cut_a_slice(char *content, int *i)
     if (content[*i] == '\'' || content[*i] == '"')
     {    
         quote_type = content[*i];
-        slice = ft_cut_quoted_text(content, i);
+        slice = ft_cut_quoted_text(content, i, lst, prev_hd);
     }
     else
         slice = ft_cut_normal_text(content, i, quote_type);
@@ -72,7 +72,7 @@ char *ft_glue_the_slices_again(t_list *list_slice)
     return (new_content);
 }
 
-char    *ft_quote_manager(char *actual_content)
+char    *ft_quote_manager(char *actual_content, t_varenv *lst, bool prev_hd)
 {
     t_list  *stock_list;
     char    *new_content;
@@ -83,7 +83,7 @@ char    *ft_quote_manager(char *actual_content)
     i = 0;
     while (actual_content[i])
     {
-        slice = ft_cut_a_slice(actual_content, &i); // Découpe un morceau et avance i
+        slice = ft_cut_a_slice(actual_content, &i, lst, prev_hd); // Découpe un morceau et avance i |||| data->varenv_lst, heredocpresent
         ft_stock_the_slice(&stock_list, slice); // Ajoute à la liste chaînée
     }
     new_content = ft_glue_the_slices_again(stock_list); // Recompose la string
@@ -96,20 +96,23 @@ t_token *ft_spot_the_quotes(t_data *data)
 {
     t_token *cur_token;
     t_token *head_of_list;
-    //char    *content_with_quote;
+    bool    prev_is_heredoc;
 
     cur_token = data->tok_lst;
     head_of_list = data->tok_lst;
+    prev_is_heredoc = false;
     while (cur_token != NULL)
 	{
-		if (cur_token->type == WORD)
+		if (cur_token->type == WORD) 
         {
-            if(cur_token->nb_quote > 0)
+            if(cur_token->nb_quote > 0) //check herdoc ici
             {
-                ft_printf("before: %s \n", cur_token->content);
-                
-                cur_token->content = ft_quote_manager(cur_token->content);
-                ft_printf("after: %s \n", cur_token->content);
+                if(cur_token->prev->type == HEREDOC)
+                    prev_is_heredoc = true;
+                ft_printf("before: %s \n", cur_token->content); //TODO oust printf
+                cur_token->content = ft_quote_manager(cur_token->content, 
+                    data->varenv_lst, prev_is_heredoc);
+                ft_printf("after: %s \n", cur_token->content);//TODO oust printf
             }
         }
 		cur_token = cur_token->next;
