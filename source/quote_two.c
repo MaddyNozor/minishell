@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/07 11:39:01 by codespace        ###   ########.fr       */
+/*   Updated: 2025/03/08 16:12:16 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ char *ft_varenv_slicing(char *content, int *i)
     if (content[*i] == '$')
     {    
         slice = ft_cut_varenv(content, i);
-        slice = ft_expand_varenv(slice);
+        slice = ft_fake_expand_varenv(slice);
+//        slice = ft_expand_varenv(slice, t_varenv *varenv)
     }
     else
         slice = ft_cut_normal_text_but_varenv(content, i);

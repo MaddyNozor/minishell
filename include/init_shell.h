@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/07 10:09:02 by codespace        ###   ########.fr       */
+/*   Updated: 2025/03/08 16:05:09 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,6 +175,7 @@ char	*ft_varenv_slicing(char *content, int *i);
 char    *ft_cut_varenv(char *content, int *i);
 char	*ft_expand_varenv(char *var_found);
 char	*ft_cut_normal_text_but_varenv(char *content, int *i);
+char *ft_fake_expand_varenv(char *var_found);
 
 // EXECUTER
 void		executer(t_data *data);
