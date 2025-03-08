@@ -6,7 +6,7 @@
 #    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/10 15:29:24 by mairivie          #+#    #+#              #
-#    Updated: 2025/03/08 19:25:19 by codespace        ###   ########.fr        #
+#    Updated: 2025/03/08 19:29:51 by codespace        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,7 @@ SRC_LIST =  main.c \
             quote_manager.c \
             quote_one.c \
             quote_two.c \
-            quote_tree
+            quote_tree.c
                      
 SRC = $(addprefix $(SRC_DIR), $(SRC_LIST))
 

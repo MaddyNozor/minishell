@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/08 19:23:39 by codespace        ###   ########.fr       */
+/*   Updated: 2025/03/08 19:32:59 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ t_token *ft_spot_the_quotes(t_data *data)
         {
             if(cur_token->nb_quote > 0) //check herdoc ici
             {
-                if(cur_token->prev->type == HEREDOC)
+                if(cur_token->prev && cur_token->prev->type == HEREDOC)
                     prev_is_heredoc = true;
                 ft_printf("before: %s \n", cur_token->content); //TODO oust printf
                 cur_token->content = ft_quote_manager(cur_token->content, 
