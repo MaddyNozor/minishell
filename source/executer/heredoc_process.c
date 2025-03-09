@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 16:20:07 by sabellil          #+#    #+#             */
-/*   Updated: 2025/02/21 14:12:29 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/09 15:49:15 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ void	setup_heredoc_fd(t_cmd *cmd, int *heredoc_fd)
 	}
 	if (last_heredoc)
 	{
-		fprintf(stderr, "🛠️ Debug : Utilisation du dernier heredoc `%s`\n",
-			last_heredoc->file_name);
+		// fprintf(stderr, "🛠️ Debug : Utilisation du dernier heredoc `%s`\n",
+		// 	last_heredoc->file_name);
 		*heredoc_fd = open(last_heredoc->file_name, O_RDONLY);
 		if (*heredoc_fd == -1)
 		{
@@ -54,7 +54,7 @@ void	process_heredoc_input(int fd, const char *delimiter)
 
 	while (1)
 	{
-		line = readline("heredoc> ");
+		line = readline("> ");
 		if (!line)
 			break ;
 		if (strcmp(line, delimiter) == 0)
@@ -105,25 +105,3 @@ int	ft_create_heredoc(const char *delimiter, int index)
 	fd = open(heredoc_filename, O_RDONLY);
 	return (fd);
 }
-
-// int	ft_create_heredoc(const char *delimiter)//avirer apres tests
-// {
-// 	int	fd;
-// 	char filename[50];
-// 	struct timeval tv;
-
-// 	gettimeofday(&tv, NULL);
-// 	snprintf(filename, sizeof(filename), ".heredoc_%ld_%d", tv.tv_sec, (int)tv.tv_usec);
-
-// 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-// 	if (fd == -1)
-// 	{
-// 		perror("open");
-// 		return (-1);
-// 	}
-// 	process_heredoc_input(fd, delimiter);
-// 	close(fd);
-
-// 	fd = open(filename, O_RDONLY);
-// 	return (fd);
-// }

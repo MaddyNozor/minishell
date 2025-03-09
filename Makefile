@@ -6,7 +6,7 @@
 #    By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/10 15:29:24 by mairivie          #+#    #+#              #
-#    Updated: 2025/03/08 12:27:17 by sabellil         ###   ########.fr        #
+#    Updated: 2025/03/09 16:16:49 by sabellil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ SRC_LIST =  main.c \
             executer/exec_simple_builtin.c \
             executer/exec_simple_extern.c \
             executer/executer.c \
-            executer/free.c \
+            executer/exit_and_free.c \
             executer/get_cmd_path.c \
             executer/handle_redirections.c \
             executer/handle_redirections2.c \
@@ -49,7 +49,8 @@ SRC_LIST =  main.c \
             parser/parsing_loop.c \
             parser/queue.c \
             parser/token_pipe.c \
-            parser/token_redirections.c \
+            parser/token_redir.c \
+            parser/token_redir_heredoc.c \
             parser/token_var_env.c \
             parser/token_word.c \
                      

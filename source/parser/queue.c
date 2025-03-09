@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:42:31 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/03 12:45:44 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/09 16:17:46 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_queue	*init_queue(void)
 	queue->tail = NULL;
 	return (queue);
 }
+
 // enqueue: qui ajoute un token dans la queue
 void	enqueue_token(t_queue *queue, char *content)
 {
@@ -38,15 +39,25 @@ void	enqueue_token(t_queue *queue, char *content)
 	else
 		queue->tail->next = new_node;
 	queue->tail = new_node;
-	printf("MIS EN QUEUE Enqueued token: %s\n", content);
+	// printf("MIS EN QUEUE Enqueued token: %s\n", content);
 }
 
 // dqueue : transferer la queue vers argv
+static void	copy_and_free_node(t_node **tmp, char **argv, int *count)
+{
+	t_node	*to_free;
+
+	argv[*count] = (*tmp)->content;
+	to_free = *tmp;
+	*tmp = (*tmp)->next;
+	free(to_free);
+	(*count)++;
+}
+
 void	transfer_queue_to_argv(t_queue *queue, t_cmd *cmd)
 {
 	int		count;
 	t_node	*tmp;
-	t_node	*to_free;
 
 	count = 0;
 	tmp = queue->head;
@@ -61,14 +72,8 @@ void	transfer_queue_to_argv(t_queue *queue, t_cmd *cmd)
 	tmp = queue->head;
 	count = 0;
 	while (tmp)
-	{
-		cmd->argv[count] = tmp->content; // copier le contenu
-		to_free = tmp;
-		tmp = tmp->next;
-		free(to_free); // liberer nœud
-		count++;
-	}
+		copy_and_free_node(&tmp, cmd->argv, &count);
 	cmd->argv[count] = NULL;
-	queue->head = NULL; // reinit de la queue
+	queue->head = NULL;
 	queue->tail = NULL;
 }

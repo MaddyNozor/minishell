@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:24:45 by sabellil          #+#    #+#             */
-/*   Updated: 2025/02/21 13:57:20 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/09 16:01:07 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,32 +105,3 @@ void	handle_heredocs_simple_cmd(t_redirection *redirection)
 	dup2(pipe_fd[0], STDIN_FILENO);
 	close(pipe_fd[0]);
 }
-// void	transfer_heredocs_to_pipe(t_redirection *redir, int pipe_fd[2])//avirer
-// {
-// 	t_redirection	*current;
-// 	char			buffer[1024];
-// 	ssize_t			bytes_read;
-// 	int				heredoc_fd;
-
-// 	current = redirection;
-// 	while (current)
-// 	{
-// 		if (current->type == REDIR_HEREDOC)
-// 		{
-// 			heredoc_fd = open(current->file_name, O_RDONLY);
-// 			if (heredoc_fd == -1)
-// 			{
-// 				perror("Erreur ouverture heredoc");
-// 				exit(1);
-// 			}
-// 			bytes_read = read(heredoc_fd, buffer, sizeof(buffer));
-// 			while (bytes_read > 0)
-// 			{
-// 				write(pipe_fd[1], buffer, bytes_read);
-// 				bytes_read = read(heredoc_fd, buffer, sizeof(buffer));
-// 			}
-// 			close(heredoc_fd);
-// 		}
-// 		current = current->next;
-// 	}
-// }

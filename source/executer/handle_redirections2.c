@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirections2.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 12:36:45 by sabellil          #+#    #+#             */
-/*   Updated: 2025/02/21 18:44:52 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/09 15:47:33 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,47 +45,3 @@ void	read_and_write(int src_fd, int dest_fd)
 		bytes_read = read(src_fd, buffer, sizeof(buffer));
 	}
 }
-
-// void	merge_heredoc_and_input(int heredoc_fd, int input_fd)//avirerapres
-// {
-// 	int		pipe_fd[2];
-// 	char	buffer[1024];
-// 	ssize_t	bytes_read;
-
-// 	if (pipe(pipe_fd) == -1)
-// 	{
-// 		perror("ERREUR : Echec de la création du pipe");
-// 		return ;
-// 	}
-// 	while ((bytes_read = read(heredoc_fd, buffer, sizeof(buffer))) > 0)
-// 		write(pipe_fd[1], buffer, bytes_read);
-// 	close(heredoc_fd);
-// 	while ((bytes_read = read(input_fd, buffer, sizeof(buffer))) > 0)
-// 		write(pipe_fd[1], buffer, bytes_read);
-// 	close(input_fd);
-// 	close(pipe_fd[1]);
-// 	dup2(pipe_fd[0], STDIN_FILENO);
-// 	close(pipe_fd[0]);
-// }
-
-// void	handle_heredocs(t_redirection *redirection, int *heredoc_fd)
-// {
-// 	t_redirection	*current;
-
-// 	current = redirection;
-// 	while (current)
-// 	{
-// 		if (current->type == REDIR_HEREDOC)
-// 		{
-// 			if (access(current->file_name, F_OK) == 0)
-// 				*heredoc_fd = open(current->file_name, O_RDONLY);
-// 			else
-// 			{
-// 				if (*heredoc_fd != -1)
-// 					close(*heredoc_fd);
-// 				*heredoc_fd = ft_create_heredoc(current->file_name);
-// 			}
-// 		}
-// 		current = current->next;
-// 	}
-// }

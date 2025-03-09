@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:24:19 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/08 19:04:58 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/09 16:07:00 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	handle_tokens(t_token *tok, t_cmd **cmd_list, t_varenv *varenv_lst)
 		}
 		// else if (tok->type == EOF)// A virer peut etre apres avoir tout code, pas besoin ?
 		// {
-		//     handle_EOF(queue, current_cmd);
+		//     handle_endoffile(queue, current_cmd);
 		// }
 		tok = tok->next;
 	}
@@ -94,46 +94,7 @@ void	handle_tokens(t_token *tok, t_cmd **cmd_list, t_varenv *varenv_lst)
 	//         }
 	//         printf("Token handling completed.\n");
 }
-// t_cmd	*parser(t_token *tok, t_varenv *varenv_lst)
-// {
 
-// 	t_cmd	*cmd_list;
-
-// 	cmd_list = NULL;
-// 	if (!tok)
-// 	{
-// 		printf("No tokens to parse.\n");
-// 		return (NULL);
-// 	}
-// 	printf("STAAAAAAAAART : Starting parser...\n");
-
-// 	t_token *current_tok = tok;//pour debug
-// 	while (current_tok)
-// 	{
-// 		printf("🔍 Token AVANT handle_tokens : %s, type = %d\n",
-// 			   current_tok->content, current_tok->type);
-// 		current_tok = current_tok->next;
-// 	}
-	
-// 	handle_tokens(tok, &cmd_list, varenv_lst);
-
-// 	// t_cmd *current_cmd = cmd_list;//pour debug
-// 	// while (current_cmd)
-// 	// {
-// 	// 	t_redirection *redir = current_cmd->redirection;
-// 	// 	while (redir)
-// 	// 	{
-// 	// 		printf("🔍 Redirection détectée après parsing : fichier = %s, type = %d\n",
-// 	// 			   redir->file_name, redir->type);
-// 	// 		redir = redir->next;
-// 	// 	}
-// 	// 	current_cmd = current_cmd->next;
-// 	// }
-
-	
-// 	printf("Parsing completed. On move on to executer!!\n");
-// 	return (cmd_list);
-// }
 t_cmd	*parser(t_token *tok, t_varenv *varenv_lst)
 {
 	t_cmd	*cmd_list;
@@ -144,45 +105,36 @@ t_cmd	*parser(t_token *tok, t_varenv *varenv_lst)
 		printf("No tokens to parse.\n");
 		return (NULL);
 	}
-	printf("STAAAAAAAAART : Starting parser...\n");
-
-	t_token *current_tok = tok; // Pour debug
-	while (current_tok)
-	{
-		printf("🔍 Token AVANT handle_tokens : %s, type = %d\n",
-			   current_tok->content, current_tok->type);
-		current_tok = current_tok->next;
-	}
-	
-	// Appelle la fonction qui analyse les tokens et construit la liste des commandes
+	// printf("STAAAAAAAAART : Starting parser...\n");
+	// t_token *current_tok = tok; // Pour debug
+	// while (current_tok)
+	// {
+	// 	printf("🔍 Token AVANT handle_tokens : %s, type = %d\n",
+	// 		   current_tok->content, current_tok->type);
+	// 	current_tok = current_tok->next;
+	// }
 	handle_tokens(tok, &cmd_list, varenv_lst);
-
-	// 🔥 Debug : Affichage de toutes les commandes stockées après parsing
-	t_cmd *current_cmd = cmd_list;
-	while (current_cmd)
-	{
-		printf("\n🔹 Commande trouvée : %s\n", current_cmd->value);
-		printf("   📌 Nombre d'arguments : %d\n", current_cmd->argc);
-		if (current_cmd->argv)
-		{
-			printf("   📌 Arguments : ");
-			for (int i = 0; current_cmd->argv[i]; i++)
-				printf("[%s] ", current_cmd->argv[i]);
-			printf("\n");
-		}
-
-		// 🔥 Vérification des redirections
-		t_redirection *redir = current_cmd->redirection;
-		while (redir)
-		{
-			printf("   🔍 Redirection détectée : fichier = %s, type = %d\n",
-				   redir->file_name, redir->type);
-			redir = redir->next;
-		}
-
-		current_cmd = current_cmd->next;
-	}
-
-	printf("\nParsing completed. On move on to executer!!\n");
+	// t_cmd *current_cmd = cmd_list;
+	// while (current_cmd)
+	// {
+	// 	printf("\n🔹 Commande trouvée : %s\n", current_cmd->value);
+	// 	printf("   📌 Nombre d'arguments : %d\n", current_cmd->argc);
+	// 	if (current_cmd->argv)
+	// 	{
+	// 		printf("   📌 Arguments : ");
+	// 		for (int i = 0; current_cmd->argv[i]; i++)
+	// 			printf("[%s] ", current_cmd->argv[i]);
+	// 		printf("\n");
+	// 	}
+		// t_redirection *redir = current_cmd->redirection;
+		// while (redir)
+		// {
+		// 	printf("   🔍 Redirection détectée : fichier = %s, type = %d\n",
+		// 		   redir->file_name, redir->type);
+		// 	redir = redir->next;
+		// }
+		// current_cmd = current_cmd->next;
+	// }
+	// printf("\nParsing completed. On move on to executer!!\n");
 	return (cmd_list);
 }

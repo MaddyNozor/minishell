@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 13:54:50 by sabellil          #+#    #+#             */
-/*   Updated: 2025/02/21 14:11:57 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/09 15:51:14 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ void	create_heredoc_file(t_redirection *redir, int index)
 		perror("Erreur ouverture heredoc");
 		exit(1);
 	}
-	fprintf(stderr,
-		"🛠️ Debug : Remplissage du heredoc `%s` (Délimiteur attendu : `%s`)\n",
-		redir->file_name, delimiter);
+	// fprintf(stderr,
+	// 	"🛠️ Debug : Remplissage du heredoc `%s` (Délimiteur attendu : `%s`)\n",
+	// 	redir->file_name, delimiter);
 	process_heredoc_input(fd, delimiter);
 	close(fd);
 	free(delimiter);
@@ -80,10 +80,10 @@ void	unlink_heredoc_temp(t_redirection *redirection)
 			{
 				perror("unlink");
 			}
-			else
-			{
-				printf("✅ Heredoc %s supprimé\n", current->file_name);
-			}
+			// else
+			// {
+			// 	printf("✅ Heredoc %s supprimé\n", current->file_name);
+			// }
 		}
 		current = current->next;
 	}

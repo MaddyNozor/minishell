@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/02/21 18:44:54 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/09 16:17:22 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ void	print_list(t_token *lst)
 {
 	while (lst)
 	{
-		printf("Token: %s, Type: %d\n", lst->content, lst->type);
+		// printf("Token: %s, Type: %d\n", lst->content, lst->type);
 		lst = lst->next;
 	}
-	printf("--List Printed--\n");
+	// printf("--List Printed--\n");
 } //TODO a virer a terme
 
 t_token	*lexer(char *line)

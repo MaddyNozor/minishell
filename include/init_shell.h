@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/08 18:30:48 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/09 16:13:38 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,19 +262,13 @@ void replace_var(t_token *tok, char *new_content);
 bool ft_var_exists(char *var_name, t_varenv *varenv);
 char *ft_expand(char *var_name, t_varenv *varenv);
 
-// PARSER - TOKEN_EOF
-
 // PARSER - TOKEN_REDIRECTIONS
 void handle_redirections(t_token *tok, t_cmd **current_cmd, t_varenv *varenv);
-// void handle_redirect_out(t_token *tok, t_cmd **current_cmd, t_varenv *varenv);//devenus static
-// void handle_append_out(t_token *tok, t_cmd **current_cmd, t_varenv *varenv);
-// void handle_redirect_in(t_token *tok, t_cmd **current_cmd, t_varenv *varenv);
-// void handle_heredoc(t_token *tok, t_cmd **current_cmd, t_varenv *varenv);/devenus static
+void	handle_heredoc(t_token *tok, t_cmd **current_cmd, t_varenv *varenv, int redir_type);
 
 //PARSER c'est faux mais j'en ai besoin pour make
 // void handle_token_word(t_queue *queue, char *content, t_cmd *current_cmd);
 void handle_token_word(t_queue *queue, t_token **tok, t_cmd *current_cmd);
-
-void handle_EOF(t_queue *queue, t_cmd *current_cmd);
+void handle_endoffile(t_queue *queue, t_cmd *current_cmd);
 
 #endif
