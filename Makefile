@@ -6,7 +6,7 @@
 #    By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/10 15:29:24 by mairivie          #+#    #+#              #
-#    Updated: 2025/03/09 16:16:49 by sabellil         ###   ########.fr        #
+#    Updated: 2025/03/09 17:29:27 by sabellil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,6 +53,10 @@ SRC_LIST =  main.c \
             parser/token_redir_heredoc.c \
             parser/token_var_env.c \
             parser/token_word.c \
+            parser/quote_handler/quote_manager.c \
+            parser/quote_handler/quote_one.c \
+            parser/quote_handler/quote_two.c \
+            parser/quote_handler/quote_tree.c
                      
 SRC = $(addprefix $(SRC_DIR), $(SRC_LIST))
 

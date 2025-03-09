@@ -6,18 +6,18 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/02/24 12:10:40 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/09 16:32:14 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../include/init_shell.h"
+#include "../../include/init_shell.h"
 
-/* DESC: Allocate with malloc and return a new token. 
- *  Init token->content with whatever is in 'content' 
-    ->next and ->prev to NULL.
-    ->type with whatever is in 'type'
+/* DESC: Allocate with malloc and return a new token.
+ *  Init token->content with whatever is in 'content'
+	->next and ->prev to NULL.
+	->type with whatever is in 'type'
  * PARAM:   content: the content of the new element.
-            type: type of token.
+			type: type of token.
  * RETURN: the adress of new token. */
 t_token	*ft_tok_new(void *content, int type)
 {
@@ -30,6 +30,7 @@ t_token	*ft_tok_new(void *content, int type)
 	new->next = NULL;
 	new->prev = NULL;
 	new->type = type;
+	new->nb_quote = 0;
 	return (new);
 }
 
@@ -37,7 +38,6 @@ t_token	*ft_tok_new(void *content, int type)
  * PARAMETERS:
 	lst: the start of the list
  * RETURN VALUES: Last element of the list */
-
 t_token	*ft_toklast(t_token *lst)
 {
 	t_token	*current;
@@ -50,11 +50,10 @@ t_token	*ft_toklast(t_token *lst)
 	return (current);
 }
 
-/* DESC: Add the 'new' element at the back of the list. 
- * RETURN: No return value  
+/* DESC: Add the 'new' element at the back of the list.
+ * RETURN: No return value
  * PARAM:	lst: pointer adress of the first element of the list
  * 			new: pointer adress of the new element to add to the list */
-
 void	ft_tokadd_back(t_token **lst, t_token *new)
 {
 	t_token	*last;
@@ -67,27 +66,28 @@ void	ft_tokadd_back(t_token **lst, t_token *new)
 		*lst = new;
 	else
 	{
-	last = ft_toklast(*lst);
-	new->prev = last;
-	last->next = new;
+		last = ft_toklast(*lst);
+		new->prev = last;
+		last->next = new;
 	}
 	return ;
 }
-t_token *init_type_token_with_x_char_of_line(
-    int type, t_token *token, int x, char *line, int i)
+
+t_token	*init_type_token_with_x_char_of_line(int type, int x, char *line, int i)
 {
-    char *content;
-    
-    content = ft_substr(line, i, x);
-    if (content == NULL)
-        return (NULL);
-    token = ft_tok_new(content, type);
-    if (token == NULL)
-    {
-        free(content);
-        return (NULL);
-    }
-    return(token);
+	t_token	*new_token;
+	char	*content;
+
+	content = ft_substr(line, i, x);
+	if (content == NULL)
+		return (NULL);
+	new_token = ft_tok_new(content, type);
+	if (new_token == NULL)
+	{
+		free(content);
+		return (NULL);
+	}
+	return (new_token);
 }
 
 void	free_token_list(t_token *list)
@@ -95,7 +95,7 @@ void	free_token_list(t_token *list)
 	t_token	*tmp_current;
 	t_token	*tmp_next;
 
-	if(!list)
+	if (!list)
 		return ;
 	tmp_current = list;
 	while (tmp_current)

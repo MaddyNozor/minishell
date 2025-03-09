@@ -6,16 +6,17 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:41:57 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/09 16:34:46 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/09 17:37:46 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
 
+
 // void init_signals(void)
 // {
 //     signal(SIGINT, handle_sigint);  // gestion de ctrl+C
-//     signal(SIGQUIT, SIG_IGN);      // ignorer ctrl+\
+//     signal(SIGQUIT, SIG_IGN);      // ignorer ctrl+ backslash
 // }
 
 char	*read_user_input(void)
@@ -36,7 +37,6 @@ char	*read_user_input(void)
 	input = readline("minishell$ ");
 	if (!input)
 	{
-		write(1, "exit\n", 5);
 		clear_history();
 		exit(0);
 	}
@@ -49,26 +49,27 @@ void ft_start_minishell(t_data *data)
 {
     char *input;
 
-    while (1)
-    {
-        input = read_user_input();
-        if (*input == '\0')
-        {
-            free(input);
-            continue;
-        }
-        data->tok_lst = lexer(input);
-        free(input);
-        if (data->tok_lst)
-        {
-            data->cmd_lst = parser(data->tok_lst, data->varenv_lst);
-            if (data->cmd_lst)
-            {
-                executer(data);
-                free_cmd_list(data->cmd_lst);
-                data->cmd_lst = NULL;
-            }
-            free_token_list(data->tok_lst);
-        }
-    }
+	while (1)
+	{
+		input = read_user_input();
+		if (*input == '\0')
+		{
+			free(input);
+			continue ;
+		}
+		data->tok_lst = lexer(input);
+		free(input);
+		if (data->tok_lst)
+		{			
+            data->tok_lst = ft_spot_the_quotes(data);
+			data->cmd_lst = parser(data->tok_lst, data->varenv_lst);
+			if (data->cmd_lst)
+			{
+				executer(data);
+				free_cmd_list(data->cmd_lst);
+				data->cmd_lst = NULL;
+			}
+			free_token_list(data->tok_lst);
+		}
+	}
 }

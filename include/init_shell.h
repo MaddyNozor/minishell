@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/09 16:38:13 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/09 17:32:13 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,12 @@
 # include <unistd.h>
 
 //--------------------- DEFINES -----------------------------
+# define FAILURE_L 0 // TODO: traque des success et failure dans le lexing
+# define SUCCESS_L 1
 # define FALSE 0
 # define TRUE 1
 # define FAILURE 1
 # define SUCCESS 0
-// # define REDIR_IN 3
-// # define REDIR_OUT 1
-// # define REDIR_APPEND 2
-// # define REDIR_HEREDOC 4
 
 //--TOKEN_TYPE_LEXING
 # define BLANK 0
@@ -49,19 +47,6 @@
 # define SIMPLE_Q 8
 # define DOUBLE_Q 9
 # define LAST_EXIT 10
-
-// //--TOKEN_TYPE_LEXING
-// # define BLANK 0
-// # define REDIRECT_OUT 1
-// # define APPEND_OUT 2
-// # define REDIRECT_IN 3
-// # define HEREDOC 4
-// # define PIPE 5
-// # define VAR_ENV 6
-// # define WORD 7
-// # define SIMPLE_Q 8
-// # define DOUBLE_Q 9
-// # define LAST_EXIT 10
 
 //--------------------- STRUCTURES -----------------------------
 
@@ -97,6 +82,7 @@ typedef struct s_token
 	struct s_token			*next;
 	struct s_token			*prev;
 	int						type;
+	int						nb_quote;
 }							t_token;
 
 typedef struct s_data
@@ -143,8 +129,8 @@ void						free_token_list(t_token *list);
 // READLINE MAIN LOOP
 void						ft_start_minishell(t_data *data);
 
-//LEXING
-//Lexer
+// LEXING
+// Lexer
 t_token						*lexer(char *line);
 
 // utils
@@ -156,13 +142,11 @@ int							is_an_operator(int type);
 t_token						*ft_tok_new(void *content, int type);
 t_token						*ft_toklast(t_token *lst);
 void						ft_tokadd_back(t_token **lst, t_token *new);
-t_token	*init_type_token_with_x_char_of_line(int type,
-												t_token *token,
-												int x,
-												char *line,
-												int i); //TODO trop de variables
-void	free_token_list_l(t_token **list);              //A modifier
+t_token						*init_type_token_with_x_char_of_line(int type,
+								int x, char *line, int i);
+
 // id_and_create_token
+int							ft_type_detector(char *line, int i);
 t_token						*token_type_operators(char *line, int i,
 								t_token *new_token);
 t_token						*token_type_varenv(char *line, int i,
@@ -174,6 +158,30 @@ t_token						*create_token(char *line, int i,
 // checker
 int							check_lexing(t_token *head_of_list);
 
+// PARSING QUOTES
+char						*ft_trim_quote(char const *s1, char const q);
+char						*ft_glue_the_slices_again(t_list *list_slice);
+char						*ft_cut_normal_text(char *content, int *i,
+								char quote_type);
+char						*ft_cut_quoted_text(char *content, int *i,
+								t_varenv *lst, bool prev_hd);
+char						*ft_cut_a_slice(char *content, int *i,
+								t_varenv *lst, bool prev_hd);
+void						ft_stock_the_slice(t_list **stock_list,
+								char *slice);
+char						*ft_quote_manager(char *actual_content,
+								t_varenv *lst, bool prev_hd);
+t_token						*ft_spot_the_quotes(t_data *data);
+char						*ft_varenv_manager(char *string, t_varenv *lst);
+char						*ft_varenv_slicing(char *content, int *i,
+								t_varenv *lst);
+char						*ft_cut_varenv(char *content, int *i);
+char						*ft_cut_normal_text_but_varenv(char *content,
+								int *i);
+// char 		*ft_fake_expand_varenv(char *var_found);
+char						*ft_expand_varenv(char *var_found,
+								t_varenv *varenv);
+
 // EXECUTER
 void						executer(t_data *data);
 
@@ -184,7 +192,8 @@ void						merge_heredoc_and_input(int heredoc_fd,
 void						handle_input_redirection(t_redirection *redirection,
 								int *input_fd, t_redirection **last_heredoc,
 								bool *input_redirection_found);
-void	handle_output_redirections(t_redirection *redirection,
+void						handle_output_redirections(
+								t_redirection *redirection,
 								int *last_output_fd);
 void						handle_pipe_redirections(t_cmd *cmd, int pipe_in,
 								int pipe_fd[2]);
@@ -202,9 +211,11 @@ void						process_heredoc_input(int fd,
 void						unlink_heredoc_temp(t_redirection *redirection);
 void						process_heredoc_input(int fd,
 								const char *delimiter);
-void						handle_heredocs_simple_cmd(t_redirection *redirection);
+void						handle_heredocs_simple_cmd(
+								t_redirection *redirection);
 void						handle_heredocs_pipeline(t_cmd *cmd_lst);
-void	handle_heredoc_redirection(t_redirection *last_heredoc,
+void						handle_heredoc_redirection(
+								t_redirection *last_heredoc,
 								int *heredoc_fd);
 void						setup_heredoc_fd(t_cmd *cmd, int *heredoc_fd);
 void						create_heredoc_list(t_cmd *cmd_lst,
@@ -229,7 +240,8 @@ void						setup_pipe(int pipe_fd[2]);
 void						handle_parent_process_pipeline(pid_t pid,
 								t_cmd *data, int *pipe_in, int pipe_fd[2]);
 void						handle_child_process_pipeline(t_cmd *cmd,
-								t_data *data, int pipe_in, int pipe_fd[2]);
+								t_data *data,
+								int pipe_in, int pipe_fd[2]);
 void						cleanup_pipeline(t_cmd *cmd_lst);
 
 // EXECUTER - COMMAND PATH

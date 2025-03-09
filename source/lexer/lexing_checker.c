@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing_checker.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/02/24 12:11:12 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/09 17:47:55 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,15 @@
 int	check_lexing(t_token *head_of_list)
 {
 	t_token	*current_token;
-	t_token *last_token;
+	t_token	*last_token;
 
 	if (head_of_list == NULL)
-		return (SUCCESS);
+		return (SUCCESS_L);
 	else if (head_of_list->type == PIPE)
-		return (FAILURE);
+		return (FAILURE_L);
 	last_token = ft_toklast(head_of_list);
-		if (is_an_operator(last_token->type) == true)
-			return (FAILURE);  
+	if (is_an_operator(last_token->type) == true)
+		return (FAILURE_L);
 	current_token = head_of_list;
 	while (current_token->next != NULL)
 	{
@@ -31,9 +31,9 @@ int	check_lexing(t_token *head_of_list)
 			&& is_an_operator(current_token->next->type) == true)
 		{
 			free_token_list(head_of_list);
-			return (FAILURE);
+			return (FAILURE_L);
 		}
 		current_token = current_token->next;
 	}
-	return (SUCCESS);
+	return (SUCCESS_L);
 }

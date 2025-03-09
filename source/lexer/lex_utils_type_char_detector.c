@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/02/21 18:44:53 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/09 16:33:07 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,28 @@ int	is_an_operator(int type)
 		|| type == APPEND_OUT || type == HEREDOC)
 		return (true);
 	return (false);
+}
+
+int	ft_type_detector(char *line, int i)
+{
+	int	type;
+
+	type = BLANK;
+	if (line[i] == '<')
+	{
+		if (line[i + 1] == '<')
+			type = HEREDOC;
+		else
+			type = REDIRECT_IN;
+	}
+	else if (line[i] == '>')
+	{
+		if (line[i + 1] == '>')
+			type = APPEND_OUT;
+		else
+			type = REDIRECT_OUT;
+	}
+	else if (line[i] == '|')
+		type = PIPE;
+	return (type);
 }

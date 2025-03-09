@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/09 16:17:22 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/09 17:47:41 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_token	*lexer(char *line)
 		}
 	}
 	print_list(head_of_list);
-	if (check_lexing(head_of_list) == FAILURE)
+	if (check_lexing(head_of_list) == FAILURE_L)
 	{
 		head_of_list = NULL;
 		ft_printf("Syntax error \n");
