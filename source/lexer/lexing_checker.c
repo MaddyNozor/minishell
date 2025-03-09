@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/02/24 12:11:12 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/09 16:22:09 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,15 @@
 int	check_lexing(t_token *head_of_list)
 {
 	t_token	*current_token;
-	t_token *last_token;
+	t_token	*last_token;
 
 	if (head_of_list == NULL)
 		return (SUCCESS);
 	else if (head_of_list->type == PIPE)
 		return (FAILURE);
 	last_token = ft_toklast(head_of_list);
-		if (is_an_operator(last_token->type) == true)
-			return (FAILURE);  
+	if (is_an_operator(last_token->type) == true)
+		return (FAILURE);
 	current_token = head_of_list;
 	while (current_token->next != NULL)
 	{

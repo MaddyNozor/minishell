@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/08 19:22:47 by codespace        ###   ########.fr       */
+/*   Updated: 2025/03/09 16:18:14 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,19 @@
 
 //--------------------- INCLUDES -----------------------------
 # include "../libft/libft.h"
-# include <unistd.h>
-# include <stdlib.h>
-# include <stdio.h>
-# include <stdbool.h>
-# include <readline/readline.h>
-# include <readline/history.h>
 # include <fcntl.h>
+# include <readline/history.h>
+# include <readline/readline.h>
+# include <stdbool.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-# include <string.h>
+# include <unistd.h>
 
 //--------------------- DEFINES -----------------------------
-# define FAILURE_L 0 //TODO: traque des success et failure dans le lexing
+# define FAILURE_L 0 // TODO: traque des success et failure dans le lexing
 # define FALSE 0
 # define SUCCESS_L 1
 # define TRUE 1
@@ -69,47 +69,47 @@
 
 typedef struct s_redirection
 {
-	char				*file_name;
-	int					type;
+	char					*file_name;
+	int						type;
 	struct s_redirection	*next;
-}	t_redirection;
+}							t_redirection;
 
 typedef struct s_cmd
 {
-	char			*value;
-	char			**argv;
-	int				argc;
-	pid_t			pid;
-	t_redirection	*redirection;
-	struct s_cmd	*next;
-}	t_cmd;
+	char					*value;
+	char					**argv;
+	int						argc;
+	pid_t					pid;
+	t_redirection			*redirection;
+	struct s_cmd			*next;
+}							t_cmd;
 
 typedef struct s_varenv
 {
-	char			*name;
-	char			*value;
-	struct s_varenv	*next;
-	struct s_varenv	*prev;
-	bool			hiden;
-}	t_varenv;
+	char					*name;
+	char					*value;
+	struct s_varenv			*next;
+	struct s_varenv			*prev;
+	bool					hiden;
+}							t_varenv;
 
 typedef struct s_token
 {
-	struct s_token	*next;
-	struct s_token	*prev;
-	char			*content;
-	int				type;
-	int				nb_quote;
-}	t_token;
+	struct s_token			*next;
+	struct s_token			*prev;
+	char					*content;
+	int						type;
+	int						nb_quote;
+}							t_token;
 
 typedef struct s_data
 {
-	t_cmd		*cmd_lst;
-	t_varenv	*varenv_lst;
-	t_token		*tok_lst;
-	int			lst_exit;
-	char		**histo;
-}	t_data;
+	t_cmd					*cmd_lst;
+	t_varenv				*varenv_lst;
+	t_token					*tok_lst;
+	int						lst_exit;
+	char					**histo;
+}							t_data;
 
 //--------------------- FONCTIONS -----------------------------
 
@@ -122,8 +122,8 @@ char		**convert_env_list_to_array(t_varenv *varenv_lst);
 int			count_env_vars(t_varenv *varenv_lst);
 char		*create_env_entry(t_varenv *varenv_lst);
 void		append_varenv_node(t_varenv **varenv_lst, t_varenv *new_node);
-void		create_varenv(t_varenv **varenv_lst, char *name, char *value,
-				bool hiden);
+void		create_varenv(t_varenv **varenv_lst, char *name,
+				char *value, bool hiden);
 void		free_varenv(t_varenv *varenv_lst);
 void		free_varenv_node(t_varenv *node);
 void		free_cmd_list(t_cmd *list);
@@ -132,51 +132,49 @@ void		free_token_list(t_token *list);
 // READLINE MAIN LOOP
 void		ft_start_minishell(t_data *data);
 
-//LEXING
-//Lexer
-t_token						*lexer(char *line);
+// LEXING
+// Lexer
+t_token		*lexer(char *line);
 
 // utils
-bool						ft_is_whitespace(char c);
-int							have_to_close_tok(char c);
-int							is_an_operator(int type);
+bool		ft_is_whitespace(char c);
+int			have_to_close_tok(char c);
+int			is_an_operator(int type);
 
 // utils token
-t_token						*ft_tok_new(void *content, int type);
-t_token						*ft_toklast(t_token *lst);
-void						ft_tokadd_back(t_token **lst, t_token *new);
-t_token						*init_type_token_with_x_char_of_line(int type, int x, 
-								char *line, int i);
-void						free_token_list_l(t_token **list);//A modifier
+t_token		*ft_tok_new(void *content, int type);
+t_token		*ft_toklast(t_token *lst);
+void		ft_tokadd_back(t_token **lst, t_token *new);
+t_token		*init_type_token_with_x_char_of_line(int type, int x,
+				char *line, int i);
+void		free_token_list_l(t_token **list); // A modifier
+
 // id_and_create_token
-t_token						*token_type_operators(char *line, int i,
-								t_token *new_token);
-t_token						*token_type_varenv(char *line, int i,
-								t_token *new_token);
-t_token						*token_type_word(char *line, int i,
-								t_token *new_token);
-t_token						*create_token(char *line, int i,
-								t_token *new_token);
+t_token		*token_type_operators(char *line, int i, t_token *new_token);
+t_token		*token_type_varenv(char *line, int i, t_token *new_token);
+t_token		*token_type_word(char *line, int i, t_token *new_token);
+t_token		*create_token(char *line, int i, t_token *new_token);
 // checker
-int							check_lexing(t_token *head_of_list);
+int			check_lexing(t_token *head_of_list);
 
-//PARSING QUOTES
-char	*ft_trim_quote(char const *s1, char const q);
-char 	*ft_glue_the_slices_again(t_list *list_slice);
-char 	*ft_cut_normal_text(char *content, int *i, char quote_type);
-char 	*ft_cut_quoted_text(char *content, int *i, 
-			t_varenv *lst, bool prev_hd);
-char 	*ft_cut_a_slice(char *content, int *i, t_varenv *lst, bool prev_hd);
-void 	ft_stock_the_slice(t_list **stock_list, char *slice);
-char    *ft_quote_manager(char *actual_content, t_varenv *lst, bool prev_hd);
-t_token *ft_spot_the_quotes(t_data *data);
-char    *ft_varenv_manager(char *string, t_varenv *lst);
-char 	*ft_varenv_slicing(char *content, int *i, t_varenv *lst);
-char    *ft_cut_varenv(char *content, int *i);
-char	*ft_cut_normal_text_but_varenv(char *content, int *i);
-char 	*ft_fake_expand_varenv(char *var_found);
-char 	*ft_expand_varenv(char *var_found, t_varenv *varenv);
-
+// PARSING QUOTES
+char		*ft_trim_quote(char const *s1, char const q);
+char		*ft_glue_the_slices_again(t_list *list_slice);
+char		*ft_cut_normal_text(char *content, int *i, char quote_type);
+char		*ft_cut_quoted_text(char *content, int *i,
+				t_varenv *lst, bool prev_hd);
+char		*ft_cut_a_slice(char *content, int *i,
+				t_varenv *lst, bool prev_hd);
+void		ft_stock_the_slice(t_list **stock_list, char *slice);
+char		*ft_quote_manager(char *actual_content,
+				t_varenv *lst, bool prev_hd);
+t_token		*ft_spot_the_quotes(t_data *data);
+char		*ft_varenv_manager(char *string, t_varenv *lst);
+char		*ft_varenv_slicing(char *content, int *i, t_varenv *lst);
+char		*ft_cut_varenv(char *content, int *i);
+char		*ft_cut_normal_text_but_varenv(char *content, int *i);
+// char 		*ft_fake_expand_varenv(char *var_found);
+char		*ft_expand_varenv(char *var_found, t_varenv *varenv);
 
 // EXECUTER
 void		executer(t_data *data);
@@ -191,8 +189,8 @@ void		handle_output_redirections(t_redirection *redirection,
 void		handle_pipe_redirections(t_cmd *cmd, int pipe_in, int pipe_fd[2]);
 void		close_redirections(t_redirection *redirection);
 int			ft_strcmp(const char *s1, const char *s2);
-void		setup_io_redirections(int heredoc_fd, int pipe_in, int pipe_fd[2],
-				t_cmd *cmd);
+void		setup_io_redirections(int heredoc_fd, int pipe_in,
+				int pipe_fd[2], t_cmd *cmd);
 void		read_and_write(int src_fd, int dest_fd);
 
 // REDIRECTIONS - HEREDOC
@@ -222,10 +220,10 @@ void		executer_simple_cmd(t_cmd *cmd, t_data *data);
 void		execute_external_cmd(t_cmd *cmd, t_data *data);
 void		executer_pipeline_cmd(t_cmd *cmd_lst, t_data *data);
 void		setup_pipe(int pipe_fd[2]);
-void		handle_parent_process_pipeline(pid_t pid, t_cmd *data,
-				int *pipe_in, int pipe_fd[2]);
-void		handle_child_process_pipeline(t_cmd *cmd, t_data *data,
-				int pipe_in, int pipe_fd[2]);
+void		handle_parent_process_pipeline(pid_t pid,
+				t_cmd *data, int *pipe_in, int pipe_fd[2]);
+void		handle_child_process_pipeline(t_cmd *cmd,
+				t_data *data, int pipe_in, int pipe_fd[2]);
 void		cleanup_pipeline(t_cmd *cmd_lst);
 
 // COMMAND PATH
