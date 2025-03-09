@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/09 17:34:33 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/09 17:52:53 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ t_token	*ft_spot_the_quotes(t_data *data)
 			{
 				if (cur_token->prev && cur_token->prev->type == HEREDOC)
 					prev_is_heredoc = true;
-				// ft_printf("before: %s \n", cur_token->content); //TODO printf
+				// ft_printf("before: %s \n", cur_token->content); //TODO pour test a virer a terme
 				cur_token->content = ft_quote_manager(cur_token->content,
 						data->varenv_lst, prev_is_heredoc);
 				// ft_printf("after: %s \n", cur_token->content);

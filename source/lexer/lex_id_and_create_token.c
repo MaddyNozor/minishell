@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/09 17:44:17 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/09 18:00:40 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ t_token	*token_type_varenv(char *line, int i, t_token *new_token)
 	int	len_varenv;
 
 	if (line[i + 1] == '?')
-		new_token = init_type_token_with_x_char_of_line(LAST_EXIT, 2, line, i);
+		new_token = init_type_token_with_x_char_of_line(VAR_ENV, 2, line, i);
 	else if (line[i + 1] >= '0' && line[i + 1] <= '9')
 		new_token = init_type_token_with_x_char_of_line(VAR_ENV, 2, line, i);
 	else if (line[i + 1] != '_' && ft_isalpha(line[i + 1]) == FALSE)

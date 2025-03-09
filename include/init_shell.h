@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/09 17:32:13 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/09 18:01:38 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@
 # include <unistd.h>
 
 //--------------------- DEFINES -----------------------------
-# define FAILURE_L 0 // TODO: traque des success et failure dans le lexing
-# define SUCCESS_L 1
+// # define FAILURE_L 0 // TODO: A virer a la fin
+// # define SUCCESS_L 1
 # define FALSE 0
 # define TRUE 1
-# define FAILURE 1
-# define SUCCESS 0
+# define FAILURE 0
+# define SUCCESS 1
 
 //--TOKEN_TYPE_LEXING
 # define BLANK 0
@@ -46,7 +46,6 @@
 # define WORD 7
 # define SIMPLE_Q 8
 # define DOUBLE_Q 9
-# define LAST_EXIT 10
 
 //--------------------- STRUCTURES -----------------------------
 
