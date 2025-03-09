@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/09 16:26:01 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/09 16:35:19 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,6 @@
 /// @param lst pointeur sur la tete de la liste
 void	print_list(t_token *lst)
 {
-	int		i;
-	t_token	*head_of_list;
-	t_token	*new_token;
-
 	while (lst)
 	{
 		printf("Token: %s, Type: %d nb_quotes: %d\n", lst->content, lst->type,
@@ -27,16 +23,18 @@ void	print_list(t_token *lst)
 		lst = lst->next;
 	}
 	printf("--List Printed--\n");
-} 
+}
 // TODO a virer a terme
 
 t_token	*lexer(char *line)
 {
-	int 	i;
-	t_token *head_of_list;
+	int		i;
+	t_token	*head_of_list;
+	t_token	*new_token;
 
-	head_of_list = NULL;
 	i = 0;
+	new_token = NULL;
+	head_of_list = NULL;
 	while (line[i])
 	{
 		if (ft_is_whitespace(line[i]) == true)

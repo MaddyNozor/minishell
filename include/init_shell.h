@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/09 16:18:14 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/09 16:34:23 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,7 @@ t_token		*init_type_token_with_x_char_of_line(int type, int x,
 void		free_token_list_l(t_token **list); // A modifier
 
 // id_and_create_token
+int			ft_type_detector(char *line, int i);
 t_token		*token_type_operators(char *line, int i, t_token *new_token);
 t_token		*token_type_varenv(char *line, int i, t_token *new_token);
 t_token		*token_type_word(char *line, int i, t_token *new_token);

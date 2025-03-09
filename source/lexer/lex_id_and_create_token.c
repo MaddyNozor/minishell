@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/09 16:21:55 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/09 16:32:48 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,30 +48,6 @@ int	ft_size_according_to_type(int type)
 	if (type == HEREDOC || type == APPEND_OUT)
 		size = 2;
 	return (size);
-}
-
-int	ft_type_detector(char *line, int i)
-{
-	int	type;
-
-	type = BLANK;
-	if (line[i] == '<')
-	{
-		if (line[i + 1] == '<')
-			type = HEREDOC;
-		else
-			type = REDIRECT_IN;
-	}
-	else if (line[i] == '>')
-	{
-		if (line[i + 1] == '>')
-			type = APPEND_OUT;
-		else
-			type = REDIRECT_OUT;
-	}
-	else if (line[i] == '|')
-		type = PIPE;
-	return (type);
 }
 
 t_token	*token_type_operators(char *line, int i, t_token *new_token)

@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/09 16:23:32 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/09 16:32:14 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ t_token	*ft_tok_new(void *content, int type)
  * PARAMETERS:
 	lst: the start of the list
  * RETURN VALUES: Last element of the list */
-
 t_token	*ft_toklast(t_token *lst)
 {
 	t_token	*current;
@@ -55,7 +54,6 @@ t_token	*ft_toklast(t_token *lst)
  * RETURN: No return value
  * PARAM:	lst: pointer adress of the first element of the list
  * 			new: pointer adress of the new element to add to the list */
-
 void	ft_tokadd_back(t_token **lst, t_token *new)
 {
 	t_token	*last;
