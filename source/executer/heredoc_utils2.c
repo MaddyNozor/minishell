@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:03:13 by sabellil          #+#    #+#             */
-/*   Updated: 2025/02/21 14:12:34 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/09 16:29:28 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	create_heredoc_list(t_cmd *cmd_lst, char *last_heredoc_files[])
 		last_heredoc_files[cmd_index] = NULL;
 		while (redir)
 		{
-			if (redir->type == REDIR_HEREDOC)
+			if (redir->type == HEREDOC)
 				last_heredoc_files[cmd_index] = redir->file_name;
 			redir = redir->next;
 		}

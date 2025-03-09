@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:04:30 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/09 15:56:31 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/09 16:34:00 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	execute_external_cmd(t_cmd *cmd, t_data *data)
 	cmd_path = find_cmd_path(cmd->value, data->varenv_lst);
 	if (!cmd_path || access(cmd_path, X_OK) == -1)
 	{
-		perror("command not found");
+		printf("bash: %s: command not found\n", cmd->value);
 		free(cmd_path);
 		exit(127);
 	}

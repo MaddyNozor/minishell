@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecole <ecole@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 14:00:05 by sabellil          #+#    #+#             */
-/*   Updated: 2025/02/27 18:07:28 by ecole            ###   ########.fr       */
+/*   Updated: 2025/03/09 16:37:18 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,73 +73,21 @@ t_varenv	*init_varenv(char **envp)
 char	**dup_env(char **envp)
 {
 	int		i;
+	int		env_count;
 	char	**new_env;
 
-	// Compter le nombre de variables d'environnement
-	for (i = 0; envp[i]; i++);
-	new_env = malloc((i + 1) * sizeof(char *));
+	env_count = 0;
+	while (envp[env_count])
+		env_count++;
+	new_env = malloc((env_count + 1) * sizeof(char *));
 	if (!new_env)
 		return (NULL);
-
-	// Copier chaque variable
-	for (i = 0; envp[i]; i++)
+	i = 0;
+	while (i < env_count)
+	{
 		new_env[i] = strdup(envp[i]);
+		i++;
+	}
 	new_env[i] = NULL;
-
 	return (new_env);
 }
-
-
-// //TEST INIT_SHELL a utiliser avec init_shell.c et init_shell_utils.c
-// void print_varenv(t_varenv *varenv_lst)
-// {
-//     t_varenv *current = varenv_lst;
-//     while (current)
-//     {
-//         printf("%s=%s\n", current->name, current->value);
-//         current = current->next;
-//     }
-// }
-
-// void free_varenv(t_varenv *varenv_lst)
-// {
-//     t_varenv *current = varenv_lst;
-//     t_varenv *next;
-//     while (current)
-//     {
-//         next = current->next;
-//         free(current->name);
-//         free(current->value);
-//         free(current);
-//         current = next;
-//     }
-// }
-
-// int main(int argc, char **argv, char **envp)
-// {
-//     t_varenv *varenv_lst;
-
-//     (void)argc; // On ignore les arguments du programme
-//     (void)argv;
-
-//     if (envp[0] == NULL) // Cas où `env -i` est utilisé (environnement vide)
-//     {
-//         printf("Lancement avec environnement vide (env -i).\n");
-//         varenv_lst = init_varenv(NULL);
-	// Appel avec NULL pour un environnement minimaliste
-//     }
-//     else
-//     {
-//         printf("Lancement avec l'environnement actuel.\n");
-//         varenv_lst = init_varenv(envp); // Appel avec l'environnement fourni
-//     }
-
-//     // Affiche les variables d'environnement
-//     printf("Variables d'environnement :\n");
-//     print_varenv(varenv_lst);
-
-//     // Libère la mémoire allouée
-//     free_varenv(varenv_lst);
-
-//     return (0);
-// }

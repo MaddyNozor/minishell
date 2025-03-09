@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:19:35 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/09 16:12:53 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/09 16:29:32 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,13 +73,13 @@ static void	handle_redirect(t_token *tok, t_cmd **current_cmd, t_varenv *varenv,
 void	handle_redirections(t_token *tok, t_cmd **current_cmd, t_varenv *varenv)
 {
 	if (tok->type == REDIRECT_OUT)
-		handle_redirect(tok, current_cmd, varenv, REDIR_OUT);
+		handle_redirect(tok, current_cmd, varenv, REDIRECT_OUT);
 	else if (tok->type == APPEND_OUT)
-		handle_redirect(tok, current_cmd, varenv, REDIR_APPEND);
+		handle_redirect(tok, current_cmd, varenv, APPEND_OUT);
 	else if (tok->type == REDIRECT_IN)
-		handle_redirect(tok, current_cmd, varenv, REDIR_IN);
+		handle_redirect(tok, current_cmd, varenv, REDIRECT_IN);
 	else if (tok->type == HEREDOC)
-		handle_heredoc(tok, current_cmd, varenv, REDIR_HEREDOC);
+		handle_heredoc(tok, current_cmd, varenv, HEREDOC);
 }
 
 //Ca fonctionne mais c'est trop long, a virer a la fin

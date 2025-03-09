@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:24:45 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/09 16:01:07 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/09 16:29:11 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	handle_heredocs_pipeline(t_cmd *cmd_lst)
 		redir = cmd->redirection;
 		while (redir)
 		{
-			if (redir->type == REDIR_HEREDOC)
+			if (redir->type == HEREDOC)
 			{
 				create_heredoc_file(redir, heredoc_index);
 				heredoc_index++;
@@ -45,7 +45,7 @@ void	create_and_fill_heredocs(t_redirection *redirection)
 	heredoc_index = 1;
 	while (current)
 	{
-		if (current->type == REDIR_HEREDOC)
+		if (current->type == HEREDOC)
 		{
 			create_heredoc_file(current, heredoc_index);
 			heredoc_index++;
@@ -75,7 +75,7 @@ void	transfer_heredocs_to_pipe(t_redirection *redirection, int pipe_fd[2])
 	current = redirection;
 	while (current)
 	{
-		if (current->type == REDIR_HEREDOC)
+		if (current->type == HEREDOC)
 		{
 			heredoc_fd = open(current->file_name, O_RDONLY);
 			if (heredoc_fd == -1)

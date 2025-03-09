@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 16:20:07 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/09 15:49:15 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/09 16:29:17 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	setup_heredoc_fd(t_cmd *cmd, int *heredoc_fd)
 	current = cmd->redirection;
 	while (current)
 	{
-		if (current->type == REDIR_HEREDOC)
+		if (current->type == HEREDOC)
 			last_heredoc = current;
 		current = current->next;
 	}

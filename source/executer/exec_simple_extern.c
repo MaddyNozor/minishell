@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:09:14 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/09 15:57:16 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/09 16:25:38 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	handle_child_process(t_cmd *cmd, t_data *data)
 
 	// printf("je suis sortie de apply redirections\n");
 	apply_redirections(cmd->redirection);
-	if (cmd->redirection && cmd->redirection->type == REDIR_IN)
+	if (cmd->redirection && cmd->redirection->type == REDIRECT_IN)
 	{
 		// printf("🔍 Je tente d'ouvrir %s en lecture seule\n", cmd->redirection->file_name);
 		input_fd = open(cmd->redirection->file_name, O_RDONLY);

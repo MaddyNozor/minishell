@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 13:54:50 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/09 15:51:14 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/09 16:29:23 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	unlink_heredoc_temp(t_redirection *redirection)
 	current = redirection;
 	while (current)
 	{
-		if (current->type == REDIR_HEREDOC)
+		if (current->type == HEREDOC)
 		{
 			if (unlink(current->file_name) == -1)
 			{
@@ -96,7 +96,7 @@ bool	contains_heredoc(t_redirection *redirection)
 	current = redirection;
 	while (current)
 	{
-		if (current->type == REDIR_HEREDOC)
+		if (current->type == HEREDOC)
 			return (true);
 		current = current->next;
 	}

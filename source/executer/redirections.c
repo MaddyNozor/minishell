@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 16:10:03 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/09 15:54:45 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/09 16:28:36 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	apply_redirections(t_redirection *redirection)//fonctionne mais pas pour >>
 	current = redirection;
 	while (current)
 	{
-		if (current->type == REDIR_IN)
+		if (current->type == REDIRECT_IN)
 		{
 			// printf("🔍 Tentative d'ouverture de %s en mode lecture seule\n", current->file_name);
 			input_fd = open(current->file_name, O_RDONLY);
@@ -57,7 +57,7 @@ void	apply_redirections(t_redirection *redirection)//fonctionne mais pas pour >>
 	// current = redirection;
 	// while (current)
 	// {
-	// 	if (current->type == REDIR_OUT || current->type == REDIR_APPEND)
+	// 	if (current->type == REDIRECT_OUT || current->type == APPEND_OUT)
 	// 	{
 	// 		printf("🔍 Traitement de la redirection de sortie : %s, type = %d\n",
 	// 			   current->file_name, current->type);

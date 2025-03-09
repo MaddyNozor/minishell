@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 13:46:25 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/09 16:00:45 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/09 16:29:03 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ void	handle_output_redirections(t_redirection *redir, int *last_out_fd)//TODO : 
 	curr = redir;
 	while (curr)
 	{
-		if (curr->type == REDIR_OUT || curr->type == REDIR_APPEND)
+		if (curr->type == REDIRECT_OUT || curr->type == APPEND_OUT)
 		{
 			if (*last_out_fd != -1)
 				close(*last_out_fd);
 			flags = O_WRONLY | O_CREAT;
-			if (curr->type == REDIR_OUT)
+			if (curr->type == REDIRECT_OUT)
 				*last_out_fd = open(curr->file_name, flags | O_TRUNC, 0644);
-			else if (curr->type == REDIR_APPEND)
+			else if (curr->type == APPEND_OUT)
 				*last_out_fd = open(curr->file_name, flags | O_APPEND, 0644);
 			if (*last_out_fd == -1)
 			{
@@ -85,9 +85,9 @@ void	handle_input_redirection(t_redirection *redirection, int *input_fd,
 	current = redirection;
 	while (current)
 	{
-		// printf("🔎 Vérification dans handle_input_redirection : type actuel = %d (REDIR_IN attendu: %d)\n",
-		// current->type, REDIR_IN);
-		if (current->type == REDIR_IN)
+		// printf("🔎 Vérification dans handle_input_redirection : type actuel = %d (REDIRECT_IN attendu: %d)\n",
+		// current->type, REDIRECT_IN);
+		if (current->type == REDIRECT_IN)
 		{
 			// printf("Je suis rentre dnas handle input redirection\n");
 			// printf("🔍 Tentative d'ouverture de %s en mode lecture seule\n",
@@ -103,7 +103,7 @@ void	handle_input_redirection(t_redirection *redirection, int *input_fd,
 			close(*input_fd);
 			*input_redir_found = true;
 		}
-		else if (current->type == REDIR_HEREDOC)
+		else if (current->type == HEREDOC)
 			*last_heredoc = current;
 		current = current->next;
 	}
