@@ -1,0 +1,81 @@
+minishell$ 
+==2221334== 
+==2221334== HEAP SUMMARY:
+==2221334==     in use at exit: 214,264 bytes in 393 blocks
+==2221334==   total heap usage: 730 allocs, 337 frees, 238,749 bytes allocated
+==2221334== 
+
+CAS 1 - strdup enqueue_token - def lost - realloc foireuse dans enqueue ?
+==2221334== 5 bytes in 1 blocks are definitely lost in loss record 1 of 69
+==2221334==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2221334==    by 0x4069D0: ft_strdup (in /home/mairivie/00_github/42_minishell/minishell)
+==2221334==    by 0x404DC6: enqueue_token (queue.c:35)
+==2221334==    by 0x405732: handle_token_word (token_word.c:25)
+==2221334==    by 0x404C31: handle_tokens (parsing_loop.c:59)
+==2221334==    by 0x404D11: parser (parsing_loop.c:116)
+==2221334==    by 0x403EF7: ft_start_minishell (readline.c:65)
+==2221334==    by 0x401363: main (main.c:25)
+==2221334== 118 bytes in 1 blocks are definitely lost in loss record 22 of 69
+==2221334==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2221334==    by 0x4069D0: ft_strdup (in /home/mairivie/00_github/42_minishell/minishell)
+==2221334==    by 0x404DC6: enqueue_token (queue.c:35) --------------
+==2221334==    by 0x405754: handle_token_word (token_word.c:31)
+==2221334==    by 0x4056B0: handle_var_env (token_var_env.c:82)
+==2221334==    by 0x404C0D: handle_tokens (parsing_loop.c:55)
+==2221334==    by 0x404D11: parser (parsing_loop.c:116)
+==2221334==    by 0x403EF7: ft_start_minishell (readline.c:65)
+==2221334==    by 0x401363: main (main.c:25)
+==2221334== 
+
+CAS 2 - PAS DE LIBERATION DES VARENV A LA FIN ? (logique si gere dans exit maybe)
+==2221334== 741 bytes in 56 blocks are still reachable in loss record 28 of 69
+==2221334==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2221334==    by 0x4069D0: ft_strdup (in /home/mairivie/00_github/42_minishell/minishell)
+==2221334==    by 0x403D11: create_varenv (manage_var_env.c:125)
+==2221334==    by 0x403712: init_existing_env (init_shell.c:31)
+==2221334==    by 0x403827: init_varenv (init_shell.c:60)
+==2221334==    by 0x401356: main (main.c:24)
+==2221334== 
+==2221334== 2,240 bytes in 56 blocks are still reachable in loss record 42 of 69
+==2221334==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2221334==    by 0x403CF4: create_varenv (manage_var_env.c:122)
+==2221334==    by 0x403712: init_existing_env (init_shell.c:31)
+==2221334==    by 0x403827: init_varenv (init_shell.c:60)
+==2221334==    by 0x401356: main (main.c:24)
+==2221334== 
+==2221334== 2,963 bytes in 56 blocks are still reachable in loss record 44 of 69
+==2221334==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2221334==    by 0x4069D0: ft_strdup (in /home/mairivie/00_github/42_minishell/minishell)
+==2221334==    by 0x403D24: create_varenv (manage_var_env.c:126) ------------
+==2221334==    by 0x403712: init_existing_env (init_shell.c:31)
+==2221334==    by 0x403827: init_varenv (init_shell.c:60)
+==2221334==    by 0x401356: main (main.c:24)
+
+CAS 3 - DEF LOST - Manip sur les queue
+==2221334== 16 bytes in 1 blocks are definitely lost in loss record 11 of 69
+==2221334==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2221334==    by 0x404D41: init_queue (queue.c:19) ---------------
+==2221334==    by 0x404B88: handle_tokens (parsing_loop.c:36)
+==2221334==    by 0x404D11: parser (parsing_loop.c:116)
+==2221334==    by 0x403EF7: ft_start_minishell (readline.c:65)
+==2221334==    by 0x401363: main (main.c:25)
+
+Soucis dans echo lorsqu'il y a un expand de var env, ca repete les tokens suivants
+echo hello $USER world
+=> echo mairivie world world
+
+CAS 4 - DANS LE SLICE DES TOKEN AVEC VARENV A EXPAND
+==2260172== 18 bytes in 3 blocks are definitely lost in loss record 11 of 79
+==2260172==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2260172==    by 0x406F73: ft_substr (in /home/mairivie/00_github/42_minishell/minishell)
+==2260172==    by 0x4061DA: ft_cut_varenv (quote_two.c:73)
+==2260172==    by 0x406020: ft_varenv_slicing (quote_two.c:42)
+==2260172==    by 0x405F91: ft_varenv_manager (quote_two.c:26)
+==2260172==    by 0x405F09: ft_cut_quoted_text (quote_one.c:86)
+==2260172==    by 0x405860: ft_cut_a_slice (quote_manager.c:25)
+==2260172==    by 0x405A40: ft_quote_manager (quote_manager.c:87)
+==2260172==    by 0x405B1F: ft_spot_the_quotes (quote_manager.c:114)
+==2260172==    by 0x403ED7: ft_start_minishell (readline.c:64)
+==2260172==    by 0x401363: main (main.c:25)
+
+
