@@ -78,4 +78,7 @@ CAS 4 - DANS LE SLICE DES TOKEN AVEC VARENV A EXPAND
 ==2260172==    by 0x403ED7: ft_start_minishell (readline.c:64)
 ==2260172==    by 0x401363: main (main.c:25)
 
+PAGER = less
+LANGUAGE = en_us
+
 

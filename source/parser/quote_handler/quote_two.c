@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quote_two.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/09 17:27:54 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/11 14:15:16 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ char	*ft_varenv_manager(char *string, t_varenv *lst)
 	}
 	new_content = ft_glue_the_slices_again(stock_list);
 	ft_lstclear(&stock_list, free);
+	stock_list = NULL;
 	free(string);
 	return (new_content);
 }
