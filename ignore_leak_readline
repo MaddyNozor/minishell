@@ -1,23 +1,39 @@
 {
-   ignore_readline_leaks
+   <readline>
    Memcheck:Leak
-   match-leak-kinds: definite
-   fun:malloc
-   obj:/usr/lib/x86_64-linux-gnu/libreadline.so.*
+   ...
+   fun:readline
 }
 
 {
-   ignore_ls_leaks
+   <ignore_ls_leaks>
    Memcheck:Leak
-   match-leak-kinds: definite
-   fun:malloc
-   obj:/bin/ls
+   ...
+   obj:*/bin/ls
 }
 
-{
-   ignore_ls_leaks
-   Memcheck:Leak
-   match-leak-kinds: reachable
-   fun:malloc
-   obj:/usr/bin/ls
-}
+# clear && make && valgrind --leak-check=full --suppressions=ignore_leak_readline --show-leak-kinds=all ./minishell
+
+# {
+#    ignore_readline_leaks
+#    Memcheck:Leak
+#    match-leak-kinds: definite
+#    fun:malloc
+#    obj:/usr/lib/x86_64-linux-gnu/libreadline.so.*
+# }
+
+# {
+#    ignore_ls_leaks
+#    Memcheck:Leak
+#    match-leak-kinds: definite
+#    fun:malloc
+#    obj:/bin/ls
+# }
+
+# {
+#    ignore_ls_leaks
+#    Memcheck:Leak
+#    match-leak-kinds: reachable
+#    fun:malloc
+#    obj:/usr/bin/ls
+# }
