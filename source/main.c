@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/09 18:22:12 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/11 14:39:16 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	main(int ac, char **av, char **envp)
 }
 
 // TODO RESTE A FAIRE
-//- Verif leak lexing-quote (Maddy)
+//- Verif leak lexing-quote (Maddy) DONE !
 //- Faire un fichier qui filtre les leak rl (exemple : echo Sara) (Maddy)
 //- Signaux (Maddy)
 //- Tests de redirections (avec et sans pipe) (Sara)
