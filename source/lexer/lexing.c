@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/09 17:52:36 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/13 12:05:42 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	print_list(t_token *lst)
 {
 	while (lst)
 	{
-		// printf("Token: %s, Type: %d\n", lst->content, lst->type);
+		printf("Token: %s, Type: %d\n", lst->content, lst->type);
 		lst = lst->next;
 	}
 	// printf("--List Printed--\n");

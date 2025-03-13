@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:24:19 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/09 16:07:00 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/13 13:08:17 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,19 @@ void	handle_tokens(t_token *tok, t_cmd **cmd_list, t_varenv *varenv_lst)
 		{
 			handle_token_pipe(&current_cmd, queue); //OK
 		}
-		else if (tok->type == VAR_ENV) //OK MAIS TODO : Gerer les $? ici ?
+		else if (tok->type == VAR_ENV)
 		{
 			handle_var_env(tok, queue, current_cmd, varenv_lst);
+			if (tok->next && tok->next->type == WORD)
+			{
+				tok = tok->next;
+				handle_token_word(queue, &tok, current_cmd);
+			}
 		}
 		else if (tok->type == WORD)
 		{
 			handle_token_word(queue, &tok, current_cmd); //OK
+
 		}
 		else if (tok->type == REDIRECT_IN || tok->type == REDIRECT_OUT
 					|| tok->type == APPEND_OUT || tok->type == HEREDOC)
@@ -71,28 +77,28 @@ void	handle_tokens(t_token *tok, t_cmd **cmd_list, t_varenv *varenv_lst)
 		tok = tok->next;
 	}
 	transfer_queue_to_argv(queue, current_cmd);
-	// printf("Final command list after parsing:\n");// Juste pour le debug
-	//         t_cmd *tmp_cmd = *cmd_list;
-	//         int i;
-	//         while (tmp_cmd)
-	//         {
-	//             printf("Command: %s, argc: %d\n", tmp_cmd->value, tmp_cmd->argc);
-	//             if (tmp_cmd->argv)
-	//             {
-	//                 printf("  argv: ");
-	//                 for (i = 0; tmp_cmd->argv[i]; i++)
-	//                     printf("[%s] ", tmp_cmd->argv[i]);
-	//                 printf("\n");
-	//             }
-	//             t_redirection *tmp_redir = tmp_cmd->redirection;
-	//             while (tmp_redir)
-	//             {
-	//                 printf("  Redirection: file: %s, type: %d\n", tmp_redir->file_name, tmp_redir->type);
-	//                 tmp_redir = tmp_redir->next;
-	//             }
-	//             tmp_cmd = tmp_cmd->next;
-	//         }
-	//         printf("Token handling completed.\n");
+	printf("Final command list after parsing:\n");// Juste pour le debug
+	        t_cmd *tmp_cmd = *cmd_list;
+	        int i;
+	        while (tmp_cmd)
+	        {
+	            printf("Command: %s, argc: %d\n", tmp_cmd->value, tmp_cmd->argc);
+	            if (tmp_cmd->argv)
+	            {
+	                printf("  argv: ");
+	                for (i = 0; tmp_cmd->argv[i]; i++)
+	                    printf("[%s] ", tmp_cmd->argv[i]);
+	                printf("\n");
+	            }
+	            t_redirection *tmp_redir = tmp_cmd->redirection;
+	            while (tmp_redir)
+	            {
+	                printf("  Redirection: file: %s, type: %d\n", tmp_redir->file_name, tmp_redir->type);
+	                tmp_redir = tmp_redir->next;
+	            }
+	            tmp_cmd = tmp_cmd->next;
+	        }
+	        printf("Token handling completed.\n");
 }
 
 t_cmd	*parser(t_token *tok, t_varenv *varenv_lst)
