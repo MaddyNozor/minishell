@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 16:10:03 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/09 16:28:36 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/13 13:22:27 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,19 @@ void	apply_redirections(t_redirection *redirection)//fonctionne mais pas pour >>
 	int				last_output_fd;
 	int				input_fd;
 	t_redirection	*current;
+	bool			input_redir_found = true;
+
 
 	last_output_fd = -1;
 	input_fd = -1;
 	current = redirection;
+	handle_input_redirection(redirection, &input_fd, NULL, &input_redir_found);
+
+	if (!input_redir_found)
+	{
+		// Si un fichier d'entrée n'existe pas, stoppe immédiatement pour éviter la création du fichier de sortie
+		return;
+	}
 	while (current)
 	{
 		if (current->type == REDIRECT_IN)

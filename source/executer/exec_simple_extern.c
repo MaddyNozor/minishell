@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:09:14 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/09 16:25:38 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/13 13:35:09 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ void	handle_child_process(t_cmd *cmd, t_data *data)
 		// printf("j'ai essayé d'ouvrir\n");
 		if (input_fd == -1)
 		{
-			printf("bash: %s: No such file or directory\n", cmd->redirection->file_name);
+		// 	printf("Je passe par la verif dans handle_child_process\n");
+		// 	printf("bash: %s: No such file or directory\n", cmd->redirection->file_name);
 			exit(1);
 		}
 		close(input_fd);

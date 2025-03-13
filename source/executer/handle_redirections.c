@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 13:46:25 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/09 16:29:03 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/13 13:36:44 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,10 @@ void	handle_input_redirection(t_redirection *redirection, int *input_fd,
 			*input_fd = open(current->file_name, O_RDONLY);
 			if (*input_fd == -1)
 			{
+				// printf("Je passe par la verif dans handle_input_process\n");
 				printf("bash: %s: No such file or directory\n", current->file_name);
 				*input_redir_found = false;
-				return ;
+				break ;
 			}
 			dup2(*input_fd, STDIN_FILENO);
 			close(*input_fd);
