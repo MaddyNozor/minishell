@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:41:57 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/09 17:37:46 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/13 18:03:34 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 char	*read_user_input(void)
 {
 	char	*input;
+	
+	ft_init_signal_handlers();
     if (isatty(STDIN_FILENO) == 0)//Pour pas avoir le reste d'un heredoc passe en prompt
     {
         // printf("⏩ STDIN est fermé, on le rouvre !\n");

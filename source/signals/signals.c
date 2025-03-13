@@ -6,31 +6,37 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 19:28:31 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/12 19:30:47 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/13 17:57:54 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
 
-extern volatile int	g_sig_captured;
+extern volatile sig_atomic_t g_sig_caught;
 
-static void	sigint_handler(int sig)
+static void	sig_int_handler()
 {
-	g_sigreceiver = sig;
-	close(STDIN_FILENO);
+	g_sig_caught = SIGINT;
 	write(STDOUT_FILENO, "\n", 1);
-}
-
-static void	sigquit_handler(int sig)
-{
-	g_sigreceiver = sig;
-	// printf("\033[2D\033[0K");
+	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
 }
 
-void	init_signal(void)
+void	sig_quit_handler()
 {
-	signal(SIGQUIT, sigquit_handler);
-	signal(SIGINT, sigint_handler);
+	g_sig_caught = SIGQUIT;
+	// rl_redisplay();
+	ft_printf("\nIs it a bird ? Is it a plane ? No ! It's Super-SIGQUIT!\n");
+	// rl_on_new_line();
+	// rl_on_new_line();
+	rl_redisplay();
+}
+
+//Ignore SIGQUIT (c+\) while execution
+//manage SIGINT (c+c) 
+void	ft_init_signal_handlers(void)
+{
+	signal(SIGINT, sig_int_handler);
+	signal(SIGQUIT, SIG_IGN);
 }

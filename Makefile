@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+         #
+#    By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/10 15:29:24 by mairivie          #+#    #+#              #
-#    Updated: 2025/03/09 17:29:27 by sabellil         ###   ########.fr        #
+#    Updated: 2025/03/13 11:12:29 by mairivie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,7 +56,8 @@ SRC_LIST =  main.c \
             parser/quote_handler/quote_manager.c \
             parser/quote_handler/quote_one.c \
             parser/quote_handler/quote_two.c \
-            parser/quote_handler/quote_tree.c
+            parser/quote_handler/quote_tree.c \
+            signals/signals.c
                      
 SRC = $(addprefix $(SRC_DIR), $(SRC_LIST))
 

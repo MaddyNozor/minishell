@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/12 19:29:27 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/13 18:02:59 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,10 @@ void						free_varenv(t_varenv *varenv_lst);
 void						free_varenv_node(t_varenv *node);
 void						free_cmd_list(t_cmd *list);
 void						free_token_list(t_token *list);
+
+// SIGNALS
+void						ft_init_signal_handlers(void);
+void						sig_quit_handler(void);
 
 // READLINE MAIN LOOP
 void						ft_start_minishell(t_data *data);
