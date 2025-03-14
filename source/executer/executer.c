@@ -6,11 +6,23 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:38:39 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/13 17:52:31 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/14 16:22:48 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
+
+extern volatile sig_atomic_t g_sig_caught;
+
+static void	sig_quit_handler()
+{
+	g_sig_caught = SIGQUIT;
+	// rl_redisplay();
+	ft_printf("\nIs it a bird ? Is it a plane ? No ! It's Super-SIGQUIT!\n");
+	// rl_on_new_line();
+	// rl_on_new_line();
+	rl_redisplay();
+}
 
 bool	is_builtin(const char *cmd_value)
 {

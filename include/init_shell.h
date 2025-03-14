@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/13 18:02:59 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/14 16:22:21 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void						free_token_list(t_token *list);
 
 // SIGNALS
 void						ft_init_signal_handlers(void);
-void						sig_quit_handler(void);
+//void						sig_quit_handler(void);
 
 // READLINE MAIN LOOP
 void						ft_start_minishell(t_data *data);
@@ -261,6 +261,7 @@ void						ft_env(t_data *data, t_cmd *cmd);
 char						**dup_env(char **envp);
 void						ft_cd(t_cmd *cmd, t_varenv *varenv);
 void						ft_exit(t_cmd *cmd, t_data *data);
+void						ft_unset(t_data *data, t_cmd *cmd);
 
 // PARSER SARA
 
