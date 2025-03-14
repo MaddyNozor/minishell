@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ecole <ecole@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/12 19:29:27 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/13 18:31:01 by ecole            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,14 @@ typedef struct s_queue
 	t_node					*tail;
 }							t_queue;
 
+typedef struct s_pipe_data
+{
+    int heredoc_fd;
+    int pipe_in;
+    int pipe_fd[2];
+} t_pipe_data;
+
+
 //--------------------- FONCTIONS -----------------------------
 
 // SHELL INITIALIZATION
@@ -199,8 +207,9 @@ void						handle_pipe_redirections(t_cmd *cmd, int pipe_in,
 								int pipe_fd[2]);
 void						close_redirections(t_redirection *redirection);
 int							ft_strcmp(const char *s1, const char *s2);
-void						setup_io_redirections(int heredoc_fd, int pipe_in,
-								int pipe_fd[2], t_cmd *cmd);
+// void						setup_io_redirections(int heredoc_fd, int pipe_in,
+// 								int pipe_fd[2], t_cmd *cmd);
+void	setup_io_redirections(t_pipe_data *pipe_data, t_cmd *cmd, t_data *data);
 void						read_and_write(int src_fd, int dest_fd);
 
 // REDIRECTIONS - HEREDOC
@@ -293,5 +302,7 @@ void						handle_token_word(t_queue *queue, t_token **tok,
 								t_cmd *current_cmd);
 void						handle_endoffile(t_queue *queue,
 								t_cmd *current_cmd);
+
+								char	*get_env_value(t_varenv *varenv_lst, const char *key);
 
 #endif
