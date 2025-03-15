@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecole <ecole@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/13 18:31:01 by ecole            ###   ########.fr       */
+/*   Updated: 2025/03/15 14:49:28 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,11 +215,10 @@ void						read_and_write(int src_fd, int dest_fd);
 // REDIRECTIONS - HEREDOC
 int							ft_create_heredoc(const char *delimiter, int index);
 bool						contains_heredoc(t_redirection *redirection);
-void						process_heredoc_input(int fd,
-								const char *delimiter);
 void						unlink_heredoc_temp(t_redirection *redirection);
 void						process_heredoc_input(int fd,
 								const char *delimiter);
+
 void						handle_heredocs_simple_cmd(
 								t_redirection *redirection);
 void						handle_heredocs_pipeline(t_cmd *cmd_lst);

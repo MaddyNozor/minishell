@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 16:10:03 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/15 14:13:50 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/15 15:32:20 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,46 +44,46 @@ void	apply_redirections(t_redirection *redirection)
 	last_heredoc = NULL;
 	current = redirection;
 
-	printf("Je suis dans apply_redirections\n");
+	// printf("Je suis dans apply_redirections\n");
 	while (current)
 	{
-		printf("🔍 Recherche du dernier heredoc : type = %d, fichier = %s\n",
-		       current->type, current->file_name);
+		// printf("🔍 Recherche du dernier heredoc : type = %d, fichier = %s\n",
+		//        current->type, current->file_name);
 		if (current->type == HEREDOC)
 			last_heredoc = current;
 		current = current->next;
 	}
 	
-	printf("J'entre dans handle_input_redirection\n");
+	// printf("J'entre dans handle_input_redirection\n");
 	handle_input_redirection(redirection, &input_fd, &last_heredoc, &input_redir_found);
-	printf("Je ressors de handle_input_redirection\n");
+	// printf("Je ressors de handle_input_redirection\n");
 	
 	if (!input_redir_found)
 	{
-		printf("🚨 Aucune entrée valide trouvée, sortie de apply_redirections\n");
+		// printf("🚨 Aucune entrée valide trouvée, sortie de apply_redirections\n");
 		return;
 	}
 
-	printf("Je m'apprête à vérifier la redirection heredoc\n");
+	// printf("Je m'apprête à vérifier la redirection heredoc\n");
 	if (last_heredoc)
 	{
-		printf("✅ Traitement du heredoc : fichier = %s\n", last_heredoc->file_name);
+		// printf("✅ Traitement du heredoc : fichier = %s\n", last_heredoc->file_name);
 		handle_heredoc_redirection(last_heredoc, &input_fd);
 	}
 
 	current = redirection;
 	while (current)
 	{
-		printf("🔍 Traitement de la redirection : type = %d, fichier = %s\n",
-		       current->type, current->file_name);
+		// printf("🔍 Traitement de la redirection : type = %d, fichier = %s\n",
+		//        current->type, current->file_name);
 
 		if (current->type == REDIRECT_IN)
 		{
-			printf("📥 Redirection d'entrée depuis %s\n", current->file_name);
+			// printf("📥 Redirection d'entrée depuis %s\n", current->file_name);
 			input_fd = open(current->file_name, O_RDONLY);
 			if (input_fd == -1)
 			{
-				printf("❌ Erreur d'ouverture de %s\n", current->file_name);
+				// printf("❌ Erreur d'ouverture de %s\n", current->file_name);
 				break;
 			}
 			dup2(input_fd, STDIN_FILENO);
@@ -93,11 +93,11 @@ void	apply_redirections(t_redirection *redirection)
 	}
 	if (input_fd == -1)
 	{
-		printf("⚠️ Aucun fichier d'entrée ouvert, on passe aux redirections de sortie\n");
+		// printf("⚠️ Aucun fichier d'entrée ouvert, on passe aux redirections de sortie\n");
 		handle_output_redirections(redirection, &last_output_fd);
 		return;
 	}
-	printf("🔄 Application des redirections de sortie\n");
+	// printf("🔄 Application des redirections de sortie\n");
 	handle_output_redirections(redirection, &last_output_fd);
 }
 

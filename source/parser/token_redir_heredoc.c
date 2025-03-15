@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 16:11:52 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/09 16:14:18 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/15 15:31:00 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,18 @@ void	handle_heredoc(t_token *tok, t_cmd **current_cmd, t_varenv *varenv, int red
 		return ;
 	redir->type = redir_type;
 	redir->next = NULL;
-	(*current_cmd)->redirection = redir;
-	set_heredoc_delimiter(&tok, redir);
+	// (*current_cmd)->redirection = redir;
+
+	t_redirection *tmp = (*current_cmd)->redirection;
+	if (!tmp)
+		(*current_cmd)->redirection = redir;
+	else
+	{
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = redir;
+	}
+		set_heredoc_delimiter(&tok, redir);
 	process_heredoc_tokens(&tok, current_cmd, varenv);
 }
 
