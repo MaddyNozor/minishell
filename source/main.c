@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecole <ecole@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/13 18:45:18 by ecole            ###   ########.fr       */
+/*   Updated: 2025/03/14 16:05:20 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,58 @@ int	main(int ac, char **av, char **envp)
 	//ft_free_all(data);
 	return (0);
 }
+
+// #include "init_shell.h"
+
+// int main(int argc, char **argv, char **envp) {
+//     t_data data;
+//     t_cmd cmd1;
+//     t_varenv *env_list;
+//     t_redirection redir_heredoc;
+
+//     (void)argc;
+//     (void)argv;
+
+//     // 🔹 Initialisation de l'environnement
+//     env_list = init_varenv(envp);
+//     data.varenv_lst = env_list;
+
+//     // 🔹 Configuration du heredoc (`<< EOF`)
+//     redir_heredoc.type = HEREDOC;
+//     redir_heredoc.file_name = strdup("EOF");
+//     redir_heredoc.next = NULL;
+
+//     // 🔹 Commande : `cat << EOF`
+//     cmd1.value = strdup("cat");
+//     cmd1.argv = (char *[]){"cat", NULL};
+//     cmd1.argc = 1;
+//     cmd1.redirection = &redir_heredoc;
+//     cmd1.next = NULL;  // 🔹 Pas de pipeline, commande unique
+
+//     // 🔹 Configuration de `t_data`
+//     data.cmd_lst = &cmd1;
+//     data.lst_exit = 0;
+
+//     // 🔹 Exécution du test
+//     printf("\n🔽🔽🔽 DÉBUT DU TEST HEREDOC 🔽🔽🔽\n");
+//     printf("▶ Exécution de : cat << EOF\n");
+//     printf("----------------------------------------------------\n");
+
+//     executer(&data);  // 🔹 Exécuter `cat << EOF`
+
+//     printf("----------------------------------------------------\n");
+//     printf("🔼🔼🔼 FIN DU TEST HEREDOC 🔼🔼🔼\n");
+
+//     // 🔹 Nettoyage mémoire
+//     free(cmd1.value);
+//     free(redir_heredoc.file_name);
+//     free_varenv(data.varenv_lst);
+
+//     return 0;
+// }
+
+
+
 
 // TODO RESTE A FAIRE
 //- Verif leak lexing-quote (Maddy) DONE !

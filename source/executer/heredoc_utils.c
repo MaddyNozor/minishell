@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 13:54:50 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/09 16:29:23 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/14 15:28:28 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,33 +39,58 @@ void	open_heredoc_file(t_redirection *redir, char *heredoc_filename)
 	}
 }
 
+// void	create_heredoc_file(t_redirection *redir, int index)
+// {
+// 	char	heredoc_filename[20];
+// 	int		fd;
+// 	char	*delimiter;
+
+// 	generate_heredoc_filename(heredoc_filename, index);
+// 	delimiter = strdup(redir->file_name);
+// 	if (!delimiter)
+// 	{
+// 		perror("Erreur malloc");
+// 		exit(1);
+// 	}
+// 	open_heredoc_file(redir, heredoc_filename);
+// 	fd = open(redir->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+// 	if (fd == -1)
+// 	{
+// 		perror("Erreur ouverture heredoc");
+// 		exit(1);
+// 	}
+// 	// fprintf(stderr,
+// 	// 	"🛠️ Debug : Remplissage du heredoc `%s` (Délimiteur attendu : `%s`)\n",
+// 	// 	redir->file_name, delimiter);
+// 	process_heredoc_input(fd, delimiter);
+// 	close(fd);
+// 	free(delimiter);
+// }
 void	create_heredoc_file(t_redirection *redir, int index)
 {
-	char	heredoc_filename[20];
-	int		fd;
-	char	*delimiter;
+    char    heredoc_filename[20];
+    int     fd;
+    char    *delimiter;
 
-	generate_heredoc_filename(heredoc_filename, index);
-	delimiter = strdup(redir->file_name);
-	if (!delimiter)
-	{
-		perror("Erreur malloc");
-		exit(1);
-	}
-	open_heredoc_file(redir, heredoc_filename);
-	fd = open(redir->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd == -1)
-	{
-		perror("Erreur ouverture heredoc");
-		exit(1);
-	}
-	// fprintf(stderr,
-	// 	"🛠️ Debug : Remplissage du heredoc `%s` (Délimiteur attendu : `%s`)\n",
-	// 	redir->file_name, delimiter);
-	process_heredoc_input(fd, delimiter);
-	close(fd);
-	free(delimiter);
+    generate_heredoc_filename(heredoc_filename, index);
+    delimiter = strdup(redir->file_name);
+    if (!delimiter)
+    {
+        perror("Erreur malloc");
+        exit(1);
+    }
+    open_heredoc_file(redir, heredoc_filename);
+    fd = open(redir->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (fd == -1)
+    {
+        perror("Erreur ouverture heredoc");
+        exit(1);
+    }
+    process_heredoc_input(fd, delimiter);
+    close(fd);
+    free(delimiter);
 }
+
 
 void	unlink_heredoc_temp(t_redirection *redirection)
 {

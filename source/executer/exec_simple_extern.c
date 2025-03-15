@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:09:14 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/13 13:35:09 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/15 13:52:17 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	handle_child_process(t_cmd *cmd, t_data *data)
 {
 	int	input_fd;
 
-	// printf("je suis sortie de apply redirections\n");
+	printf("Je suis dans handle_child_process\n");
 	apply_redirections(cmd->redirection);
 	if (cmd->redirection && cmd->redirection->type == REDIRECT_IN)
 	{
