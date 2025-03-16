@@ -3,15 +3,66 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 15:02:30 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/14 18:28:59 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/16 12:27:27 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
 
+void        ft_unset_utils(t_varenv *current, t_data *data)
+{
+    t_varenv *temp;
+
+    temp = current;
+    if (!current->prev && current->next) //first
+    {
+        current->next->prev = temp->prev;
+        data->varenv_lst = current->next;
+    }
+    else if (!current->next && current->prev) //last
+    {
+        current->prev->next = temp->next;
+    }
+    else //other
+    {
+        current->next->prev = temp->prev;
+        current->prev->next = temp->next;
+    }
+    free(temp->name);
+    free(temp->value);
+    temp = NULL;
+}
+
+void       ft_unset(t_data *data, t_cmd *cmd)
+{
+    int i;
+    t_varenv *current;
+
+    i = 1;
+    if (cmd->argc < 1)
+        return;
+    while (i < cmd->argc)
+    {
+        printf("4\n");
+        current = data->varenv_lst;
+        while (current)
+        {
+            printf("Z\n");
+            if (ft_strcmp(cmd->argv[i], current->name) == 0)
+            {
+                    ft_unset_utils(current, data);
+            }
+            current = current->next;
+        }
+        printf("8\n");
+        i++;
+    }
+}
+
+/*
 void       ft_unset(t_data *data, t_cmd *cmd)
 {
     int i;
@@ -37,13 +88,11 @@ void       ft_unset(t_data *data, t_cmd *cmd)
                 {
                     current->next->prev = temp->prev;
                     data->varenv_lst = current->next;
-                    //free(current);
                     printf("next\n");
                 }
                 else if (!current->next && current->prev) //last
                 {
                     current->prev->next = temp->next;
-                    //free(current);
                     printf("prev\n");
                 }
                 else //other
@@ -65,6 +114,7 @@ void       ft_unset(t_data *data, t_cmd *cmd)
         i++;
     }
 }
+*/
 
 /*
 Si absence d'arg > return
