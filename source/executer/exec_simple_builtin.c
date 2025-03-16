@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_simple_builtin.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 15:44:00 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/14 16:15:25 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/16 14:27:03 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ void	execute_builtin(t_cmd *cmd, t_data *data)
 	else if (ft_strncmp(cmd->value, "exit", 5) == 0)
 		ft_exit(cmd, data);
 	else if (ft_strncmp(cmd->value, "unset", 6) == 0)
-			ft_unset(data, cmd);
+		ft_unset(data, cmd);
+	else if (ft_strncmp(cmd->value, "export", 7) == 0)
+		ft_export(data, cmd);
 	else
-		printf("Oops je l'ai pas encore code celui la! Hehe\n");
-	// else if (ft_strncmp(cmd->value, "export", 7) == 0)
-	// 	ft_export(cmd, data);
+			printf("Oops je l'ai pas encore code celui la! Hehe\n");
 }
 
 void	exec_simple_builtin_dir(t_cmd *cmd, t_data *data)
