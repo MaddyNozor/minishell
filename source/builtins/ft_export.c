@@ -3,35 +3,74 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 15:02:30 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/16 14:28:53 by codespace        ###   ########.fr       */
+/*   Updated: 2025/03/17 12:38:05 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
 
-void       ft_export(t_data *data, t_cmd *cmd)
+void        ft_print_list_export(t_data *data)
 {
-    //int i;
     t_varenv    *current;
 
-    //i = 1;
-    if (cmd->argc == 1)
+    current = data->varenv_lst;
+    while (current)
     {
-        current = data->varenv_lst;
-        while (current)
+        if (current->name)
         {
-            if (current->name)
-            {
-                printf("export : %s", current->name); 
-                if (current->value)
-                    printf("=%s", current->value);
-                printf("\n");
-            }
-            current = current->next;
+            printf("export %s", current->name); 
+            if (current->value)
+                printf("=\"%s\"", current->value);
+            printf("\n");
         }
+        current = current->next;
+    }
+}
+
+int    found_sign_equal_in_word(char *str)
+{
+    int i;
+    
+    i = 0;
+    while (str[i])
+    {
+        if (str[i] == '=')
+            return (i);
+        i++;
+    }
+    return (-1);   
+}
+
+void       ft_export(t_data *data, t_cmd *cmd)
+{
+    int     i;
+    char    *name;
+    char    *value;
+    int     split_pos;
+
+    i = 1;
+    if (cmd->argc == 1)
+        ft_print_list_export(data);
+    while (i < cmd->argc)
+    {
+        name = NULL;
+        value = NULL;
+        split_pos = found_sign_equal_in_word(cmd->argv[i]);
+        if (split_pos >= 0)
+        {
+            name = 
+            value =
+            //split pour avoir value et name
+        }
+        else
+            name = cmd->argv[i];
+        check name
+        check value
+        //void	create_varenv(t_varenv **varenv_lst, char *name, char *value, bool hiden)
+        i++;
     }
 }
 

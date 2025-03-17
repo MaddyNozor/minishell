@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 15:02:30 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/16 12:27:27 by codespace        ###   ########.fr       */
+/*   Updated: 2025/03/17 11:53:08 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,18 +46,15 @@ void       ft_unset(t_data *data, t_cmd *cmd)
         return;
     while (i < cmd->argc)
     {
-        printf("4\n");
         current = data->varenv_lst;
         while (current)
         {
-            printf("Z\n");
             if (ft_strcmp(cmd->argv[i], current->name) == 0)
             {
                     ft_unset_utils(current, data);
             }
             current = current->next;
         }
-        printf("8\n");
         i++;
     }
 }
