@@ -6,11 +6,23 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:38:39 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/17 12:25:56 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/17 16:10:05 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
+
+extern volatile sig_atomic_t g_sig_caught;
+
+static void	sig_quit_handler()
+{
+	g_sig_caught = SIGQUIT;
+	// rl_redisplay();
+	ft_printf("\nIs it a bird ? Is it a plane ? No ! It's Super-SIGQUIT!\n");
+	// rl_on_new_line();
+	// rl_on_new_line();
+	rl_redisplay();
+}
 
 bool	is_builtin(const char *cmd_value)
 {
@@ -42,6 +54,7 @@ void	executer_simple_cmd(t_cmd *cmd, t_data *data)
 void	executer(t_data *data)
 {
 	// printf("Je suis dans executer\n");
+	signal(SIGQUIT, sig_quit_handler);
 	if (data->cmd_lst->next == NULL)
 		executer_simple_cmd(data->cmd_lst, data);
 	else

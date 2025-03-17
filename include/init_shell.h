@@ -6,9 +6,10 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/15 14:49:28 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/17 16:02:22 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef INIT_SHELL_H
 # define INIT_SHELL_H
@@ -133,6 +134,10 @@ void						free_varenv(t_varenv *varenv_lst);
 void						free_varenv_node(t_varenv *node);
 void						free_cmd_list(t_cmd *list);
 void						free_token_list(t_token *list);
+
+// SIGNALS
+void						ft_init_signal_handlers(void);
+//void						sig_quit_handler(void);
 
 // READLINE MAIN LOOP
 void						ft_start_minishell(t_data *data);
@@ -265,6 +270,8 @@ void						ft_env(t_data *data, t_cmd *cmd);
 char						**dup_env(char **envp);
 void						ft_cd(t_cmd *cmd, t_varenv *varenv);
 void						ft_exit(t_cmd *cmd, t_data *data);
+void						ft_unset(t_data *data, t_cmd *cmd);
+void       					ft_export(t_data *data, t_cmd *cmd);
 
 // PARSER SARA
 
