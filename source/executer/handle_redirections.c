@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 13:46:25 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/09 16:29:03 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/17 15:43:56 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,28 +104,48 @@ void	handle_input_redirection(t_redirection *redirection, int *input_fd,
 			*input_redir_found = true;
 		}
 		else if (current->type == HEREDOC)
+		{
+			// printf("Je repere que current type est Heredoc\n");
 			*last_heredoc = current;
+		}
+		// printf("J'arrive vers la fin de handle input redirection, on avance dans current\n");
 		current = current->next;
 	}
+	// printf("J'arrive a la toute fin de handle input redirection\n");
 }
-
-void	handle_heredoc_redirection(t_redirection *last_heredoc, int *heredoc_fd)
+void handle_heredoc_redirection(t_redirection *last_heredoc, int *heredoc_fd)
 {
-	int	fd_stdin;
-
-	if (!last_heredoc)
-		return ;
-	// printf("Je suis entré dans handle_heredoc_redirection\n");
-	*heredoc_fd = open(last_heredoc->file_name, O_RDONLY);
-	if (*heredoc_fd == -1)
-	{
-		perror("Erreur ouverture heredoc");
-		exit(1);
-	}
-	dup2(*heredoc_fd, STDIN_FILENO);
-	close(*heredoc_fd);
-	fd_stdin = dup(STDIN_FILENO);// Sauvegarde de STDIN
-	dup2(fd_stdin, STDIN_FILENO);// Restauration de STDIN apres execve()
-	close(fd_stdin);
-	// printf("✅ STDIN restauré après heredoc.\n");
+    if (!last_heredoc)
+        return;
+    // printf("Je suis entré dans handle_heredoc_redirection\n");
+    *heredoc_fd = open(last_heredoc->file_name, O_RDONLY);
+    if (*heredoc_fd == -1)
+    {
+        perror("Erreur ouverture heredoc");
+        exit(1);
+    }
+    dup2(*heredoc_fd, STDIN_FILENO);
+    close(*heredoc_fd);
 }
+// void	handle_heredoc_redirection(t_redirection *last_heredoc, int *heredoc_fd)
+// {
+// 	int	fd_stdin;
+
+// 	if (!last_heredoc)
+// 		return ;
+// 	printf("Je suis entré dans handle_heredoc_redirection\n");
+// 	*heredoc_fd = open(last_heredoc->file_name, O_RDONLY);
+// 	if (*heredoc_fd == -1)
+// 	{
+// 		printf("Je suis entré le if heredoc_fd == -1\n");
+// 		perror("Erreur ouverture heredoc");
+// 		exit(1);
+// 	}
+// 	dup2(*heredoc_fd, STDIN_FILENO);
+// 	close(*heredoc_fd);
+// 	fd_stdin = dup(STDIN_FILENO);// Sauvegarde de STDIN
+// 	dup2(fd_stdin, STDIN_FILENO);// Restauration de STDIN apres execve()
+// 	close(fd_stdin);
+// 	// printf("✅ STDIN restauré après heredoc.\n");
+// }
+

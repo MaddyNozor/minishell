@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/16 14:26:24 by codespace        ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2025/03/17 15:47:57 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef INIT_SHELL_H
 # define INIT_SHELL_H
@@ -210,11 +211,10 @@ void						read_and_write(int src_fd, int dest_fd);
 // REDIRECTIONS - HEREDOC
 int							ft_create_heredoc(const char *delimiter, int index);
 bool						contains_heredoc(t_redirection *redirection);
-void						process_heredoc_input(int fd,
-								const char *delimiter);
 void						unlink_heredoc_temp(t_redirection *redirection);
 void						process_heredoc_input(int fd,
 								const char *delimiter);
+
 void						handle_heredocs_simple_cmd(
 								t_redirection *redirection);
 void						handle_heredocs_pipeline(t_cmd *cmd_lst);
