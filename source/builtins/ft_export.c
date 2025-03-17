@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 15:02:30 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/17 12:38:05 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/17 14:11:30 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@ int    found_sign_equal_in_word(char *str)
     while (str[i])
     {
         if (str[i] == '=')
+        {
+            printf("%d\n", i);
             return (i);
+        }
         i++;
     }
     return (-1);   
@@ -57,24 +60,32 @@ void       ft_export(t_data *data, t_cmd *cmd)
     while (i < cmd->argc)
     {
         name = NULL;
-        value = NULL;
+        value = NULL; //pourrait avoir une valeur predef ici pour pouvoir dire qu'en cas de NULL y a eu un fail
         split_pos = found_sign_equal_in_word(cmd->argv[i]);
         if (split_pos >= 0)
         {
-            name = 
-            value =
+            name = ft_substr(cmd->argv[i], 0, split_pos);
+            value = ft_substr(cmd->argv[i], split_pos + 1, strlen(cmd->argv[i]) - split_pos);
+            printf("name:%s| \nvalue:%s|\n", name, value);
             //split pour avoir value et name
         }
         else
             name = cmd->argv[i];
-        check name
-        check value
-        //void	create_varenv(t_varenv **varenv_lst, char *name, char *value, bool hiden)
+        //check name
+        //check value
+        create_varenv(&data->varenv_lst, name, value, false);
         i++;
     }
 }
 
 /*
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+ * PARAMETERS
+ * 	s: string from which to extract the new string
+ * 	start: start index of the new string in the string 's'
+ * 	len: maximum size of the new string
+
+
 typedef struct s_cmd
 {
 	char					*value;
