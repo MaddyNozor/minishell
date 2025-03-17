@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 15:02:30 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/17 16:20:52 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/17 18:41:15 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,45 +47,87 @@ int    found_sign_equal_in_word(char *str)
     return (-1);   
 }
 
+bool    is_valid_name(char *name)
+{
+    int i;
+    
+    if (!name)
+        return (false);
+    i = 1;
+    while (name [i])
+    {
+        if(!ft_isalnum(name[i]) && name[i] != '_')
+            return (false);
+        i++;
+    }
+    return (true);
+}
+
+t_varenv *ft_check_if_varenv_exist(t_varenv *list, char *name)
+{
+    t_varenv *current;
+
+    current = list;
+    while (current)
+    {
+        if (ft_strcmp(current->name, name) == 0 )
+            return current;
+        current = current->next;
+    }
+    return (NULL);
+}
+
 void       ft_export(t_data *data, t_cmd *cmd)
 {
-    int     i;
-    char    *name;
-    char    *value;
-    int     split_pos;
+    int         i;
+    char        *name;
+    char        *value;
+    int         split_pos;
+    t_varenv    *varenv_exist;
 
-    i = 1;
     if (cmd->argc == 1)
+    {   
         ft_print_list_export(data);
+        return;
+    }
+    i = 1;
     while (i < cmd->argc)
     {
         name = NULL;
-        value = NULL; //pourrait avoir une valeur predef ici pour pouvoir dire qu'en cas de NULL y a eu un fail
+        value = NULL; 
+        varenv_exist = NULL;
         split_pos = found_sign_equal_in_word(cmd->argv[i]);
         if (split_pos >= 0)
         {
             name = ft_substr(cmd->argv[i], 0, split_pos);
             value = ft_substr(cmd->argv[i], split_pos + 1, strlen(cmd->argv[i]) - split_pos);
-            // printf("name:%s| \nvalue:%s|\n", name, value);
-            //split pour avoir value et name
         }
         else
-            name = cmd->argv[i];
-        //check name
-        //check value
-        create_varenv(&data->varenv_lst, name, value, false);
+            name = ft_strdup(cmd->argv[i]);
+        if (is_valid_name(name) == false)
+        {
+            printf("export: '%s' : not a valid identifier \n", name);
+            free(name);
+            if (value)
+                free(value);
+        }
+        else if (name)
+            varenv_exist = ft_check_if_varenv_exist(data->varenv_lst, name);
+        else if (varenv_exist != NULL)
+        {
+            if (value)
+            {
+                free(varenv_exist->value);
+                varenv_exist->value = value;
+            }
+            free(name);
+        }
+        else if (name != NULL && value != NULL)
+            create_varenv(&data->varenv_lst, name, value, false);
         i++;
     }
 }
-
 /*
-char	*ft_substr(char const *s, unsigned int start, size_t len)
- * PARAMETERS
- * 	s: string from which to extract the new string
- * 	start: start index of the new string in the string 's'
- * 	len: maximum size of the new string
-
-
 typedef struct s_cmd
 {
 	char					*value;

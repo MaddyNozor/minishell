@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 19:28:31 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/14 16:18:58 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/17 18:06:58 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ void	sig_quit_handler()
 {
 	g_sig_caught = SIGQUIT;
 	// rl_redisplay();
-	ft_printf("\nIs it a bird ? Is it a plane ? No ! It's Super-SIGQUIT!\n");
+	ft_printf("^\\Quit (core dumped)\n");
+	ft_printf("\n\nIs it a bird ? Is it a plane ? No ! It's Super-SIGQUIT!\n");
 	// rl_on_new_line();
 	// rl_on_new_line();
 	rl_redisplay();
