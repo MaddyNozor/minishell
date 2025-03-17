@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/14 16:05:20 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/17 14:13:12 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,3 +135,219 @@ int	main(int ac, char **av, char **envp)
 //  verifier ca
 //  minishell$ ls | echo Sara
 // minishell$ 
+
+// bash-5.1$ echo "Hello World" | cat
+// Hello World
+
+// bash-5.1$ echo "Hello World" | tr ' ' '_'
+// Hello_World
+
+// bash-5.1$ echo "Hello World" | tr ' ' '_' | rev
+// dlroW_olleH
+
+
+
+// bash-5.1$ echo Sara | lsssssssssss | ls
+// bash: lsssssssssss: command not found
+//  biiinii
+//  c_formatter_42
+//  Desktop
+//  Documents
+//  Downloads
+//  fichier1
+//  goinfre
+//  ilona
+//  intra-uuid-853640af-6d79-45c8-965a-5726ed79af59-6151788-sabellil
+//  kdjkfdh
+//  Music
+//  output
+//  output2
+//  output_test_file1
+//  philo
+//  philotest
+//  Pictures
+//  pipex
+//  Public
+// 'Save changement'
+//  sgoinfre
+//  snap
+//  Templates
+//  try
+//  Videos
+//  zzzzzzzzzzzzzzzzzzzzz
+// bash-5.1$ echo Sara | ls
+//  biiinii
+//  c_formatter_42
+//  Desktop
+//  Documents
+//  Downloads
+//  fichier1
+//  goinfre
+//  ilona
+//  intra-uuid-853640af-6d79-45c8-965a-5726ed79af59-6151788-sabellil
+//  kdjkfdh
+//  Music
+//  output
+//  output2
+//  output_test_file1
+//  philo
+//  philotest
+//  Pictures
+//  pipex
+//  Public
+// 'Save changement'
+//  sgoinfre
+//  snap
+//  Templates
+//  try
+//  Videos
+//  zzzzzzzzzzzzzzzzzzzzz
+
+// bash-5.1$ ls | echo Sara
+// Sara
+
+// bash-5.1$ ls | wc -l | echo Sara
+// Sara
+
+// bash-5.1$ echo Sara | ls | wc -l
+// 26
+
+// bash-5.1$ echo Sara | wc -l | ls
+//  biiinii
+//  c_formatter_42
+//  Desktop
+//  Documents
+//  Downloads
+//  fichier1
+//  goinfre
+//  ilona
+//  intra-uuid-853640af-6d79-45c8-965a-5726ed79af59-6151788-sabellil
+//  kdjkfdh
+//  Music
+//  output
+//  output2
+//  output_test_file1
+//  philo
+//  philotest
+//  Pictures
+//  pipex
+//  Public
+// 'Save changement'
+//  sgoinfre
+//  snap
+//  Templates
+//  try
+//  Videos
+//  zzzzzzzzzzzzzzzzzzzzz
+// bash-5.1$ 
+
+
+
+
+
+
+// bash-5.1$ cat << A | tr 'a-z' 'A-Z' | cat << B | rev
+// > Oui
+// > A
+// > Non
+// > B
+// noN
+// bash-5.1$ 
+
+// bash-5.1$  cat << EOF | tr 'a-z' 'A-Z' | rev
+// > Oui
+// > EOF
+// IUO
+// bash-5.1$ 
+
+
+// bash-5.1$ cat << A << B << C | tr 'a-z' 'A-Z' | rev
+// > Oui
+// > A
+// > Non
+// > B
+// > Pourquoi
+// > C
+// IOUQRUOP
+// bash-5.1$ cat << A << B << C | tr 'a-z' 'A-Z' | lssss | rev
+// > Oui
+// > A
+// > Non
+// > B
+// > Pourquoi
+// > C
+// bash: lssss: command not found
+// bash-5.1$ 
+
+
+// bash-5.1$ cat << EOF1 << EOF2 | tr 'a-z' 'A-Z' | rev << EOF3 << EOF4
+// > Oui
+// > EOF1
+// > Non
+// > EOF2
+// > Pourquoi
+// > EOF3
+// > Pas
+// > EOF4
+// saP
+// bash-5.1$ 
+
+
+// bash-5.1$ cat << EOF1 << EOF2 | lssss | tr 'a-z' 'A-Z' | rev << EOF3 << EOF4
+// > Oui
+// > EOF1
+// > Non
+// > EOF2
+// > Pourquoi
+// > EOF3
+// > Pas
+// > EOF4
+// bash: lssss: command not found
+// saP
+// bash-5.1$ 
+
+
+
+
+
+// bash-5.1$ cat << EOF << EOF < input.txt | tr 'a-z' 'A-Z' > output.txt // Affiche NON et pas output.txt nexiste pas
+// > Oui
+// > EOF
+// > non
+// > EOF
+// bash: input.txt: No such file or directory
+// bash-5.1$ 
+
+
+
+// bash-5.1$ ls | lsssssssssss | echo Sara  // EXECUTE MAIS INVERSE LIGNE
+// Sara
+// bash: lsssssssssss: command not found
+
+
+// bash-5.1$ echo "Hello Minishell" | tr ' ' '_' > output.txt // affiche Hello Minishell en terminal
+// bash-5.1$ cat output.txt
+// Hello_Minishell
+// bash-5.1$ 
+
+
+// bash-5.1$ cat << A | tr 'a-z' 'A-Z' | lssssss | cat << B | rev // INVERSE le lsss commant not found et noN
+// > Oui
+// > A
+// > Non
+// > B
+// bash: lssssss: command not found
+// noN
+// bash-5.1$ 
+
+// bash-5.1$ cat << EOF1 << EOF2 | tr 'a-z' 'A-Z' | lss |  rev << EOF3 << EOF4
+// > Oui
+// > EOF1
+// > Non
+// > EOF2
+// > Pourquoi
+// > EOF3
+// > Pas
+// > EOF4
+// saP
+// bash: lss: command not found
