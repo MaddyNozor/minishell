@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/17 16:02:22 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/17 18:20:52 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -309,6 +309,7 @@ void						handle_token_word(t_queue *queue, t_token **tok,
 void						handle_endoffile(t_queue *queue,
 								t_cmd *current_cmd);
 
-								char	*get_env_value(t_varenv *varenv_lst, const char *key);
+char	*get_env_value(t_varenv *varenv_lst, const char *key);
+void	handle_heredoc_and_input(int heredoc_fd, int input_fd);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 16:20:07 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/17 16:04:31 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/17 18:24:44 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,23 +70,23 @@ void	process_heredoc_input(int fd, const char *delimiter)
 	}
 }
 
-void	merge_heredoc_and_input(int heredoc_fd, int input_fd)
-{
-	int	pipe_fd[2];
+// void	merge_heredoc_and_input(int heredoc_fd, int input_fd)
+// {
+// 	int	pipe_fd[2];
 
-	if (pipe(pipe_fd) == -1)
-	{
-		perror("ERREUR : Echec de la création du pipe");
-		return ;
-	}
-	read_and_write(heredoc_fd, pipe_fd[1]);
-	close(heredoc_fd);
-	read_and_write(input_fd, pipe_fd[1]);
-	close(input_fd);
-	close(pipe_fd[1]);
-	dup2(pipe_fd[0], STDIN_FILENO);
-	close(pipe_fd[0]);
-}
+// 	if (pipe(pipe_fd) == -1)
+// 	{
+// 		perror("ERREUR : Echec de la création du pipe");
+// 		return ;
+// 	}
+// 	read_and_write(heredoc_fd, pipe_fd[1]);
+// 	close(heredoc_fd);
+// 	read_and_write(input_fd, pipe_fd[1]);
+// 	close(input_fd);
+// 	close(pipe_fd[1]);
+// 	dup2(pipe_fd[0], STDIN_FILENO);
+// 	close(pipe_fd[0]);
+// }
 
 int	ft_create_heredoc(const char *delimiter, int index)
 {

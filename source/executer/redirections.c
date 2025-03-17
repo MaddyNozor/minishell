@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 16:10:03 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/17 16:04:42 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/17 18:20:14 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	apply_redirections(t_redirection *redirection)
 	int				input_fd;
 	t_redirection	*current;
 	t_redirection	*last_heredoc;
+	t_redirection	*fake;
 	bool			input_redir_found = true;
 	bool			output_created = false;
 
@@ -50,8 +51,7 @@ void	apply_redirections(t_redirection *redirection)
 	// ✅ Étape 1 : Lire et stocker les heredocs, MAIS NE PAS LES APPLIQUER IMMÉDIATEMENT
 	while (current)
 	{
-		if (current->type == HEREDOC)
-			last_heredoc = current;
+
 		current = current->next;
 	}
 
@@ -61,6 +61,8 @@ void	apply_redirections(t_redirection *redirection)
 	{
 		if (current->type == REDIRECT_IN)
 		{
+			if (last_heredoc)
+				last_heredoc = NULL;
 			input_fd = open(current->file_name, O_RDONLY);
 			if (input_fd == -1)
 			{
@@ -82,19 +84,25 @@ void	apply_redirections(t_redirection *redirection)
 				fprintf(stderr, "bash: %s: No such file or directory\n", current->file_name);
 				exit(1);
 			}
+			
 			close(input_fd);
 		}
+		else if (current->type == HEREDOC)
+			last_heredoc = current;
+			
 		current = current->next;
 	}
 	printf("Je suis juste avant handle_input_redirection\n");
 
 	// ✅ Étape 3 : Appliquer les redirections seulement si input.txt est valide
-	handle_input_redirection(redirection, &input_fd, &last_heredoc, &input_redir_found);
-	if (!input_redir_found)
-		return;
-
+	handle_input_redirection(redirection, &input_fd, &fake, &input_redir_found);
+	int heredoc_fd = (last_heredoc) ? open(last_heredoc->file_name, O_RDONLY) : -1;
+	handle_heredoc_and_input(heredoc_fd, input_fd);
+	
 	if (last_heredoc)
 		handle_heredoc_redirection(last_heredoc, &input_fd);
+	if (!input_redir_found)
+		return;
 
 	handle_output_redirections(redirection, &last_output_fd);
 }
