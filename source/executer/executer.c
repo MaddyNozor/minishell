@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:38:39 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/13 14:06:23 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/17 12:25:56 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,16 @@ void	executer(t_data *data)
 		executer_simple_cmd(data->cmd_lst, data);
 	else
 	{
-	// 	t_cmd *current_cmd;
+// 		t_cmd *current_cmd;
 
-	// // Vérifier toutes les commandes envoyées à l'exécution
-	// current_cmd = data->cmd_lst;
-	// while (current_cmd)
-	// {
-	// 	printf("➡️ Commande envoyée à l'exécution : %s\n", current_cmd->value);
-	// 	current_cmd = current_cmd->next;
-	// }
-
+// 	// Vérifier toutes les commandes envoyées à l'exécution
+// 	current_cmd = data->cmd_lst;
+// 	while (current_cmd)
+// 	{
+// 		printf("➡️ Commande envoyée à l'exécution : %s\n", current_cmd->value);
+// 		current_cmd = current_cmd->next;
+// 	}
+//  printf("J'entre dnas executer_pipeline_cmd\n");
 				executer_pipeline_cmd(data->cmd_lst, data);
 
 	}

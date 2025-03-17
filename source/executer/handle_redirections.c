@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 13:46:25 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/15 15:34:32 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/17 13:41:52 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,42 +78,102 @@ void	handle_heredoc_and_input(int heredoc_fd, int input_fd)
 }
 
 void	handle_input_redirection(t_redirection *redirection, int *input_fd,
-		t_redirection **last_heredoc, bool *input_redir_found)
+	t_redirection **last_heredoc, bool *input_redir_found)
 {
 	t_redirection	*current;
+	bool			heredoc_exists = false;
 
+	printf("📌 Je rentre dans handle_input_redirection\n");
 	current = redirection;
 	while (current)
 	{
-		// printf("🔎 Vérification dans handle_input_redirection : type actuel = %d (REDIRECT_IN attendu: %d)\n",
-		// current->type, REDIRECT_IN);
+		printf("🔍 Vérification d'une redirection : type = %d, fichier = %s\n",
+			current->type, current->file_name);
+
 		if (current->type == REDIRECT_IN)
 		{
-			// printf("Je suis rentre dnas handle input redirection\n");
-			// printf("🔍 Tentative d'ouverture de %s en mode lecture seule\n",
-			// 		current->file_name);
+			printf("📥 Tentative d'ouverture de %s en mode lecture\n", current->file_name);
 			*input_fd = open(current->file_name, O_RDONLY);
 			if (*input_fd == -1)
 			{
-				// printf("Je passe par la verif dans handle_input_process\n");
-				printf("bash: %s: No such file or directory\n", current->file_name);
+				printf("🚨 ERREUR : Le fichier %s n'existe pas !\n", current->file_name);
+				fprintf(stderr, "bash: %s: No such file or directory\n", current->file_name);
 				*input_redir_found = false;
-				break ;
+				return;
 			}
+
+			// ✅ On redirige `STDIN` vers `input.txt`
+			printf("✅ Fichier %s ouvert avec succès !\n", current->file_name);
 			dup2(*input_fd, STDIN_FILENO);
 			close(*input_fd);
 			*input_redir_found = true;
+			return; // ✅ On sort immédiatement, pas de heredoc
 		}
 		else if (current->type == HEREDOC)
 		{
-			// printf("Je repere que current type est Heredoc\n");
+			printf("📌 Un heredoc est détecté : %s\n", current->file_name);
+			heredoc_exists = true;
 			*last_heredoc = current;
 		}
-		// printf("J'arrive vers la fin de handle input redirection, on avance dans current\n");
 		current = current->next;
 	}
-	// printf("J'arrive a la toute fin de handle input redirection\n");
+
+	// ✅ Si `< input.txt>` n'existe pas, on prend le heredoc
+	if (!*input_redir_found && heredoc_exists)
+	{
+		printf("📌 Aucun fichier d'entrée trouvé, utilisation du heredoc %s\n", (*last_heredoc)->file_name);
+		handle_heredoc_redirection(*last_heredoc, input_fd);
+		*input_redir_found = true;
+	}
 }
+
+
+// void	handle_input_redirection(t_redirection *redirection, int *input_fd,
+// 	t_redirection **last_heredoc, bool *input_redir_found)//OK Mardi 17 aprem
+// {
+// t_redirection	*current;
+
+// printf("Je rentre dans handle_input_redirection\n");
+// current = redirection;
+// while (current)
+// {
+// 	if (current->type == REDIRECT_IN)
+// 	{
+// 		// ✅ Ajout d'un printf pour voir le fichier qu'on tente d'ouvrir
+// 		printf("🔍 Tentative d'ouverture du fichier : %s\n", current->file_name);
+
+// 		*input_fd = open(current->file_name, O_RDONLY);
+// 		if (*input_fd == -1)
+// 		{
+// 			// ✅ Ajout d'un printf pour signaler que le fichier n'existe pas
+// 			printf("🚨 ERREUR : Le fichier %s n'existe pas !\n", current->file_name);
+
+// 			// ✅ Affichage de l'erreur immédiatement
+// 			fprintf(stderr, "bash: %s: No such file or directory\n", current->file_name);
+
+// 				// ✅ Ne pas quitter `minishell`, juste fermer STDIN pour éviter que `cat` ne fonctionne
+// 				close(STDIN_FILENO);
+// 				*input_redir_found = false;
+// 				return;
+// 		}
+// 		else
+// 		{
+// 			// ✅ Ajout d'un printf pour confirmer que le fichier a été ouvert
+// 			printf("✅ Fichier %s ouvert avec succès !\n", current->file_name);
+// 		}
+
+// 		dup2(*input_fd, STDIN_FILENO);
+// 		close(*input_fd);
+// 		*input_redir_found = true;
+// 	}
+// 	else if (current->type == HEREDOC)
+// 	{
+// 		*last_heredoc = current;
+// 	}
+// 	current = current->next;
+// }
+// }
+
 void handle_heredoc_redirection(t_redirection *last_heredoc, int *heredoc_fd)
 {
     if (!last_heredoc)
@@ -128,6 +188,7 @@ void handle_heredoc_redirection(t_redirection *last_heredoc, int *heredoc_fd)
     dup2(*heredoc_fd, STDIN_FILENO);
     close(*heredoc_fd);
 }
+
 // void	handle_heredoc_redirection(t_redirection *last_heredoc, int *heredoc_fd)
 // {
 // 	int	fd_stdin;
@@ -150,3 +211,40 @@ void handle_heredoc_redirection(t_redirection *last_heredoc, int *heredoc_fd)
 // 	// printf("✅ STDIN restauré après heredoc.\n");
 // }
 
+// void	handle_input_redirection(t_redirection *redirection, int *input_fd,
+// 		t_redirection **last_heredoc, bool *input_redir_found)// Ok Mardi 17 matin, mais pas pour cat << EOF << EOF < input.txt | tr 'a-z' 'A-Z' > output.txt
+// {
+// 	t_redirection	*current;
+
+// 	current = redirection;
+// 	while (current)
+// 	{
+// 		// printf("🔎 Vérification dans handle_input_redirection : type actuel = %d (REDIRECT_IN attendu: %d)\n",
+// 		// current->type, REDIRECT_IN);
+// 		if (current->type == REDIRECT_IN)
+// 		{
+// 			// printf("Je suis rentre dnas handle input redirection\n");
+// 			// printf("🔍 Tentative d'ouverture de %s en mode lecture seule\n",
+// 			// 		current->file_name);
+// 			*input_fd = open(current->file_name, O_RDONLY);
+// 			if (*input_fd == -1)
+// 			{
+// 				// printf("Je passe par la verif dans handle_input_process\n");
+// 				printf("bash: %s: No such file or directory\n", current->file_name);
+// 				*input_redir_found = false;
+// 				break ;
+// 			}
+// 			dup2(*input_fd, STDIN_FILENO);
+// 			close(*input_fd);
+// 			*input_redir_found = true;
+// 		}
+// 		else if (current->type == HEREDOC)
+// 		{
+// 			// printf("Je repere que current type est Heredoc\n");
+// 			*last_heredoc = current;
+// 		}
+// 		// printf("J'arrive vers la fin de handle input redirection, on avance dans current\n");
+// 		current = current->next;
+// 	}
+// 	// printf("J'arrive a la toute fin de handle input redirection\n");
+// }
