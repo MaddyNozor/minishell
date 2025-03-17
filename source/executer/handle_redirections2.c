@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 12:36:45 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/17 14:34:50 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/17 16:17:23 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	setup_io_redirections(t_pipe_data *pipe_data, t_cmd *cmd, t_data *data)
 
 	(void)heredoc_fd;
 	(void)data;
-		printf("🔄 Vérification de STDIN dans setup_io_redirections avant toute redirection\n");
+		// printf("🔄 Vérification de STDIN dans setup_io_redirections avant toute redirection\n");
 
 	// ✅ Vérification des heredocs avant toute redirection
 	if (pipe_data->heredoc_fd != -1)
@@ -29,7 +29,7 @@ void	setup_io_redirections(t_pipe_data *pipe_data, t_cmd *cmd, t_data *data)
 	}
 	else
 	{
-		printf("✅ Aucun heredoc appliqué pour %s\n", cmd->value);
+		// printf("✅ Aucun heredoc appliqué pour %s tkt c'est juste un printf on le ire a la fin \n", cmd->value);
 	}
 
 	// ✅ Si ce n'est pas la dernière commande du pipeline, rediriger `STDOUT` vers le pipe

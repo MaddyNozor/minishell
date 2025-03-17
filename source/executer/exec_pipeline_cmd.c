@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:04:30 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/17 14:45:08 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/17 16:18:46 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,7 @@ void	execute_external_cmd(t_cmd *cmd, t_data *data)
 // }
 
 
-void	handle_child_process_pipeline(t_cmd *cmd, t_data *data, int pipe_in, int pipe_fd[2])//Mardi 17 Matin OK pour cat << EOF1 << EOF2 | lssss | tr 'a-z' 'A-Z' | rev << EOF3 << EOF4 
+void	handle_child_process_pipeline(t_cmd *cmd, t_data *data, int pipe_in, int pipe_fd[2])//Mardi 17 Matin OK pour cat << EOF1 << EOF2 | lssss | tr 'a-z' 'A-Z' | rev << EOF3 << EOF4  (imprime rev pur rien, a voir pkoi)
 {
 	int		input_fd;
 	char	*cmd_path;
@@ -246,20 +246,20 @@ void	handle_child_process_pipeline(t_cmd *cmd, t_data *data, int pipe_in, int pi
 void	handle_parent_process_pipeline(pid_t pid, t_cmd *cmd, int *pipe_in, int pipe_fd[2])
 {
 	int	status;
-
-	printf("📌 Entrée dans handle_parent_process_pipeline pour %s\n", cmd->value);
+	(void)cmd;
+	// printf("📌 Entrée dans handle_parent_process_pipeline pour %s\n", cmd->value);
 
 	waitpid(pid, &status, 0);
 
 	// ✅ Vérifier si on ferme `pipe_fd[0]` trop tôt
 	if (*pipe_in != 0)
 	{
-		printf("⚠️ Fermeture de pipe_in (%d) pour %s\n", *pipe_in, cmd->value);
+		// printf("⚠️ Fermeture de pipe_in (%d) pour %s\n", *pipe_in, cmd->value);
 		close(*pipe_in);
 	}
 	else
 	{
-		printf("✅ `pipe_in` reste ouvert pour %s\n", cmd->value);
+		// printf("✅ `pipe_in` reste ouvert pour %s\n", cmd->value);
 	}
 
 	// ✅ On transmet l'entrée au prochain processus
@@ -310,7 +310,7 @@ pid_t	pid;
 int		input_fd;
 bool	input_exists = true;
 
-printf("📌 Entrée dans execute_pipeline_command pour %s\n", cmd->value);
+// printf("📌 Entrée dans execute_pipeline_command pour %s\n", cmd->value);
 
 // ✅ Vérifier si `< input.txt>` existe avant le fork
 if (cmd->redirection)
@@ -320,17 +320,17 @@ if (cmd->redirection)
 	{
 		if (redir->type == REDIRECT_IN)
 		{
-			printf("🔍 Vérification du fichier d'entrée : %s\n", redir->file_name);
+			// printf("🔍 Vérification du fichier d'entrée : %s\n", redir->file_name);
 			input_fd = open(redir->file_name, O_RDONLY);
 			if (input_fd == -1)
 			{
-				printf("🚨 ERREUR : Le fichier %s n'existe pas !\n", redir->file_name);
+				// printf("🚨 ERREUR : Le fichier %s n'existe pas !\n", redir->file_name);
 				fprintf(stderr, "bash: %s: No such file or directory\n", redir->file_name);
 				input_exists = false;
 			}
 			else
 			{
-				printf("✅ Fichier %s ouvert avec succès !\n", redir->file_name);
+				// printf("✅ Fichier %s ouvert avec succès !\n", redir->file_name);
 				close(input_fd);
 			}
 		}
@@ -354,7 +354,7 @@ while (out)
 // ❌ Ne pas forker `cat` si `input.txt` n'existe pas
 if (!input_exists)
 {
-	printf("⚠️ Le pipeline continue, mais `%s` ne sera pas exécutée.\n", cmd->value);
+	// printf("⚠️ Le pipeline continue, mais `%s` ne sera pas exécutée.\n", cmd->value);
 	int devnull_fd = open("/dev/null", O_RDONLY);
 	if (devnull_fd != -1)
 		dup2(devnull_fd, STDIN_FILENO);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 15:02:30 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/17 14:11:30 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/17 16:20:52 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int    found_sign_equal_in_word(char *str)
     {
         if (str[i] == '=')
         {
-            printf("%d\n", i);
+            // printf("%d\n", i);
             return (i);
         }
         i++;
@@ -66,7 +66,7 @@ void       ft_export(t_data *data, t_cmd *cmd)
         {
             name = ft_substr(cmd->argv[i], 0, split_pos);
             value = ft_substr(cmd->argv[i], split_pos + 1, strlen(cmd->argv[i]) - split_pos);
-            printf("name:%s| \nvalue:%s|\n", name, value);
+            // printf("name:%s| \nvalue:%s|\n", name, value);
             //split pour avoir value et name
         }
         else
