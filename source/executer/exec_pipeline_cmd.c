@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:04:30 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/17 18:36:12 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/17 18:45:07 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,22 +90,20 @@ void	handle_parent_process_pipeline(pid_t pid, t_cmd *cmd, int *pipe_in, int pip
 {
 	int	status;
 	(void)cmd;
-	waitpid(pid, &status, 0);
+	if (!cmd->next)
+	{
+		waitpid(pid, &status, 0);
+		while (wait(NULL) > 0)
+			;
+	}
 	if (*pipe_in != 0)
-	{
-		// printf("⚠️ Fermeture de pipe_in (%d) pour %s\n", *pipe_in, cmd->value);
-		close(*pipe_in);
-	}
-	else
-	{
-		// printf("✅ `pipe_in` reste ouvert pour %s\n", cmd->value);
-	}
+{
+    // ✅ Si une commande échoue, on continue à transmettre le pipe
+    close(*pipe_in);
+}
+*pipe_in = pipe_fd[0];  // ✅ On garde le pipe ouvert pour la commande suivante
+close(pipe_fd[1]);      // ✅ Ferme la sortie du pipe
 
-	// ✅ On transmet l'entrée au prochain processus
-	*pipe_in = pipe_fd[0]; 
-
-	// ✅ Fermer la sortie du pipe
-	close(pipe_fd[1]);
 }
 
 void	execute_pipeline_command(t_cmd *cmd, t_data *data, int *pipe_in,
@@ -343,9 +341,9 @@ void	executer_pipeline_cmd(t_cmd *cmd_lst, t_data *data)
 void handle_child_process_pipeline(t_cmd *cmd, t_data *data, int pipe_in, int pipe_fd[2])
 {
     printf("📌 DEBUG: heredoc_fd = %d pour commande %s\n", pipe_in, cmd->value);
+    handle_pipe_redirections(cmd, pipe_in, pipe_fd);
 
     apply_redirections(cmd->redirection);
-    handle_pipe_redirections(cmd, pipe_in, pipe_fd);
 
     // printf("📌 EXECVE: %s\n", cmd->value);
     if (is_builtin(cmd->value))
