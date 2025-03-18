@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/18 16:08:54 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/18 17:43:12 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -273,6 +273,15 @@ void						ft_exit(t_cmd *cmd, t_data *data);
 void						ft_unset(t_data *data, t_cmd *cmd);
 int       					ft_export(t_data *data, t_cmd *cmd);
 
+bool    					is_valid_name(char *name);
+t_varenv 					*ft_check_if_varenv_exist(t_varenv *list, 
+								char *name);
+void    					free_name_value_if_invalid(char **name, 
+								char **value);
+int    						ft_replace_varenv_value(char **name, char **value,
+								t_varenv *varenv);
+int    						found_sign_equal_in_word(char *str);
+
 // PARSER SARA
 
 // PARSER - QUEUE
@@ -309,6 +318,7 @@ void						handle_token_word(t_queue *queue, t_token **tok,
 void						handle_endoffile(t_queue *queue,
 								t_cmd *current_cmd);
 
-								char	*get_env_value(t_varenv *varenv_lst, const char *key);
+								char	*get_env_value(t_varenv *varenv_lst,
+									const char *key);
 
 #endif
