@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:04:30 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/18 17:37:59 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/18 18:09:40 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ static void	handle_parent_process_pipeline_close_pipe(int *pipe_in, int pipe_fd[
 	*pipe_in = pipe_fd[0];
 	close(pipe_fd[1]);
 }
-
 static bool	check_input_existence(t_redirection *redirection, t_data *data)
 {
 	int				input_fd;
@@ -87,14 +86,16 @@ static bool	check_input_existence(t_redirection *redirection, t_data *data)
 			input_fd = open(redir->file_name, O_RDONLY);
 			if (input_fd == -1)
 			{
-				exit_with_error(data, "bash: No such file or directory", 1);
-				return (false);
+				printf("bash: %s: No such file or directory\n", redir->file_name);
+								data->lst_exit = 1;
+				update_exit_status(data->varenv_lst, data->lst_exit);
+				return false;
 			}
 			close(input_fd);
 		}
 		redir = redir->next;
 	}
-	return (true);
+	return true;
 }
 
 static void	create_output_files(t_redirection *redirection)
@@ -141,7 +142,8 @@ void execute_pipeline_command(t_cmd *cmd, t_data *data, int *pipe_in, int pipe_f
 {
     pid_t	pid;
 	int		status;
-
+	
+	printf("Je passe par le execute pipeline command\n");
 	if (!handle_missing_input(cmd, data))
 		return;
     create_output_files(cmd->redirection);

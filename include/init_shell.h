@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/18 17:04:31 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/18 18:30:42 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ typedef struct s_queue
 	t_node					*tail;
 }							t_queue;
 
+
 typedef struct s_pipe_data
 {
     int heredoc_fd;
@@ -114,14 +115,15 @@ typedef struct s_pipe_data
     int pipe_fd[2];
 } t_pipe_data;
 
-typedef struct s_redir_info
-{
-	int				*input_fd;
-	t_redirection	**last_heredoc;
-	bool			*output_created;
-	t_redirection	*redirection;
-} t_redir_info;
 
+typedef struct s_redir_state//ADDED Absolument necessaire pour les redirections
+{
+	int				last_output_fd;
+	int				input_fd;
+	t_redirection	*last_heredoc;
+	bool			input_redir_found;
+	bool			output_created;
+}	t_redir_state;
 
 //--------------------- FONCTIONS -----------------------------
 
