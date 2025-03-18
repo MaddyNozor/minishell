@@ -6,7 +6,7 @@
 #    By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/10 15:29:24 by mairivie          #+#    #+#              #
-#    Updated: 2025/03/17 16:05:05 by sabellil         ###   ########.fr        #
+#    Updated: 2025/03/18 15:22:30 by sabellil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,7 @@ SRC_LIST =  main.c \
             executer/heredoc_process.c \
             executer/heredoc_utils.c \
             executer/heredoc_utils2.c \
+            executer/last_exit.c \
             executer/pipe_utils.c \
             executer/redirections.c \
             initialization/init_shell.c \

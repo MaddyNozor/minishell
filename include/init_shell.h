@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/17 18:20:52 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/18 14:39:36 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,11 +264,11 @@ int							count_env_vars(t_varenv *varenv_lst);
 void						free_tab(char **tab);
 
 // BUILT-IN COMMANDS
-void						ft_echo(t_cmd *cmd);
-void						ft_pwd(void);
-void						ft_env(t_data *data, t_cmd *cmd);
+int							ft_echo(t_cmd *cmd);
+int							ft_pwd(void);
+int							ft_env(t_data *data, t_cmd *cmd);
 char						**dup_env(char **envp);
-void						ft_cd(t_cmd *cmd, t_varenv *varenv);
+int							ft_cd(t_cmd *cmd, t_varenv *varenv);
 void						ft_exit(t_cmd *cmd, t_data *data);
 void						ft_unset(t_data *data, t_cmd *cmd);
 void       					ft_export(t_data *data, t_cmd *cmd);
@@ -311,5 +311,10 @@ void						handle_endoffile(t_queue *queue,
 
 char	*get_env_value(t_varenv *varenv_lst, const char *key);
 void	handle_heredoc_and_input(int heredoc_fd, int input_fd);
+
+//EXIT
+char	*get_exit_status(t_varenv *varenv);
+void update_exit_status(t_varenv *varenv, int exit_status);
+void	exit_with_error(t_data *data, char *message, int exit_code);
 
 #endif

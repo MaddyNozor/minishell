@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:21:32 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/03 12:40:54 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/18 12:41:16 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,30 +44,60 @@ void	ft_update_pwd(t_varenv *varenv)
 		perror("getcwd");
 }
 
-void	ft_cd(t_cmd *cmd, t_varenv *varenv)
+int	ft_cd(t_cmd *cmd, t_varenv *varenv)
 {
 	char	*path;
 	char	*home;
+	int		ret;
 
+	path = NULL;
+	ret = 0;
 	if (cmd->argc == 1 || !cmd->argv[1])
 	{
 		home = getenv("HOME");
-		if (home)
+		if (!home)
 		{
-			if (chdir(home) == -1)
-				perror("cd");
-			else
-				ft_update_pwd(varenv);
+			printf("cd: HOME not set\n");
+			return (89);
 		}
-		else
-			fprintf(stderr, "cd: HOME not set\n");
+		path = home;
 	}
 	else
-	{
 		path = cmd->argv[1];
-		if (chdir(path) == -1)
-			perror("cd");
-		else
-			ft_update_pwd(varenv);
+	if (chdir(path) == -1)
+	{
+		perror("cd");
+		return (78);
 	}
+	ft_update_pwd(varenv);
+	return (ret);
 }
+
+
+// void	ft_cd(t_cmd *cmd, t_varenv *varenv)
+// {
+// 	char	*path;
+// 	char	*home;
+
+// 	if (cmd->argc == 1 || !cmd->argv[1])
+// 	{
+// 		home = getenv("HOME");
+// 		if (home)
+// 		{
+// 			if (chdir(home) == -1)
+// 				perror("cd");
+// 			else
+// 				ft_update_pwd(varenv);
+// 		}
+// 		else
+// 			fprintf(stderr, "cd: HOME not set\n");
+// 	}
+// 	else
+// 	{
+// 		path = cmd->argv[1];
+// 		if (chdir(path) == -1)
+// 			perror("cd");
+// 		else
+// 			ft_update_pwd(varenv);
+// 	}
+// }

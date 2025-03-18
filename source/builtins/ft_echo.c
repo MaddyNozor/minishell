@@ -6,13 +6,13 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:46:35 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/03 12:40:19 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/18 12:25:36 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
 
-void	ft_echo(t_cmd *cmd)
+int	ft_echo(t_cmd *cmd)
 {
 	int		i;
 	int		newline;
@@ -33,4 +33,5 @@ void	ft_echo(t_cmd *cmd)
 	}
 	if (newline)
 		write(STDOUT_FILENO, "\n", 1);
+	return (0);
 }
