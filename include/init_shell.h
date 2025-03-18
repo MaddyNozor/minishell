@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/17 16:02:22 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/18 16:08:54 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,7 +271,7 @@ char						**dup_env(char **envp);
 void						ft_cd(t_cmd *cmd, t_varenv *varenv);
 void						ft_exit(t_cmd *cmd, t_data *data);
 void						ft_unset(t_data *data, t_cmd *cmd);
-void       					ft_export(t_data *data, t_cmd *cmd);
+int       					ft_export(t_data *data, t_cmd *cmd);
 
 // PARSER SARA
 
