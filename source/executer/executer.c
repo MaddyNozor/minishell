@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:38:39 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/17 16:10:05 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/18 11:09:04 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,14 @@ bool	is_builtin(const char *cmd_value)
 void	executer_simple_cmd(t_cmd *cmd, t_data *data)
 {
 	if (cmd == NULL || cmd->value == NULL)
-		return ;
+	{
+		if (cmd && cmd->redirection && contains_heredoc(cmd->redirection))
+		{
+			handle_heredocs_simple_cmd(cmd->redirection);
+			unlink_heredoc_temp(cmd->redirection);
+		}
+		return;
+	}
 	if (is_builtin(cmd->value))
 		exec_simple_builtin(cmd, data);
 	else
@@ -53,13 +60,12 @@ void	executer_simple_cmd(t_cmd *cmd, t_data *data)
 
 void	executer(t_data *data)
 {
-	// printf("Je suis dans executer\n");
 	signal(SIGQUIT, sig_quit_handler);
 	if (data->cmd_lst->next == NULL)
 		executer_simple_cmd(data->cmd_lst, data);
 	else
 	{
-// 		t_cmd *current_cmd;
+// 	t_cmd *current_cmd;
 
 // 	// Vérifier toutes les commandes envoyées à l'exécution
 // 	current_cmd = data->cmd_lst;

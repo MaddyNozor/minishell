@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/17 17:08:20 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/17 19:12:20 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -354,3 +354,6 @@ int	main(int ac, char **av, char **envp)
 // > EOF4
 // saP
 // bash: lss: command not found
+
+
+// A REGLER MARDI bash-5.1$ << EOF
