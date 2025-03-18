@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 13:46:25 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/17 18:24:34 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/18 16:57:36 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,25 +87,17 @@ void merge_heredoc_and_input(int heredoc_fd, int input_fd)
 		perror("ERREUR : Echec de la création du pipe");
 		return;
 	}
-
-	// ✅ Vérifie si heredoc_fd est valide avant de lire
 	if (heredoc_fd != -1)
 	{
 		read_and_write(heredoc_fd, pipe_fd[1]);
 		close(heredoc_fd);
 	}
-
-	// ✅ Vérifie si input_fd est valide avant de lire
 	if (input_fd != -1)
 	{
 		read_and_write(input_fd, pipe_fd[1]);
 		close(input_fd);
 	}
-
-	// ✅ Fermeture du côté écriture du pipe
 	close(pipe_fd[1]);
-
-	// ✅ Redirige STDIN vers l'entrée du pipe
 	if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
 	{
 		perror("ERREUR : dup2 vers STDIN a échoué");
@@ -114,37 +106,22 @@ void merge_heredoc_and_input(int heredoc_fd, int input_fd)
 }
 
 void	handle_input_redirection(t_redirection *redirection, int *input_fd,
-	t_redirection **last_heredoc, bool *input_redir_found)//OK Mardi 17 aprem
+	t_redirection **last_heredoc, bool *input_redir_found)
 {
 t_redirection	*current;
 
-printf("Je rentre dans handle_input_redirection\n");
 current = redirection;
 while (current)
 {
-	printf("Je rentre dans la boucle current %i\n", current->type);
 	if (current->type == REDIRECT_IN)
 	{
-		// ✅ Ajout d'un printf pour voir le fichier qu'on tente d'ouvrir
-		printf("🔍 Tentative d'ouverture du fichier : %s\n", current->file_name);
-
 		*input_fd = open(current->file_name, O_RDONLY);
 		if (*input_fd == -1)
 		{
-			// ✅ Ajout d'un printf pour signaler que le fichier n'existe pas
-			printf("🚨 ERREUR : Le fichier %s n'existe pas !\n", current->file_name);
-
-			// ✅ Affichage de l'erreur immédiatement
 			fprintf(stderr, "bash: %s: No such file or directory\n", current->file_name);
-
-				// ✅ Ne pas quitter `minishell`, juste fermer STDIN pour éviter que `cat` ne fonctionne
-				close(STDIN_FILENO);
-				*input_redir_found = false;
-				return;
-		}
-		else
-		{
-			printf("✅ Fichier %s ouvert avec succès !\n", current->file_name);
+			close(STDIN_FILENO);
+			*input_redir_found = false;
+			return;
 		}
 		dup2(*input_fd, STDIN_FILENO);
 		close(*input_fd);
@@ -163,7 +140,6 @@ void handle_heredoc_redirection(t_redirection *last_heredoc, int *heredoc_fd)
 {
     if (!last_heredoc)
         return;
-    // printf("Je suis entré dans handle_heredoc_redirection\n");
     *heredoc_fd = open(last_heredoc->file_name, O_RDONLY);
     if (*heredoc_fd == -1)
     {

@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/18 14:39:36 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/18 17:04:31 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,14 @@ typedef struct s_pipe_data
     int pipe_fd[2];
 } t_pipe_data;
 
+typedef struct s_redir_info
+{
+	int				*input_fd;
+	t_redirection	**last_heredoc;
+	bool			*output_created;
+	t_redirection	*redirection;
+} t_redir_info;
+
 
 //--------------------- FONCTIONS -----------------------------
 
@@ -199,7 +207,7 @@ char						*ft_expand_varenv(char *var_found,
 void						executer(t_data *data);
 
 // REDIRECTIONS
-void						apply_redirections(t_redirection *redirection);
+void	apply_redirections(t_redirection *redirection, t_data *data);
 void						merge_heredoc_and_input(int heredoc_fd,
 								int input_fd);
 void						handle_input_redirection(t_redirection *redirection,
@@ -212,9 +220,7 @@ void						handle_pipe_redirections(t_cmd *cmd, int pipe_in,
 								int pipe_fd[2]);
 void						close_redirections(t_redirection *redirection);
 int							ft_strcmp(const char *s1, const char *s2);
-// void						setup_io_redirections(int heredoc_fd, int pipe_in,
-// 								int pipe_fd[2], t_cmd *cmd);
-void	setup_io_redirections(t_pipe_data *pipe_data, t_cmd *cmd, t_data *data);
+// void	setup_io_redirections(t_pipe_data *pipe_data, t_cmd *cmd, t_data *data);// TODO : plus utilise ? a virer a la fin
 void						read_and_write(int src_fd, int dest_fd);
 
 // REDIRECTIONS - HEREDOC
@@ -258,8 +264,7 @@ void						handle_child_process_pipeline(t_cmd *cmd,
 void						cleanup_pipeline(t_cmd *cmd_lst);
 
 // EXECUTER - COMMAND PATH
-char						*find_cmd_path(const char *cmd,
-								t_varenv *varenv_lst);
+char						*find_cmd_path(const char *cmd, t_varenv *varenv_lst, t_data *data);
 int							count_env_vars(t_varenv *varenv_lst);
 void						free_tab(char **tab);
 

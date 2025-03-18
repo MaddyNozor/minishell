@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:04:30 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/18 15:26:01 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/18 17:37:59 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	execute_external_cmd(t_cmd *cmd, t_data *data)
 	char	*cmd_path;
 	char	**env_array;
 
-	cmd_path = find_cmd_path(cmd->value, data->varenv_lst);
+	cmd_path = find_cmd_path(cmd->value, data->varenv_lst, data);
 	if (!cmd_path || access(cmd_path, X_OK) == -1)
 	{
 		free(cmd_path);
@@ -30,6 +30,8 @@ void	execute_external_cmd(t_cmd *cmd, t_data *data)
 		free(cmd_path);
 		exit_with_error(data, "bash: environment conversion failed", 127);
 	}
+	if (!cmd->argv || !cmd->argv[0])
+		exit_with_error(data, "bash: invalid arguments", 127);
 	execve(cmd_path, cmd->argv, env_array);
 	perror("execve failed");
 	free(cmd_path);
@@ -43,13 +45,13 @@ void	handle_child_process_pipeline(t_cmd *cmd, t_data *data, int pipe_in,
 	char	*cmd_path;
 
 	handle_pipe_redirections(cmd, pipe_in, pipe_fd);
-	apply_redirections(cmd->redirection);
+	apply_redirections(cmd->redirection, data);
 	if (is_builtin(cmd->value))
 	{
 		execute_builtin(cmd, data);
 		exit(data->lst_exit);
 	}
-	cmd_path = find_cmd_path(cmd->value, data->varenv_lst);
+	cmd_path = find_cmd_path(cmd->value, data->varenv_lst, data);
 	if (!cmd_path || access(cmd_path, X_OK) == -1)
 	{
 		printf("bash: %s: command not found\n", cmd->value);
@@ -164,7 +166,7 @@ void execute_pipeline_command(t_cmd *cmd, t_data *data, int *pipe_in, int pipe_f
     }
 }
 
-void	executer_pipeline_cmd(t_cmd *cmd_lst, t_data *data)
+void	executer_pipeline_cmd(t_cmd *cmd_lst, t_data *data)//TODO : Enlever une variable dans le corps de la fonction
 {
 	int pipe_fd[2];
 	int pipe_in;

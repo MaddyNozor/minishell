@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 15:44:00 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/18 15:26:17 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/18 17:05:22 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	exec_simple_builtin_dir(t_cmd *cmd, t_data *data)
 
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
-	apply_redirections(cmd->redirection);
+	apply_redirections(cmd->redirection, data);
 	input_fd = open(cmd->redirection->file_name, O_RDONLY);
 	if (input_fd == -1)
 	{
@@ -60,7 +60,7 @@ void	exec_simple_builtin_dir(t_cmd *cmd, t_data *data)
 void	exec_simple_builtin_heredoc(t_cmd *cmd, t_data *data)
 {
 	handle_heredocs_simple_cmd(cmd->redirection);
-	apply_redirections(cmd->redirection);
+	apply_redirections(cmd->redirection, data);
 	execute_builtin(cmd, data);
 	close_redirections(cmd->redirection);
 	unlink_heredoc_temp(cmd->redirection);

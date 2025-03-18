@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 16:10:03 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/17 18:20:14 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/18 17:35:37 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,158 +23,157 @@ void	close_redirections(t_redirection *redirection)
 		fd = open(curr->file_name, O_RDONLY);
 		if (fd != -1)
 		{
-			// printf("🔴 Fermeture de %s (fd: %d)\n", curr->file_name, fd);
 			close(fd);
 		}
-		// else
-		// 	printf("⚠️ Impossible d'ouvrir %s pour fermeture\n", curr->file_name);
 		curr = curr->next;
 	}
 }
 
-void	apply_redirections(t_redirection *redirection)
+// static void	handle_input_files(t_redirection *redirection, int *input_fd,
+// 		t_redirection **last_heredoc, bool *output_created)
+// {
+// 	t_redirection	*current;
+// 	t_redirection	*out;
+// 	int				fd;
+
+// 	current = redirection;
+// 	while (current)
+// 	{
+// 		if (current->type == REDIRECT_IN)
+// 		{
+// 			if (*last_heredoc)
+// 				*last_heredoc = NULL;
+// 			*input_fd = open(current->file_name, O_RDONLY);
+// 			if (*input_fd == -1)
+// 			{
+// 				out = redirection;
+// 				while (out)
+// 				{
+// 					if ((out->type == REDIRECT_OUT || out->type == APPEND_OUT)
+// 						&& !(*output_created))
+// 					{
+// 						fd = open(out->file_name, O_WRONLY | O_CREAT | O_TRUNC,
+// 								0644);
+// 						if (fd != -1)
+// 							close(fd);
+// 						*output_created = true;
+// 					}
+// 					out = out->next;
+// 				}
+// 				fprintf(stderr, "bash: %s: No such file or directory\n",
+// 						current->file_name);
+// 				exit(1);
+// 			}
+// 			close(*input_fd);
+// 		}
+// 		else if (current->type == HEREDOC)
+// 			*last_heredoc = current;
+// 		current = current->next;
+// 	}
+// }
+
+
+
+
+// void	apply_redirections(t_redirection *redirection, t_data *data)
+// {
+// 	int				last_output_fd;
+// 	int				in_fd;
+// 	t_redirection	*lst_heredoc;
+// 	bool			is_in_redir;
+// 	bool			output_created;
+
+// 	last_output_fd = -1;
+// 	in_fd = -1;
+// 	lst_heredoc = NULL;
+// 	is_in_redir = true;
+// 	output_created = false;
+// 	handle_input_files(redirection, &in_fd, &lst_heredoc, &output_created,
+// 			data);
+// 	handle_input_redirection(redirection, &in_fd, &lst_heredoc, &is_in_redir);
+// 	if (lst_heredoc)
+// 		handle_heredoc_and_input(open(lst_heredoc->file_name, O_RDONLY), in_fd);
+// 	else
+// 		handle_heredoc_and_input(-1, in_fd);
+// 	if (lst_heredoc)
+// 		handle_heredoc_redirection(lst_heredoc, &in_fd);
+// 	if (!is_in_redir)
+// 	{
+// 		data->lst_exit = 1;
+// 			// ✅ Mise à jour de `lst_exit` en cas d'échec de la redirection d'entrée
+// 		update_exit_status(data->varenv_lst, data->lst_exit);
+// 		return ;
+// 	}
+// 	handle_output_redirections(redirection, &last_output_fd);
+// }
+// Fonction gérant l'ouverture des fichiers de redirection
+static bool	handle_input_file(t_redirection *current, int *input_fd, bool *output_created, t_redirection *redirection)
 {
-	int				last_output_fd;
-	int				input_fd;
-	t_redirection	*current;
-	t_redirection	*last_heredoc;
-	t_redirection	*fake;
-	bool			input_redir_found = true;
-	bool			output_created = false;
-
-	last_output_fd = -1;
-	input_fd = -1;
-	last_heredoc = NULL;
-	current = redirection;
-	printf("Je rentre dans apply_redirections\n");
-
-	// ✅ Étape 1 : Lire et stocker les heredocs, MAIS NE PAS LES APPLIQUER IMMÉDIATEMENT
-	while (current)
+	*input_fd = open(current->file_name, O_RDONLY);
+	if (*input_fd == -1)
 	{
-
-		current = current->next;
+		// Si fichier d'entrée introuvable, on traite les fichiers de sortie
+		t_redirection *out = redirection;
+		while (out)
+		{
+			if ((out->type == REDIRECT_OUT || out->type == APPEND_OUT) && !(*output_created))
+			{
+				int fd = open(out->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+				if (fd != -1)
+					close(fd);
+				*output_created = true;
+			}
+			out = out->next;
+		}
+		fprintf(stderr, "bash: %s: No such file or directory\n", current->file_name);
+		return false;
 	}
+	close(*input_fd);
+	return true;
+}
 
-	// ✅ Étape 2 : Vérifier si < input.txt existe après lecture des heredocs
-	current = redirection;
+// Fonction principale de gestion des fichiers d'entrée
+static void	handle_input_files(t_redirection *redirection, int *input_fd, t_redirection **last_heredoc, bool *output_created)
+{
+	t_redirection	*current = redirection;
 	while (current)
 	{
 		if (current->type == REDIRECT_IN)
 		{
-			if (last_heredoc)
-				last_heredoc = NULL;
-			input_fd = open(current->file_name, O_RDONLY);
-			if (input_fd == -1)
-			{
-				// ✅ Étape 2.1 : CRÉER output.txt avant de stopper (comme Bash)
-				t_redirection *out = redirection;
-				while (out)
-				{
-					if ((out->type == REDIRECT_OUT || out->type == APPEND_OUT) && !output_created)
-					{
-						int fd = open(out->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-						if (fd != -1)
-							close(fd);
-						output_created = true;
-					}
-					out = out->next;
-				}
-
-				// ✅ Étape 2.2 : Afficher l'erreur et STOPPER tout (aucune exécution de `cat`)
-				fprintf(stderr, "bash: %s: No such file or directory\n", current->file_name);
+			if (*last_heredoc)
+				*last_heredoc = NULL;
+			if (!handle_input_file(current, input_fd, output_created, redirection)) 
 				exit(1);
-			}
-			
-			close(input_fd);
 		}
 		else if (current->type == HEREDOC)
-			last_heredoc = current;
-			
+			*last_heredoc = current;
 		current = current->next;
 	}
-	printf("Je suis juste avant handle_input_redirection\n");
-
-	// ✅ Étape 3 : Appliquer les redirections seulement si input.txt est valide
-	handle_input_redirection(redirection, &input_fd, &fake, &input_redir_found);
-	int heredoc_fd = (last_heredoc) ? open(last_heredoc->file_name, O_RDONLY) : -1;
-	handle_heredoc_and_input(heredoc_fd, input_fd);
-	
-	if (last_heredoc)
-		handle_heredoc_redirection(last_heredoc, &input_fd);
-	if (!input_redir_found)
-		return;
-
-	handle_output_redirections(redirection, &last_output_fd);
 }
 
+// Fonction principale de gestion des redirections
+void	apply_redirections(t_redirection *redirection, t_data *data)
+{
+	int				last_output_fd = -1;
+	int				input_fd = -1;
+	t_redirection	*lst_heredoc = NULL;
+	bool			is_in_redir = true;
+	bool			output_created = false;
 
+	handle_input_files(redirection, &input_fd, &lst_heredoc, &output_created);
+	handle_input_redirection(redirection, &input_fd, &lst_heredoc, &is_in_redir);
+	if (lst_heredoc)
+		handle_heredoc_and_input(open(lst_heredoc->file_name, O_RDONLY), input_fd);
+	else
+		handle_heredoc_and_input(-1, input_fd);
 
-// void	apply_redirections(t_redirection *redirection)//ok pour Mardi 17 matin
-// {
-// 	int				last_output_fd;
-// 	int				input_fd;
-// 	t_redirection	*current;
-// 	t_redirection	*last_heredoc;
-// 	bool			input_redir_found = true;
-
-// 	last_output_fd = -1;
-// 	input_fd = -1;
-// 	last_heredoc = NULL;
-// 	current = redirection;
-
-// 	// printf("Je suis dans apply_redirections\n");
-// 	while (current)
-// 	{
-// 		// printf("🔍 Recherche du dernier heredoc : type = %d, fichier = %s\n",
-// 		//        current->type, current->file_name);
-// 		if (current->type == HEREDOC)
-// 			last_heredoc = current;
-// 		current = current->next;
-// 	}
-	
-// 	// printf("J'entre dans handle_input_redirection\n");
-// 	handle_input_redirection(redirection, &input_fd, &last_heredoc, &input_redir_found);
-// 	// printf("Je ressors de handle_input_redirection\n");
-	
-// 	if (!input_redir_found)
-// 	{
-// 		// printf("🚨 Aucune entrée valide trouvée, sortie de apply_redirections\n");
-// 		return;
-// 	}
-
-// 	// printf("Je m'apprête à vérifier la redirection heredoc\n");
-// 	if (last_heredoc)
-// 	{
-// 		// printf("✅ Traitement du heredoc : fichier = %s\n", last_heredoc->file_name);
-// 		handle_heredoc_redirection(last_heredoc, &input_fd);
-// 	}
-
-// 	current = redirection;
-// 	while (current)
-// 	{
-// 		// printf("🔍 Traitement de la redirection : type = %d, fichier = %s\n",
-// 		//        current->type, current->file_name);
-
-// 		if (current->type == REDIRECT_IN)
-// 		{
-// 			// printf("📥 Redirection d'entrée depuis %s\n", current->file_name);
-// 			input_fd = open(current->file_name, O_RDONLY);
-// 			if (input_fd == -1)
-// 			{
-// 				// printf("❌ Erreur d'ouverture de %s\n", current->file_name);
-// 				break;
-// 			}
-// 			dup2(input_fd, STDIN_FILENO);
-// 			close(input_fd);
-// 		}
-// 		current = current->next;
-// 	}
-// 	if (input_fd == -1)
-// 	{
-// 		// printf("⚠️ Aucun fichier d'entrée ouvert, on passe aux redirections de sortie\n");
-// 		handle_output_redirections(redirection, &last_output_fd);
-// 		return;
-// 	}
-// 	// printf("🔄 Application des redirections de sortie\n");
-// 	handle_output_redirections(redirection, &last_output_fd);
-// }
+	if (lst_heredoc)
+		handle_heredoc_redirection(lst_heredoc, &input_fd);
+	if (!is_in_redir)
+	{
+		data->lst_exit = 1;
+		update_exit_status(data->varenv_lst, data->lst_exit);
+		return ;
+	}
+	handle_output_redirections(redirection, &last_output_fd);
+}

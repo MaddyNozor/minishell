@@ -6,13 +6,27 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 12:36:45 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/17 17:49:44 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/18 15:27:47 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
 
-// void	setup_io_redirections(t_pipe_data *pipe_data, t_cmd *cmd, t_data *data)
+void	read_and_write(int src_fd, int dest_fd)
+{
+	char	buffer[1024];
+	ssize_t	bytes_read;
+
+	bytes_read = read(src_fd, buffer, sizeof(buffer));
+	while (bytes_read > 0)
+	{
+		write(dest_fd, buffer, bytes_read);
+		bytes_read = read(src_fd, buffer, sizeof(buffer));
+	}
+}
+
+
+// void	setup_io_redirections(t_pipe_data *pipe_data, t_cmd *cmd, t_data *data)// TODO : Plus utilisie a virer a la fin ?
 // {
 // 	int	heredoc_fd;
 
@@ -40,17 +54,3 @@
 // 	close(pipe_data->pipe_fd[1]);
 // 	close(pipe_data->pipe_fd[0]);
 // }
-
-
-void	read_and_write(int src_fd, int dest_fd)
-{
-	char	buffer[1024];
-	ssize_t	bytes_read;
-
-	bytes_read = read(src_fd, buffer, sizeof(buffer));
-	while (bytes_read > 0)
-	{
-		write(dest_fd, buffer, bytes_read);
-		bytes_read = read(src_fd, buffer, sizeof(buffer));
-	}
-}

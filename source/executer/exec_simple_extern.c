@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:09:14 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/18 14:44:57 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/18 17:28:30 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,15 @@ void handle_child_process(t_cmd *cmd, t_data *data)
 {
     int input_fd;
 
-    apply_redirections(cmd->redirection);
+    apply_redirections(cmd->redirection, data);
     if (cmd->redirection && cmd->redirection->type == REDIRECT_IN)
     {
         input_fd = open(cmd->redirection->file_name, O_RDONLY);
         if (input_fd == -1)
-            exit_with_error(data, "bash: No such file or directory", 1);
+        {
+                        exit_with_error(data, "bash: No such file or directory", 1);
+
+        }
         close(input_fd);
     }
     execute_external_cmd(cmd, data);
@@ -30,7 +33,6 @@ void handle_child_process(t_cmd *cmd, t_data *data)
 void handle_parent_process(pid_t pid, t_cmd *cmd, t_data *data)
 {
     int status;
-
     waitpid(pid, &status, 0);
     
     if (WIFEXITED(status))
