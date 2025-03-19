@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 15:39:51 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 15:42:51 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 16:47:19 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void        ft_print_list_export(t_data *data)
         }
         current = current->next;
     }
+	data->lst_exit = 0;  // Assurer que `export` sans argument retourne toujours 0 ✅
+	update_exit_status(data->varenv_lst, data->lst_exit);
 }
 
 int    found_sign_equal_in_word(char *str)

@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 15:02:30 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/19 15:40:49 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 16:49:29 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,15 +61,19 @@ int	ft_export(t_data *data, t_cmd *cmd)
 	int	error_flag;
 
 	if (cmd->argc == 1)
-		return (ft_print_list_export(data), 0);
+	{
+		ft_print_list_export(data);
+		return (0);
+	}
 	i = 1;
 	error_flag = 0;
 	while (i < cmd->argc)
 		process_export_arg(data, cmd->argv[i++], &error_flag);
-	data->lst_exit = 0;
+	data->lst_exit = error_flag;  // Si erreur, `$?` = 1 sinon `$?` = 0
 	update_exit_status(data->varenv_lst, data->lst_exit);
-	return (0);
+	return (error_flag);
 }
+
 
 /*
 char	*ft_substr(char const *s, unsigned int start, size_t len)
