@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 16:11:52 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/15 15:31:00 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 17:35:56 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,45 @@ static void	set_heredoc_delimiter(t_token **tok, t_redirection *redir)
 	}
 }
 
+// static void	process_heredoc_tokens(t_token **tok, t_cmd **current_cmd, t_varenv *varenv)
+// {
+// 	char	*expanded_value;
+
+// 	while (*tok && ((*tok)->type == WORD || (*tok)->type == VAR_ENV))
+// 	{
+// 		if ((*tok)->type == WORD)
+// 		{
+// 			// printf("Heredoc argument stored: %s\n", (*tok)->content);
+// 			enqueue_token(init_queue(), (*tok)->content);
+// 			(*current_cmd)->argc++;
+// 		}
+// 		else if ((*tok)->type == VAR_ENV)
+// 		{
+// 			expanded_value = ft_expand((*tok)->content + 1, varenv);
+// 			if (expanded_value)
+// 			{
+// 				// printf("Expanded heredoc argument: %s\n", expanded_value);
+// 				enqueue_token(init_queue(), expanded_value);
+// 				(*current_cmd)->argc++;
+// 			}
+// 			// else
+// 			// 	printf("Heredoc expansion failed for: %s\n", (*tok)->content);
+// 		}
+// 		*tok = (*tok)->next;
+// 	}
+// }
+
 static void	process_heredoc_tokens(t_token **tok, t_cmd **current_cmd, t_varenv *varenv)
 {
 	char	*expanded_value;
+	t_data	*data;
 
+	data = (*current_cmd)->data; // Récupérer data via current_cmd
 	while (*tok && ((*tok)->type == WORD || (*tok)->type == VAR_ENV))
 	{
 		if ((*tok)->type == WORD)
 		{
-			// printf("Heredoc argument stored: %s\n", (*tok)->content);
-			enqueue_token(init_queue(), (*tok)->content);
+			enqueue_token(init_queue(data), (*tok)->content, data);
 			(*current_cmd)->argc++;
 		}
 		else if ((*tok)->type == VAR_ENV)
@@ -43,16 +72,14 @@ static void	process_heredoc_tokens(t_token **tok, t_cmd **current_cmd, t_varenv 
 			expanded_value = ft_expand((*tok)->content + 1, varenv);
 			if (expanded_value)
 			{
-				// printf("Expanded heredoc argument: %s\n", expanded_value);
-				enqueue_token(init_queue(), expanded_value);
+				enqueue_token(init_queue(data), expanded_value, data);
 				(*current_cmd)->argc++;
 			}
-			// else
-			// 	printf("Heredoc expansion failed for: %s\n", (*tok)->content);
 		}
 		*tok = (*tok)->next;
 	}
 }
+
 
 void	handle_heredoc(t_token *tok, t_cmd **current_cmd, t_varenv *varenv, int redir_type)
 {

@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:24:19 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 17:19:21 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 17:31:07 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	handle_tokens(t_token *tok, t_cmd **cmd_list, t_varenv *varenv_lst, t_data 
 	t_queue	*queue;
 	t_cmd	*current_cmd;
 
-	queue = init_queue();
+	queue = init_queue(data);
 	current_cmd = init_cmd_structs(data);
 	if (!current_cmd)
 		return ;

@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:18:44 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/18 19:47:09 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 17:36:52 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,12 +89,13 @@ void	replace_var(t_token *tok, char *new_content)
 // 		tok->type = WORD;
 // 	}
 // }
-
 void	handle_var_env(t_token *tok, t_queue *queue, t_cmd *current_cmd, t_varenv *varenv)
 {
 	char	*expanded_value;
 	char	*var_name;
+	t_data	*data;
 
+	data = current_cmd->data; // Récupération de `data` sans modifier le prototype
 	expanded_value = NULL;
 	if (tok->content[0] == '$')
 		var_name = tok->content + 1;
@@ -106,7 +107,7 @@ void	handle_var_env(t_token *tok, t_queue *queue, t_cmd *current_cmd, t_varenv *
 		expanded_value = ft_expand(var_name, varenv);
 		if (expanded_value)
 		{
-			enqueue_token(queue, expanded_value); // On ajoute directement la valeur expandée
+			enqueue_token(queue, expanded_value, data); // On ajoute directement la valeur expandée
 			current_cmd->argc++; // Incrémente le nombre d'arguments
 			free(expanded_value);
 		}
