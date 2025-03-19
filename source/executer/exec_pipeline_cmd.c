@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:04:30 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/18 18:52:17 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 11:33:43 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,7 @@ void	executer_pipeline_cmd(t_cmd *cmd_lst, t_data *data)
 	int cmd_index;
 	char *last_heredoc_files[256];
 
-	handle_heredocs_pipeline(cmd_lst);
+	handle_heredocs_pipeline(data, cmd_lst);
 	create_heredoc_list(cmd_lst, last_heredoc_files);
 	pipe_in = 0;
 	current_cmd = cmd_lst;
@@ -201,5 +201,5 @@ void	executer_pipeline_cmd(t_cmd *cmd_lst, t_data *data)
 	if (cmd_lst->pid != 0)
 		data->lst_exit = cmd_lst->pid;
 	update_exit_status(data->varenv_lst, data->lst_exit);
-	cleanup_pipeline(cmd_lst);
+	cleanup_pipeline(data, cmd_lst);
 }

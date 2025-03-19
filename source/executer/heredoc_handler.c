@@ -6,13 +6,13 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:24:45 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 11:03:52 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 11:31:05 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
 
-void	handle_heredocs_pipeline(t_cmd *cmd_lst)
+void	handle_heredocs_pipeline(t_data *data, t_cmd *cmd_lst)
 {
 	t_cmd			*cmd;
 	t_redirection	*redir;
@@ -27,7 +27,7 @@ void	handle_heredocs_pipeline(t_cmd *cmd_lst)
 		{
 			if (redir->type == HEREDOC)
 			{
-				create_heredoc_file(redir, heredoc_index);
+				create_heredoc_file(data, redir, heredoc_index); // Correction ici
 				heredoc_index++;
 			}
 			redir = redir->next;
@@ -36,7 +36,7 @@ void	handle_heredocs_pipeline(t_cmd *cmd_lst)
 	}
 }
 
-void	create_and_fill_heredocs(t_redirection *redirection)
+void	create_and_fill_heredocs(t_data *data, t_redirection *redirection)
 {
 	t_redirection	*current;
 	int				heredoc_index;
@@ -47,12 +47,13 @@ void	create_and_fill_heredocs(t_redirection *redirection)
 	{
 		if (current->type == HEREDOC)
 		{
-			create_heredoc_file(current, heredoc_index);
+			create_heredoc_file(data, current, heredoc_index);
 			heredoc_index++;
 		}
 		current = current->next;
 	}
 }
+
 
 static void	read_and_write_heredoc(int heredoc_fd, int pipe_fd[2])
 {
@@ -95,12 +96,33 @@ void	handle_heredocs_simple_cmd(t_data *data, t_redirection *redirection)
 
 	if (pipe(pipe_fd) == -1)
 	{
-		perror("Erreur lors de la création du pipe");
-		exit(1);
+		exit_with_error(data, "pipe", strerror(errno), 1);
+		return;
 	}
-	create_and_fill_heredocs(redirection);
+	create_and_fill_heredocs(data, redirection);
 	transfer_heredocs_to_pipe(data, redirection, pipe_fd);
 	close(pipe_fd[1]);
-	dup2(pipe_fd[0], STDIN_FILENO);
+	if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
+	{
+		exit_with_error(data, "dup2", strerror(errno), 1);
+		close(pipe_fd[0]);
+		return;
+	}
 	close(pipe_fd[0]);
 }
+
+// void	handle_heredocs_simple_cmd(t_redirection *redirection)// TODO : A virer a la fin (ajout de lst_exit)
+// {
+// 	int	pipe_fd[2];
+	
+// 	if (pipe(pipe_fd) == -1)
+// 	{
+// 		perror("Erreur lors de la création du pipe");
+// 		exit(1);
+// 	}
+// 	create_and_fill_heredocs(redirection);
+// 	transfer_heredocs_to_pipe(redirection, pipe_fd);
+// 	close(pipe_fd[1]);
+// 	dup2(pipe_fd[0], STDIN_FILENO);
+// 	close(pipe_fd[0]);
+// }

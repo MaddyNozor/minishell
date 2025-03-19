@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:09:14 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 11:03:39 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 11:29:06 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	handle_parent_process(pid_t pid, t_cmd *cmd, t_data *data)
 		data->lst_exit = 128 + WTERMSIG(status);
 	update_exit_status(data->varenv_lst, data->lst_exit);
 	close_redirections(cmd->redirection);
-	unlink_heredoc_temp(cmd->redirection);
+	unlink_heredoc_temp(data, cmd->redirection);
 	if (strcmp(cmd->value, "clear") == 0)
 		printf("\033[H\033[J");
 }

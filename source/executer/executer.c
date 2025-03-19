@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:38:39 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 11:03:45 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 11:28:20 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	executer_simple_cmd(t_cmd *cmd, t_data *data)
         if (cmd && cmd->redirection && contains_heredoc(cmd->redirection))
         {
             handle_heredocs_simple_cmd(data, cmd->redirection);
-            unlink_heredoc_temp(cmd->redirection);
+			unlink_heredoc_temp(data, cmd->redirection);
         }
         return;
     }

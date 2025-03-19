@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/19 11:04:13 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 11:33:31 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,23 +225,22 @@ int							ft_strcmp(const char *s1, const char *s2);
 void						read_and_write(int src_fd, int dest_fd);
 
 // REDIRECTIONS - HEREDOC
-int							ft_create_heredoc(const char *delimiter, int index);
+// int							ft_create_heredoc(const char *delimiter, int index);
 bool						contains_heredoc(t_redirection *redirection);
-void						unlink_heredoc_temp(t_redirection *redirection);
+void						unlink_heredoc_temp(t_data *data, t_redirection *redirection);
 void						process_heredoc_input(int fd,
 								const char *delimiter);
 
 void	handle_heredocs_simple_cmd(t_data *data, t_redirection *redirection);
-void						handle_heredocs_pipeline(t_cmd *cmd_lst);
+void	handle_heredocs_pipeline(t_data *data, t_cmd *cmd_lst);
 void						handle_heredoc_redirection(t_data *data, 
 								t_redirection *last_heredoc,
 								int *heredoc_fd);
-void						setup_heredoc_fd(t_cmd *cmd, int *heredoc_fd);
+// void	setup_heredoc_fd(t_data *data, t_cmd *cmd, int *heredoc_fd);
 void						create_heredoc_list(t_cmd *cmd_lst,
 								char *last_heredoc_files[]);
 void						handle_heredoc_input(char *heredoc_file);
-void						create_heredoc_file(t_redirection *redir,
-								int index);
+void						create_heredoc_file(t_data *data, t_redirection *redir, int index);
 void						generate_heredoc_filename(char *filename,
 								int index);
 
@@ -261,7 +260,8 @@ void						handle_parent_process_pipeline(pid_t pid,
 void						handle_child_process_pipeline(t_cmd *cmd,
 								t_data *data,
 								int pipe_in, int pipe_fd[2]);
-void						cleanup_pipeline(t_cmd *cmd_lst);
+void	cleanup_pipeline(t_data *data, t_cmd *cmd_lst);
+
 
 // EXECUTER - COMMAND PATH
 char						*find_cmd_path(const char *cmd, t_varenv *varenv_lst, t_data *data);
