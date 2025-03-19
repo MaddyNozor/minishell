@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/19 16:23:58 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 16:52:33 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,7 +270,7 @@ void						free_tab(char **tab);
 
 // BUILT-IN COMMANDS
 int	ft_echo(t_cmd *cmd, t_data *data);
-int							ft_pwd(void);
+int	ft_pwd(t_data *data);
 int							ft_env(t_data *data, t_cmd *cmd);
 // char						**dup_env(t_data *data, char **envp);//TODO : A virer a la fin, on lappelle jamais
 int	ft_cd(t_cmd *cmd, t_data *data);
