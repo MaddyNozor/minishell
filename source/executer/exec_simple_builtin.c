@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 15:44:00 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 15:43:30 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 16:03:48 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void execute_builtin(t_cmd *cmd, t_data *data)
 	else if (ft_strncmp(cmd->value, "export", 7) == 0)
         data->lst_exit = ft_export(data, cmd);
     else if (ft_strncmp(cmd->value, "cd", 3) == 0)
-        data->lst_exit = ft_cd(cmd, data->varenv_lst);
+		data->lst_exit = ft_cd(cmd, data);
 	else if (ft_strncmp(cmd->value, "unset", 6) == 0)
 		data->lst_exit = ft_unset(data, cmd);
     else if (ft_strncmp(cmd->value, "exit", 5) == 0)
