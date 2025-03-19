@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 15:02:30 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/19 15:26:00 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 15:51:42 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,28 +52,21 @@ static bool	ft_remove_var(t_data *data, char *var_name)
 	}
 	return (false);
 }
-
 int	ft_unset(t_data *data, t_cmd *cmd)
 {
 	int	i;
-	int	error_flag;
 
 	if (cmd->argc < 2)
 		return (0);
 	i = 1;
-	error_flag = 0;
 	while (i < cmd->argc)
 	{
-		if (!ft_remove_var(data, cmd->argv[i]))
-		{
-			printf("bash: unset: `%s': not found\n", cmd->argv[i]);
-			error_flag = 1;
-		}
+		ft_remove_var(data, cmd->argv[i]);
 		i++;
 	}
-	data->lst_exit = error_flag;
+	data->lst_exit = 0;
 	update_exit_status(data->varenv_lst, data->lst_exit);
-	return (error_flag);
+	return (0);
 }
 
 /*
