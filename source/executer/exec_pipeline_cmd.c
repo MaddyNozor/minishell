@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:04:30 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 11:59:56 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 13:14:39 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	execute_external_cmd(t_cmd *cmd, t_data *data)
 		free(cmd_path);
 		exit_with_error(data, cmd->value, "No such file or directory", 127);
 	}
-	env_array = convert_env_list_to_array(data->varenv_lst);
+	env_array = convert_env_list_to_array(data, data->varenv_lst);
 	if (!env_array)
 	{
 		perror("env conversion failed");
@@ -60,7 +60,7 @@ static void	handle_child_process_pipeline(t_cmd *cmd, t_data *data, int pipe_in,
 		update_exit_status(data->varenv_lst, data->lst_exit);
 		exit(127);
 	}
-	execve(cmd_path, cmd->argv, convert_env_list_to_array(data->varenv_lst));
+	execve(cmd_path, cmd->argv, convert_env_list_to_array(data, data->varenv_lst));
 	perror("execve failed");
 	data->lst_exit = 127;
 	update_exit_status(data->varenv_lst, data->lst_exit);

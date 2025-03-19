@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_var_env_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:13:45 by sabellil          #+#    #+#             */
-/*   Updated: 2025/02/24 12:17:36 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/19 13:10:31 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,19 +59,6 @@ void	free_cmd_list(t_cmd *list)
 		free(tmp);
 	}
 }
-
-// void	free_token_list(t_token *list)
-// {
-// 	t_token	*tmp;
-
-// 	while (list)
-// 	{
-// 		tmp = list;
-// 		list = list->next;
-// 		free(tmp->content);
-// 		free(tmp);
-// 	}
-// }
 
 void	free_envp_on_error(char **envp, int i)
 {

@@ -6,7 +6,7 @@
 #    By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/10 15:29:24 by mairivie          #+#    #+#              #
-#    Updated: 2025/03/18 15:22:30 by sabellil         ###   ########.fr        #
+#    Updated: 2025/03/19 15:41:28 by sabellil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ SRC_LIST =  main.c \
             builtins/ft_cd.c \
             builtins/ft_exit.c \
 			builtins/ft_export.c \
+            builtins/ft_export_utils.c \
             builtins/ft_unset.c \
             executer/exec_pipeline_cmd.c \
             executer/exec_simple_builtin.c \

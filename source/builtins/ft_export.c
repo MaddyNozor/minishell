@@ -6,76 +6,69 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 15:02:30 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/17 16:20:52 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 15:40:49 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
 
-void        ft_print_list_export(t_data *data)
+static bool	validate_and_extract(char *arg, char **name, char **value, int *error_flag)
 {
-    t_varenv    *current;
+	*name = NULL;
+	*value = NULL;
+	if (!arg || ft_strlen(arg) == 0) // Cas export ""
+		return (handle_invalid_identifier(arg, error_flag));
+	if (!extract_name_value(arg, name, value) || !*name || ft_strlen(*name) == 0) // Cas export =
+	{
+		free(*name);
+		free(*value);
+		return (handle_invalid_identifier(arg, error_flag));
+	}
+	if (!*value)
+		*value = ft_strdup(""); // Permet d'eviter un Segfault sur free()
+	if (!is_valid_identifier(*name))
+	{
+		free(*name);
+		free(*value);
+		return (handle_invalid_identifier(arg, error_flag));
+	}
+	return (true);
+}
+static void	process_export_arg(t_data *data, char *arg, int *error_flag)
+{
+	char	*name;
+	char	*value;
 
-    current = data->varenv_lst;
-    while (current)
-    {
-        if (current->name)
-        {
-            printf("export %s", current->name); 
-            if (current->value)
-                printf("=\"%s\"", current->value);
-            printf("\n");
-        }
-        current = current->next;
-    }
+	if (!validate_and_extract(arg, &name, &value, error_flag))
+		return;
+	if (!ft_strchr(arg, '='))
+	{
+		free(name);
+		free(value);
+		return;
+	}
+	while (*value && isspace(*value))
+		value++;
+	if (!update_env_var(data->varenv_lst, name, value))
+		create_varenv(data, &data->varenv_lst, (t_varenv_data){name, value, false});
+	free(name);
+	free(value);
 }
 
-int    found_sign_equal_in_word(char *str)
+int	ft_export(t_data *data, t_cmd *cmd)
 {
-    int i;
-    
-    i = 0;
-    while (str[i])
-    {
-        if (str[i] == '=')
-        {
-            // printf("%d\n", i);
-            return (i);
-        }
-        i++;
-    }
-    return (-1);   
-}
+	int	i;
+	int	error_flag;
 
-void       ft_export(t_data *data, t_cmd *cmd)
-{
-    int     i;
-    char    *name;
-    char    *value;
-    int     split_pos;
-
-    i = 1;
-    if (cmd->argc == 1)
-        ft_print_list_export(data);
-    while (i < cmd->argc)
-    {
-        name = NULL;
-        value = NULL; //pourrait avoir une valeur predef ici pour pouvoir dire qu'en cas de NULL y a eu un fail
-        split_pos = found_sign_equal_in_word(cmd->argv[i]);
-        if (split_pos >= 0)
-        {
-            name = ft_substr(cmd->argv[i], 0, split_pos);
-            value = ft_substr(cmd->argv[i], split_pos + 1, strlen(cmd->argv[i]) - split_pos);
-            // printf("name:%s| \nvalue:%s|\n", name, value);
-            //split pour avoir value et name
-        }
-        else
-            name = cmd->argv[i];
-        //check name
-        //check value
-        create_varenv(&data->varenv_lst, name, value, false);
-        i++;
-    }
+	if (cmd->argc == 1)
+		return (ft_print_list_export(data), 0);
+	i = 1;
+	error_flag = 0;
+	while (i < cmd->argc)
+		process_export_arg(data, cmd->argv[i++], &error_flag);
+	data->lst_exit = 0;
+	update_exit_status(data->varenv_lst, data->lst_exit);
+	return (0);
 }
 
 /*

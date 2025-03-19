@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/19 13:01:42 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 15:43:03 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,14 @@ typedef struct s_redir_state//ADDED Absolument necessaire pour les redirections
 	bool			output_created;
 }	t_redir_state;
 
+typedef struct s_varenv_data//ADDED Absolument necessaire pour lst_exit dans les var_env
+{
+	char	*name;
+	char	*value;
+	bool	hiden;
+}	t_varenv_data;
+
+
 //--------------------- FONCTIONS -----------------------------
 
 // SHELL INITIALIZATION
@@ -135,13 +143,12 @@ void						init_minimalist_env(t_varenv **varenv_lst);
 void						init_existing_env(t_varenv **varenv_lst,
 								char **envp);
 void						free_envp_on_error(char **envp, int i);
-char						**convert_env_list_to_array(t_varenv *varenv_lst);
+char	**convert_env_list_to_array(t_data *data, t_varenv *varenv_lst);
 int							count_env_vars(t_varenv *varenv_lst);
-char						*create_env_entry(t_varenv *varenv_lst);
+char						*create_env_entry(t_data *data, t_varenv *varenv_lst);
 void						append_varenv_node(t_varenv **varenv_lst,
 								t_varenv *new_node);
-void						create_varenv(t_varenv **varenv_lst, char *name,
-								char *value, bool hiden);
+void	create_varenv(t_data *data, t_varenv **varenv_lst, t_varenv_data var_data);
 void						free_varenv(t_varenv *varenv_lst);
 void						free_varenv_node(t_varenv *node);
 void						free_cmd_list(t_cmd *list);
@@ -266,11 +273,16 @@ void						free_tab(char **tab);
 int							ft_echo(t_cmd *cmd);
 int							ft_pwd(void);
 int							ft_env(t_data *data, t_cmd *cmd);
-char						**dup_env(char **envp);
+// char						**dup_env(t_data *data, char **envp);//TODO : A virer a la fin, on lappelle jamais
 int							ft_cd(t_cmd *cmd, t_varenv *varenv);
 void						ft_exit(t_cmd *cmd, t_data *data);
-void						ft_unset(t_data *data, t_cmd *cmd);
-void       					ft_export(t_data *data, t_cmd *cmd);
+int	ft_unset(t_data *data, t_cmd *cmd);
+
+int							ft_export(t_data *data, t_cmd *cmd);
+bool	handle_invalid_identifier(char *arg, int *error_flag);
+bool	extract_name_value(char *arg, char **name, char **value);
+bool	is_valid_identifier(char *name);
+void        ft_print_list_export(t_data *data);
 
 // PARSER SARA
 
@@ -316,4 +328,5 @@ void	handle_heredoc_and_input(t_data *data, int heredoc_fd, int input_fd);
 char	*get_exit_status(t_varenv *varenv);
 void update_exit_status(t_varenv *varenv, int exit_status);
 void	exit_with_error(t_data *data, char *context, char *error_message, int exit_code);
+bool	update_env_var(t_varenv *varenv, char *key, char *value);
 #endif

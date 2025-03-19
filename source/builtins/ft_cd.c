@@ -6,13 +6,13 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:21:32 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/18 12:41:16 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 13:55:43 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
 
-void	update_env_var(t_varenv *varenv, char *key, char *value)
+bool	update_env_var(t_varenv *varenv, char *key, char *value)
 {
 	t_varenv	*current;
 
@@ -23,12 +23,13 @@ void	update_env_var(t_varenv *varenv, char *key, char *value)
 		{
 			free(current->value);
 			current->value = ft_strdup(value);
-			return ;
+			return (true); // Indique que la variable a été mise à jour
 		}
 		current = current->next;
 	}
-	create_varenv(&varenv, key, value, false);
+	return (false); // La variable n'existait pas
 }
+
 
 void	ft_update_pwd(t_varenv *varenv)
 {
