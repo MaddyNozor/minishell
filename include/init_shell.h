@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/19 16:52:33 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 17:22:34 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,16 +60,6 @@ typedef struct s_redirection
 	struct s_redirection	*next;
 }							t_redirection;
 
-typedef struct s_cmd
-{
-	char					*value;
-	char					**argv;
-	int						argc;
-	pid_t					pid;
-	t_redirection			*redirection;
-	struct s_cmd			*next;
-}							t_cmd;
-
 typedef struct s_varenv
 {
 	char					*name;
@@ -87,6 +77,17 @@ typedef struct s_token
 	int						type;
 	int						nb_quote;
 }							t_token;
+
+typedef struct s_cmd
+{
+	char					*value;
+	char					**argv;
+	int						argc;
+	pid_t					pid;
+	t_redirection			*redirection;
+	struct s_cmd			*next;
+	struct s_data			*data; // Stocke un pointeur vers t_data
+}							t_cmd;
 
 typedef struct s_data
 {
@@ -109,30 +110,28 @@ typedef struct s_queue
 	t_node					*tail;
 }							t_queue;
 
-
 typedef struct s_pipe_data
 {
-    int heredoc_fd;
-    int pipe_in;
-    int pipe_fd[2];
-} t_pipe_data;
+    int						heredoc_fd;
+    int						pipe_in;
+    int						pipe_fd[2];
+}							t_pipe_data;
 
-
-typedef struct s_redir_state//ADDED Absolument necessaire pour les redirections
+typedef struct s_redir_state
 {
-	int				last_output_fd;
-	int				input_fd;
-	t_redirection	*last_heredoc;
-	bool			input_redir_found;
-	bool			output_created;
-}	t_redir_state;
+	int						last_output_fd;
+	int						input_fd;
+	t_redirection			*last_heredoc;
+	bool					input_redir_found;
+	bool					output_created;
+}							t_redir_state;
 
-typedef struct s_varenv_data//ADDED Absolument necessaire pour lst_exit dans les var_env
+typedef struct s_varenv_data
 {
-	char	*name;
-	char	*value;
-	bool	hiden;
-}	t_varenv_data;
+	char					*name;
+	char					*value;
+	bool					hiden;
+}							t_varenv_data;
 
 
 //--------------------- FONCTIONS -----------------------------
@@ -291,15 +290,11 @@ void						enqueue_token(t_queue *queue, char *content);
 t_queue						*init_queue(void);
 
 // PARSER - MAIN LOOP
-t_cmd						*parser(t_token *tok, t_varenv *varenv_lst);
-void						handle_tokens(t_token *tok, t_cmd **cmd_list,
-								t_varenv *varenv_lst);
-t_cmd						*init_cmd_structs(void);
+t_cmd	*parser(t_token *tok, t_varenv *varenv_lst, t_data *data);
+t_cmd	*init_cmd_structs(t_data *data);
 
 // PARSER - TOKEN_PIPE
-void						handle_token_pipe(t_cmd **current_cmd,
-								t_queue *queue);
-
+void	handle_token_pipe(t_cmd **current_cmd, t_queue *queue);
 // PARSER - TOKEN_VAR_ENV
 void						handle_var_env(t_token *tok, t_queue *queue,
 								t_cmd *current_cmd, t_varenv *varenv);

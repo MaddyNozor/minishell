@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:41:57 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/13 18:03:34 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/19 17:15:15 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void ft_start_minishell(t_data *data)
 		if (data->tok_lst)
 		{			
             data->tok_lst = ft_spot_the_quotes(data);
-			data->cmd_lst = parser(data->tok_lst, data->varenv_lst);
+			data->cmd_lst = parser(data->tok_lst, data->varenv_lst, data);
 			if (data->cmd_lst)
 			{
 				executer(data);
