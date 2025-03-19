@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 15:44:00 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 16:03:48 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 16:13:05 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void execute_builtin(t_cmd *cmd, t_data *data)
 {
     if (ft_strncmp(cmd->value, "echo", 5) == 0)
-        data->lst_exit = ft_echo(cmd);
+        data->lst_exit = ft_echo(cmd, data);
     else if (ft_strncmp(cmd->value, "pwd", 4) == 0)
         data->lst_exit = ft_pwd();
     else if (ft_strncmp(cmd->value, "env", 4) == 0)
