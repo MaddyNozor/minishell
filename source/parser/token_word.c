@@ -6,18 +6,27 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:19:05 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 17:38:03 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 17:43:08 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
+
+static void	add_word_to_queue(t_queue *queue, char *content, t_cmd *current_cmd)
+{
+	t_data *data;
+
+	data = current_cmd->data;
+	enqueue_token(queue, content, data);
+	current_cmd->argc++;
+}
 
 void	handle_token_word(t_queue *queue, t_token **tok, t_cmd *current_cmd)
 {
 	t_token	*current_tok;
 	t_data	*data;
 
-	data = current_cmd->data; // Récupération de `data` depuis `current_cmd`
+	data = current_cmd->data;
 	current_tok = *tok;
 	if (!current_cmd->value) // Si c'est le premier token WORD dans cette commande
 	{
@@ -28,19 +37,15 @@ void	handle_token_word(t_queue *queue, t_token **tok, t_cmd *current_cmd)
 			data->lst_exit = 1;
 			return ;
 		}
-		enqueue_token(queue, current_tok->content, data);
-		current_cmd->argc++;
+		add_word_to_queue(queue, current_tok->content, current_cmd);
 	}
 	else
-	{
-		enqueue_token(queue, current_tok->content, data);
-		current_cmd->argc++;
-	}
+		add_word_to_queue(queue, current_tok->content, current_cmd);
+
 	while (current_tok->next && current_tok->next->type == WORD)
 	{
 		current_tok = current_tok->next;
-		enqueue_token(queue, current_tok->content, data);
-		current_cmd->argc++;
+		add_word_to_queue(queue, current_tok->content, current_cmd);
 	}
 	*tok = current_tok; // Mise à jour du pointeur pour `handle_tokens`
 }
