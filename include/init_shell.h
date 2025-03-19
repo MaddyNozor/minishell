@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/19 17:40:04 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 17:51:18 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,7 +286,8 @@ void        ft_print_list_export(t_data *data);
 
 // PARSER - QUEUE
 void						transfer_queue_to_argv(t_queue *queue, t_cmd *cmd);
-void	enqueue_token(t_queue *queue, char *content, t_data *data);
+bool	enqueue_token(t_queue *queue, char *content, t_data *data);
+
 t_queue	*init_queue(t_data *data);
 
 // PARSER - MAIN LOOP

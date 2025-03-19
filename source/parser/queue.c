@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:42:31 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 17:30:30 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 17:50:14 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_queue	*init_queue(t_data *data)
 }
 
 // enqueue: ajoute un token dans la queue
-void	enqueue_token(t_queue *queue, char *content, t_data *data)
+bool	enqueue_token(t_queue *queue, char *content, t_data *data)
 {
 	t_node	*new_node;
 
@@ -38,7 +38,7 @@ void	enqueue_token(t_queue *queue, char *content, t_data *data)
 	{
 		printf("bash: allocation error\n");
 		data->lst_exit = 1;
-		return ;
+		return (false);
 	}
 	new_node->content = ft_strdup(content);
 	if (!new_node->content)
@@ -46,7 +46,7 @@ void	enqueue_token(t_queue *queue, char *content, t_data *data)
 		printf("bash: allocation error\n");
 		data->lst_exit = 1;
 		free(new_node);
-		return ;
+		return (false);
 	}
 	new_node->next = NULL;
 	if (!queue->head)
@@ -54,7 +54,9 @@ void	enqueue_token(t_queue *queue, char *content, t_data *data)
 	else
 		queue->tail->next = new_node;
 	queue->tail = new_node;
+	return (true);
 }
+
 
 // dqueue : transférer la queue vers argv
 static void	copy_and_free_node(t_node **tmp, char **argv, int *count)
