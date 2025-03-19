@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:19:05 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/18 19:20:55 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 13:05:04 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ void	handle_token_word(t_queue *queue, t_token **tok, t_cmd *current_cmd)
 		current_tok = current_tok->next;
 		enqueue_token(queue, current_tok->content);
 		current_cmd->argc++;
-		printf("Chained argument: %s, new argc: %d\n", current_tok->content,
-				current_cmd->argc);
+		// printf("Chained argument: %s, new argc: %d\n", current_tok->content,
+		// 		current_cmd->argc);
 	}
 	*tok = current_tok; // maj du pointeur pour handle_tokens
 	// printf("🔍 handle_token_word : tok->content = %s, current_cmd->value = %s\n",

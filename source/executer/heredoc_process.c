@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 16:20:07 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 11:16:08 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 11:57:23 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,17 @@ int	ft_strcmp(const char *s1, const char *s2)
 	return ((unsigned char)*s1 - (unsigned char)*s2);
 }
 
-void	process_heredoc_input(int fd, const char *delimiter)
+static bool	safe_write(t_data *data, int fd, const char *str, size_t len)
+{
+	if (write(fd, str, len) == -1)
+	{
+		exit_with_error(data, "write", strerror(errno), 1);
+		return (false);
+	}
+	return (true);
+}
+
+void	process_heredoc_input(t_data *data, int fd, const char *delimiter)
 {
 	char	*line;
 
@@ -31,18 +41,44 @@ void	process_heredoc_input(int fd, const char *delimiter)
 		line = readline("> ");
 		if (!line)
 			break ;
-		if (strcmp(line, delimiter) == 0)
+		if (ft_strcmp(line, delimiter) == 0)
 		{
 			free(line);
 			break ;
 		}
-		if (write(fd, line, strlen(line)) == -1)
-			perror("write");
-		if (write(fd, "\n", 1) == -1)
-			perror("write");
+		if (!safe_write(data, fd, line, strlen(line)) ||
+			!safe_write(data, fd, "\n", 1))
+		{
+			free(line);
+			return;
+		}
 		free(line);
 	}
 }
+
+
+
+// void	process_heredoc_input(int fd, const char *delimiter)// TODO : A virer a la fin (ajout de lst_exit)
+// {
+// 	char	*line;
+
+// 	while (1)
+// 	{
+// 		line = readline("> ");
+// 		if (!line)
+// 			break ;
+// 		if (strcmp(line, delimiter) == 0)
+// 		{
+// 			free(line);
+// 			break ;
+// 		}
+// 		if (write(fd, line, strlen(line)) == -1)
+// 			perror("write");
+// 		if (write(fd, "\n", 1) == -1)
+// 			perror("write");
+// 		free(line);
+// 	}
+// }
 
 // int	ft_create_heredoc(t_data *data, const char *delimiter, int index)//TODO : V2 avec lst_exit (jamais appele?)
 // {

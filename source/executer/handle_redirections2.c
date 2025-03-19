@@ -6,13 +6,13 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 12:36:45 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 10:58:16 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 13:01:06 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
 
-void	read_and_write(int src_fd, int dest_fd)
+void	read_and_write(t_data *data, int src_fd, int dest_fd)
 {
 	char	buffer[1024];
 	ssize_t	bytes_read;
@@ -20,15 +20,19 @@ void	read_and_write(int src_fd, int dest_fd)
 	bytes_read = read(src_fd, buffer, sizeof(buffer));
 	while (bytes_read > 0)
 	{
-		write(dest_fd, buffer, bytes_read);
+		if (write(dest_fd, buffer, bytes_read) == -1)
+		{
+			exit_with_error(data, "write", strerror(errno), 1);
+			return;
+		}
 		bytes_read = read(src_fd, buffer, sizeof(buffer));
 	}
 }
 
-void	handle_heredoc_and_input(int heredoc_fd, int input_fd)
+void	handle_heredoc_and_input(t_data *data, int heredoc_fd, int input_fd)
 {
 	if (heredoc_fd != -1 && input_fd != -1)
-		merge_heredoc_and_input(heredoc_fd, input_fd);
+		merge_heredoc_and_input(data, heredoc_fd, input_fd);
 	else if (heredoc_fd != -1)
 	{
 		dup2(heredoc_fd, STDIN_FILENO);
@@ -41,32 +45,35 @@ void	handle_heredoc_and_input(int heredoc_fd, int input_fd)
 	}
 }
 
-void merge_heredoc_and_input(int heredoc_fd, int input_fd)
+void merge_heredoc_and_input(t_data *data, int heredoc_fd, int input_fd)
 {
 	int	pipe_fd[2];
 
 	if (pipe(pipe_fd) == -1)
 	{
-		perror("ERREUR : Echec de la création du pipe");
+		exit_with_error(data, "pipe", strerror(errno), 1);
 		return;
 	}
 	if (heredoc_fd != -1)
 	{
-		read_and_write(heredoc_fd, pipe_fd[1]);
+		read_and_write(data, heredoc_fd, pipe_fd[1]);
 		close(heredoc_fd);
 	}
 	if (input_fd != -1)
 	{
-		read_and_write(input_fd, pipe_fd[1]);
+		read_and_write(data, input_fd, pipe_fd[1]);
 		close(input_fd);
 	}
 	close(pipe_fd[1]);
 	if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
 	{
-		perror("ERREUR : dup2 vers STDIN a échoué");
+		exit_with_error(data, "dup2", strerror(errno), 1);
+		close(pipe_fd[0]);
+		return;
 	}
 	close(pipe_fd[0]);
 }
+
 
 void handle_heredoc_redirection(t_data *data, t_redirection *last_heredoc, int *heredoc_fd)
 {
@@ -110,3 +117,17 @@ void handle_heredoc_redirection(t_data *data, t_redirection *last_heredoc, int *
 // 	close(pipe_data->pipe_fd[1]);
 // 	close(pipe_data->pipe_fd[0]);
 // }
+
+// void	read_and_write(int src_fd, int dest_fd)//TODO : A virer a la fin (ajout de lst_exit)
+// {
+// 	char	buffer[1024];
+// 	ssize_t	bytes_read;
+
+// 	bytes_read = read(src_fd, buffer, sizeof(buffer));
+// 	while (bytes_read > 0)
+// 	{
+// 		write(dest_fd, buffer, bytes_read);
+// 		bytes_read = read(src_fd, buffer, sizeof(buffer));
+// 	}
+// }
+

@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:03:13 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/09 16:29:28 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 11:38:59 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	create_heredoc_list(t_cmd *cmd_lst, char *last_heredoc_files[])
 	}
 }
 
-void	handle_heredoc_input(char *heredoc_file)
+void	handle_heredoc_input(t_data *data, char *heredoc_file)
 {
 	int	fd;
 
@@ -44,10 +44,32 @@ void	handle_heredoc_input(char *heredoc_file)
 		fd = open(heredoc_file, O_RDONLY);
 		if (fd == -1)
 		{
-			perror("Erreur ouverture heredoc");
-			exit(1);
+			exit_with_error(data, heredoc_file, strerror(errno), 1);
+			return;
 		}
-		dup2(fd, STDIN_FILENO);
+		if (dup2(fd, STDIN_FILENO) == -1)
+		{
+			exit_with_error(data, "dup2", strerror(errno), 1);
+			close(fd);
+			return;
+		}
 		close(fd);
 	}
 }
+
+// void	handle_heredoc_input(char *heredoc_file)//TODO : A virer a la fin (ajout de lst_exit)
+// {
+// 	int	fd;
+
+// 	if (heredoc_file)
+// 	{
+// 		fd = open(heredoc_file, O_RDONLY);
+// 		if (fd == -1)
+// 		{
+// 			perror("Erreur ouverture heredoc");
+// 			exit(1);
+// 		}
+// 		dup2(fd, STDIN_FILENO);
+// 		close(fd);
+// 	}
+// }

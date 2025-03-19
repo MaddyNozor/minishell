@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/19 11:33:31 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 13:01:42 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,25 +211,24 @@ char						*ft_expand_varenv(char *var_found,
 void						executer(t_data *data);
 
 // REDIRECTIONS
-void	apply_redirections(t_redirection *redirection, t_data *data);
-void						merge_heredoc_and_input(int heredoc_fd,
-								int input_fd);
-								void	handle_input_redirection(t_redirection *redirection, t_data *data,
+void						apply_redirections(t_redirection *redirection, t_data *data);
+void						merge_heredoc_and_input(t_data *data, int heredoc_fd, int input_fd);
+void						handle_input_redirection(t_redirection *redirection, t_data *data,
 									t_redir_state *state);
-void	handle_output_redirections(t_redirection *redir, t_data *data, int *last_out_fd);
+void						handle_output_redirections(t_redirection *redir, t_data *data, int *last_out_fd);
 void						handle_pipe_redirections(t_cmd *cmd, int pipe_in,
 								int pipe_fd[2]);
 void						close_redirections(t_redirection *redirection);
 int							ft_strcmp(const char *s1, const char *s2);
 // void	setup_io_redirections(t_pipe_data *pipe_data, t_cmd *cmd, t_data *data);// TODO : plus utilise ? a virer a la fin
-void						read_and_write(int src_fd, int dest_fd);
+void	read_and_write(t_data *data, int src_fd, int dest_fd);
 
 // REDIRECTIONS - HEREDOC
 // int							ft_create_heredoc(const char *delimiter, int index);
 bool						contains_heredoc(t_redirection *redirection);
 void						unlink_heredoc_temp(t_data *data, t_redirection *redirection);
-void						process_heredoc_input(int fd,
-								const char *delimiter);
+void	process_heredoc_input(t_data *data, int fd, const char *delimiter);
+
 
 void	handle_heredocs_simple_cmd(t_data *data, t_redirection *redirection);
 void	handle_heredocs_pipeline(t_data *data, t_cmd *cmd_lst);
@@ -239,7 +238,7 @@ void						handle_heredoc_redirection(t_data *data,
 // void	setup_heredoc_fd(t_data *data, t_cmd *cmd, int *heredoc_fd);
 void						create_heredoc_list(t_cmd *cmd_lst,
 								char *last_heredoc_files[]);
-void						handle_heredoc_input(char *heredoc_file);
+void	handle_heredoc_input(t_data *data, char *heredoc_file);
 void						create_heredoc_file(t_data *data, t_redirection *redir, int index);
 void						generate_heredoc_filename(char *filename,
 								int index);
@@ -254,12 +253,7 @@ void						executer_simple_cmd(t_cmd *cmd, t_data *data);
 // EXECUTER - PIPELINE
 void						execute_external_cmd(t_cmd *cmd, t_data *data);
 void						executer_pipeline_cmd(t_cmd *cmd_lst, t_data *data);
-void						setup_pipe(int pipe_fd[2]);
-void						handle_parent_process_pipeline(pid_t pid,
-								t_cmd *data, int *pipe_in, int pipe_fd[2]);
-void						handle_child_process_pipeline(t_cmd *cmd,
-								t_data *data,
-								int pipe_in, int pipe_fd[2]);
+void	setup_pipe(t_data *data, int pipe_fd[2]);
 void	cleanup_pipeline(t_data *data, t_cmd *cmd_lst);
 
 
@@ -315,7 +309,8 @@ void						handle_endoffile(t_queue *queue,
 								t_cmd *current_cmd);
 
 char	*get_env_value(t_varenv *varenv_lst, const char *key);
-void	handle_heredoc_and_input(int heredoc_fd, int input_fd);
+void	handle_heredoc_and_input(t_data *data, int heredoc_fd, int input_fd);
+
 
 //EXIT
 char	*get_exit_status(t_varenv *varenv);

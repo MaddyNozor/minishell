@@ -6,20 +6,21 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:04:28 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 11:32:47 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 11:42:11 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
 
-void	setup_pipe(int pipe_fd[2])
+void	setup_pipe(t_data *data, int pipe_fd[2])
 {
 	if (pipe(pipe_fd) == -1)
 	{
-		perror("Erreur lors de la creation du pipe");
-		exit(1);
+		exit_with_error(data, "pipe", strerror(errno), 1);
+		return;
 	}
 }
+
 
 void	cleanup_pipeline(t_data *data, t_cmd *cmd_lst)
 {
