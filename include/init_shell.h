@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/18 17:43:12 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/19 14:19:55 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,7 @@ t_token						*lexer(char *line);
 bool						ft_is_whitespace(char c);
 int							have_to_close_tok(char c);
 int							is_an_operator(int type);
+int							ft_size_according_to_type(int type);
 
 // utils token
 t_token						*ft_tok_new(void *content, int type);

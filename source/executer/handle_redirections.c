@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirections.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 13:46:25 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/17 16:04:23 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 14:00:18 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	handle_input_redirection(t_redirection *redirection, int *input_fd,
 	t_redirection	*current;
 	bool			heredoc_exists = false;
 
-	printf("📌 Je rentre dans handle_input_redirection\n");
+	// printf("📌 Je rentre dans handle_input_redirection\n");
 	current = redirection;
 	while (current)
 	{

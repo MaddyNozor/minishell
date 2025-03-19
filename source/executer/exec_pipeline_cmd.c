@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipeline_cmd.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:04:30 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/17 16:18:46 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 14:03:40 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ void	execute_external_cmd(t_cmd *cmd, t_data *data)
 	// ✅ Vérifier si `execve()` est bien appelé avec les bons arguments
 	// printf("📌 Vérification de `execve()` pour %s\n", cmd->value);
 	// printf("🔹 Commande complète : ");
-	for (int i = 0; cmd->argv[i] != NULL; i++)
-	{
-		printf("%s ", cmd->argv[i]);
-	}
-	printf("\n");
+	// for (int i = 0; cmd->argv[i] != NULL; i++)
+	// {
+	// 	printf("%s ", cmd->argv[i]);
+	// }
+	// printf("\n");
 
 	// ✅ Supprimer les logs avant `execve()` pour éviter qu’ils ne soient écrits dans `output.txt`
 	fflush(stdout);

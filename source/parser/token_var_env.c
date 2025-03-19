@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_var_env.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:18:44 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/13 13:06:50 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/18 18:52:04 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*ft_expand(char *var_name, t_varenv *varenv)
 		}
 		current = current->next;
 	}
-	// printf("Variable %s introuvable dans varenv_lst\n", var_name);
+	//printf("Variable %s introuvable dans varenv_lst\n", var_name);
 	return (NULL);
 }
 
@@ -37,17 +37,17 @@ bool	ft_var_exists(char *var_name, t_varenv *varenv)
 	t_varenv	*current;
 
 	current = varenv;
-	// printf("Recherche de la variable: %s\n", var_name);
+	//printf("Recherche de la variable: %s\n", var_name);
 	while (current)
 	{
 		if (ft_strcmp(current->name, var_name) == 0)
 		{
-			// printf("Variable %s trouvee !\n", var_name);
+			//printf("Variable %s trouvee !\n", var_name);
 			return (true);
 		}
 		current = current->next;
 	}
-	// printf("Variable %s non trouvee\n", var_name);
+	//printf("Variable %s non trouvee\n", var_name);
 	return (false);
 }
 

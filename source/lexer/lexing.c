@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/15 13:44:32 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 17:53:13 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ void	print_list(t_token *lst)
 {
 	while (lst)
 	{
-		// printf("Token: %s, Type: %d\n", lst->content, lst->type);
+		printf("Token: %s, Type: %d\n", lst->content, lst->type);
 		lst = lst->next;
 	}
-	// printf("--List Printed--\n");
+	printf("--List Printed--\n");
 } //TODO  pour test a virer a terme
 
 t_token	*lexer(char *line)
@@ -40,11 +40,13 @@ t_token	*lexer(char *line)
 		else
 		{
 			new_token = create_token(line, i, new_token);
+			if (new_token == NULL)
+				return (NULL);
 			ft_tokadd_back(&head_of_list, new_token);
-			i = i + ft_strlen(new_token->content);
+			i = i + ft_strlen(new_token->content) + 1;
 		}
 	}
-	print_list(head_of_list);
+	// print_list(head_of_list);
 	if (check_lexing(head_of_list) == FAILURE)
 	{
 		head_of_list = NULL;

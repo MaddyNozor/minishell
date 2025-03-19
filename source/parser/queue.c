@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   queue.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:42:31 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/09 16:17:46 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 18:02:59 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ void	enqueue_token(t_queue *queue, char *content)
 	new_node = malloc(sizeof(t_node));
 	if (!new_node)
 		return ;
-	new_node->content = ft_strdup(content);
+	if(content)
+		new_node->content = ft_strdup(content);
+	else
+		new_node->content = ft_strdup(" ");
 	new_node->next = NULL;
 	if (!queue->head)
 		queue->head = new_node;

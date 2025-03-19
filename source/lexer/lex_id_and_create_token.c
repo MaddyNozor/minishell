@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lex_id_and_create_token.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/09 18:00:40 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 17:23:04 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,6 @@
 // 		return (NULL);
 // 	return (new_token);
 // }
-
-int	ft_size_according_to_type(int type)
-{
-	int	size;
-
-	size = 1;
-	if (type == HEREDOC || type == APPEND_OUT)
-		size = 2;
-	return (size);
-}
 
 t_token	*token_type_operators(char *line, int i, t_token *new_token)
 {
@@ -87,34 +77,51 @@ t_token	*token_type_varenv(char *line, int i, t_token *new_token)
 	return (new_token);
 }
 
+char *sub_ft_type_word(int *len, int *nb_pair_quote, char *line, int i)
+{
+	char	type_of_quote;
+
+	type_of_quote = line[i + *len];
+	(*nb_pair_quote)++;
+	(*len)++;
+	while (line[i + *len] && line[i + *len] != type_of_quote)
+		(*len)++;
+	if (!line[i + *len])
+	{
+		ft_printf("Syntax Error\n");
+		return (NULL);
+	}
+	return("");
+}
+
 t_token	*token_type_word(char *line, int i, t_token *new_token)
 {
 	int		len;
-	char	type_of_quote;
 	int		nb_pair_quote;
+	char *temp;
+	char *temp2;
 
 	len = 0;
 	nb_pair_quote = 0;
 	while (line[i + len] && have_to_close_tok(line[i + len]) == false)
 	{
 		if (line[i + len] == '\'' || line[i + len] == '\"')
-		{
-			type_of_quote = line[i + len];
-			nb_pair_quote++;
-			len++;
-			while (line[i + len] && line[i + len] != type_of_quote)
-				len++;
-			if (!line[i + len])
-			{
-				ft_printf("Syntax Error\n");
-				//ft_exit();
+			if (sub_ft_type_word(&len, &nb_pair_quote, line, i) == NULL)
 				return (NULL);
-			}
-		}
 		len++;
 	}
 	new_token = init_type_token_with_x_char_of_line(WORD, len, line, i);
+	ft_printf("new token content init type %s \n", new_token->content);
 	new_token->nb_quote = nb_pair_quote;
+    if (strchr(new_token->content, '$') != NULL && nb_pair_quote == 0)
+    {
+		ft_printf("new token content strchr %s \n", new_token->content);
+        temp = ft_strjoin("\"", new_token->content);
+        temp2 = ft_strjoin(temp, "\"");
+        free(temp);
+        new_token->content = temp2;
+        new_token->nb_quote = 1;
+    }
 	return (new_token);
 }
 
@@ -122,8 +129,8 @@ t_token	*create_token(char *line, int i, t_token *new_token)
 {
 	if (line[i] == '<' || line[i] == '>' || line[i] == '|')
 		new_token = token_type_operators(line, i, new_token);
-	else if (line[i] == '$')
-		new_token = token_type_varenv(line, i, new_token);
+	// else if (line[i] == '$')
+	// 	new_token = token_type_varenv(line, i, new_token);
 	else
 		new_token = token_type_word(line, i, new_token);
 	if (new_token == NULL)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 16:10:03 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/17 16:04:42 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 14:01:20 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	apply_redirections(t_redirection *redirection)
 	input_fd = -1;
 	last_heredoc = NULL;
 	current = redirection;
-	printf("Je rentre dans apply_redirections\n");
+	// printf("Je rentre dans apply_redirections\n");
 
 	// ✅ Étape 1 : Lire et stocker les heredocs, MAIS NE PAS LES APPLIQUER IMMÉDIATEMENT
 	while (current)
@@ -86,7 +86,7 @@ void	apply_redirections(t_redirection *redirection)
 		}
 		current = current->next;
 	}
-	printf("Je suis juste avant handle_input_redirection\n");
+	// printf("Je suis juste avant handle_input_redirection\n");
 
 	// ✅ Étape 3 : Appliquer les redirections seulement si input.txt est valide
 	handle_input_redirection(redirection, &input_fd, &last_heredoc, &input_redir_found);
