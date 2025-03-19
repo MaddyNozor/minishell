@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:18:44 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/18 12:06:40 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/18 19:47:09 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,38 @@ void	replace_var(t_token *tok, char *new_content)
 	if (new_content)
 		tok->content = ft_strdup(new_content);
 }
+
+// void	handle_var_env(t_token *tok, t_queue *queue, t_cmd *current_cmd,
+// 		t_varenv *varenv)
+// {
+// 	char	*expanded_value;
+// 	char	*var_name;
+
+// 	expanded_value = NULL;
+// 	// printf("Handling VAR_ENV token: %s\n", tok->content);
+// 	if (tok->content[0] == '$')
+// 		var_name = tok->content + 1; // supprime le '$' pour la recherche
+// 	else
+// 		var_name = tok->content;
+// 	if (ft_var_exists(var_name, varenv))
+// 	{
+// 		expanded_value = ft_expand(var_name, varenv);
+// 		if (expanded_value)
+// 		{
+// 			replace_var(tok, expanded_value);
+// 			tok->type = WORD;
+// 			// printf("Expanded value: %s\n", expanded_value);
+// 			handle_token_word(queue, &tok, current_cmd);
+// 			free(expanded_value);
+// 		}
+// 	}
+// 	else
+// 	{
+// 		replace_var(tok, NULL);
+// 		tok->type = WORD;
+// 	}
+// }
+
 void	handle_var_env(t_token *tok, t_queue *queue, t_cmd *current_cmd, t_varenv *varenv)
 {
 	char	*expanded_value;
@@ -68,40 +100,16 @@ void	handle_var_env(t_token *tok, t_queue *queue, t_cmd *current_cmd, t_varenv *
 		var_name = tok->content + 1;
 	else
 		var_name = tok->content;
-	if (ft_strcmp(var_name, "?") == 0)
-		expanded_value = get_exit_status(varenv);
-	else if (ft_var_exists(var_name, varenv))
-		expanded_value = ft_expand(var_name, varenv);
-	if (expanded_value)
+
+	if (ft_var_exists(var_name, varenv))
 	{
-		enqueue_token(queue, expanded_value);
-		current_cmd->argc++;
-		free(expanded_value);
+		expanded_value = ft_expand(var_name, varenv);
+		if (expanded_value)
+		{
+			enqueue_token(queue, expanded_value); // On ajoute directement la valeur expandée
+			current_cmd->argc++; // Incrémente le nombre d'arguments
+			free(expanded_value);
+		}
 	}
-	tok->type = WORD;
+	tok->type = WORD; // Change en WORD pour ne pas être re-traité
 }
-
-
-// void	handle_var_env(t_token *tok, t_queue *queue, t_cmd *current_cmd, t_varenv *varenv)
-// {
-// 	char	*expanded_value;
-// 	char	*var_name;
-
-// 	expanded_value = NULL;
-// 	if (tok->content[0] == '$')
-// 		var_name = tok->content + 1;
-// 	else
-// 		var_name = tok->content;
-
-// 	if (ft_var_exists(var_name, varenv))
-// 	{
-// 		expanded_value = ft_expand(var_name, varenv);
-// 		if (expanded_value)
-// 		{
-// 			enqueue_token(queue, expanded_value); // On ajoute directement la valeur expandée
-// 			current_cmd->argc++; // Incrémente le nombre d'arguments
-// 			free(expanded_value);
-// 		}
-// 	}
-// 	tok->type = WORD; // Change en WORD pour ne pas être re-traité
-// }

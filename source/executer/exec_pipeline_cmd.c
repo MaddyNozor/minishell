@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:04:30 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/18 18:09:40 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/18 18:52:17 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,22 +21,23 @@ void	execute_external_cmd(t_cmd *cmd, t_data *data)
 	if (!cmd_path || access(cmd_path, X_OK) == -1)
 	{
 		free(cmd_path);
-		exit_with_error(data, "bash: command not found", 127);
+		exit_with_error(data, cmd->value, "No such file or directory", 127);
 	}
 	env_array = convert_env_list_to_array(data->varenv_lst);
 	if (!env_array)
 	{
 		perror("env conversion failed");
 		free(cmd_path);
-		exit_with_error(data, "bash: environment conversion failed", 127);
+		exit_with_error(data, "environment",
+				"Failed to convert environment variables", 127);
 	}
 	if (!cmd->argv || !cmd->argv[0])
-		exit_with_error(data, "bash: invalid arguments", 127);
+		exit_with_error(data, cmd->value, "Invalid arguments", 127);
 	execve(cmd_path, cmd->argv, env_array);
 	perror("execve failed");
 	free(cmd_path);
 	free_tab(env_array);
-	exit_with_error(data, "bash: command execution failed", 127);
+	exit_with_error(data, cmd->value, "Command execution failed", 127);
 }
 
 void	handle_child_process_pipeline(t_cmd *cmd, t_data *data, int pipe_in,
@@ -66,7 +67,8 @@ void	handle_child_process_pipeline(t_cmd *cmd, t_data *data, int pipe_in,
 	exit(127);
 }
 
-static void	handle_parent_process_pipeline_close_pipe(int *pipe_in, int pipe_fd[2])
+static void	handle_parent_process_pipeline_close_pipe(int *pipe_in,
+		int pipe_fd[2])
 {
 	if (*pipe_in != 0)
 		close(*pipe_in);
@@ -86,16 +88,17 @@ static bool	check_input_existence(t_redirection *redirection, t_data *data)
 			input_fd = open(redir->file_name, O_RDONLY);
 			if (input_fd == -1)
 			{
-				printf("bash: %s: No such file or directory\n", redir->file_name);
-								data->lst_exit = 1;
+				printf("bash: %s: No such file or directory\n",
+						redir->file_name);
+				data->lst_exit = 1;
 				update_exit_status(data->varenv_lst, data->lst_exit);
-				return false;
+				return (false);
 			}
 			close(input_fd);
 		}
 		redir = redir->next;
 	}
-	return true;
+	return (true);
 }
 
 static void	create_output_files(t_redirection *redirection)
@@ -118,41 +121,44 @@ static void	create_output_files(t_redirection *redirection)
 
 static bool	handle_missing_input(t_cmd *cmd, t_data *data)
 {
+	int	devnull_fd;
+
 	if (!check_input_existence(cmd->redirection, data))
 	{
-		int devnull_fd = open("/dev/null", O_RDONLY);
+		devnull_fd = open("/dev/null", O_RDONLY);
 		if (devnull_fd != -1)
 			dup2(devnull_fd, STDIN_FILENO);
 		return (false);
 	}
 	return (true);
 }
-
 static pid_t	create_forked_process(t_data *data)
 {
 	pid_t	pid;
 
 	pid = fork();
 	if (pid == -1)
-		exit_with_error(data, "Erreur lors du fork", 1);
+		exit_with_error(data, "fork", "Resource temporarily unavailable", 1);
 	return (pid);
 }
 
-void execute_pipeline_command(t_cmd *cmd, t_data *data, int *pipe_in, int pipe_fd[2])
+
+void	execute_pipeline_command(t_cmd *cmd, t_data *data, int *pipe_in,
+		int pipe_fd[2])
 {
-    pid_t	pid;
+	pid_t	pid;
 	int		status;
-	
+
 	printf("Je passe par le execute pipeline command\n");
 	if (!handle_missing_input(cmd, data))
-		return;
-    create_output_files(cmd->redirection);
-    setup_pipe(pipe_fd);
-    pid = create_forked_process(data);
-    if (pid == 0)
-        handle_child_process_pipeline(cmd, data, *pipe_in, pipe_fd);
-    else
-    {
+		return ;
+	create_output_files(cmd->redirection);
+	setup_pipe(pipe_fd);
+	pid = create_forked_process(data);
+	if (pid == 0)
+		handle_child_process_pipeline(cmd, data, *pipe_in, pipe_fd);
+	else
+	{
 		if (!cmd->next)
 		{
 			waitpid(pid, &status, 0);
@@ -165,10 +171,11 @@ void execute_pipeline_command(t_cmd *cmd, t_data *data, int *pipe_in, int pipe_f
 			update_exit_status(data->varenv_lst, data->lst_exit);
 		}
 		handle_parent_process_pipeline_close_pipe(pipe_in, pipe_fd);
-    }
+	}
 }
 
-void	executer_pipeline_cmd(t_cmd *cmd_lst, t_data *data)//TODO : Enlever une variable dans le corps de la fonction
+void	executer_pipeline_cmd(t_cmd *cmd_lst, t_data *data)
+	//TODO : Enlever une variable dans le corps de la fonction
 {
 	int pipe_fd[2];
 	int pipe_in;
@@ -182,7 +189,8 @@ void	executer_pipeline_cmd(t_cmd *cmd_lst, t_data *data)//TODO : Enlever une var
 	current_cmd = cmd_lst;
 	cmd_index = 0;
 	if (!get_env_value(data->varenv_lst, "PATH"))
-		printf("🚨 ERREUR: La variable PATH est NULL dans executer_pipeline_cmd() !!\n");	// TODO : À remplacer
+		printf("🚨 ERREUR: La variable PATH est NULL dans executer_pipeline_cmd() !!\n");
+			// TODO : À remplacer
 	while (current_cmd)
 	{
 		handle_heredoc_input(last_heredoc_files[cmd_index]);

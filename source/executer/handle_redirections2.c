@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 12:36:45 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/18 15:27:47 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 10:58:16 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,62 @@ void	read_and_write(int src_fd, int dest_fd)
 	}
 }
 
+void	handle_heredoc_and_input(int heredoc_fd, int input_fd)
+{
+	if (heredoc_fd != -1 && input_fd != -1)
+		merge_heredoc_and_input(heredoc_fd, input_fd);
+	else if (heredoc_fd != -1)
+	{
+		dup2(heredoc_fd, STDIN_FILENO);
+		close(heredoc_fd);
+	}
+	else if (input_fd != -1)
+	{
+		dup2(input_fd, STDIN_FILENO);
+		close(input_fd);
+	}
+}
+
+void merge_heredoc_and_input(int heredoc_fd, int input_fd)
+{
+	int	pipe_fd[2];
+
+	if (pipe(pipe_fd) == -1)
+	{
+		perror("ERREUR : Echec de la création du pipe");
+		return;
+	}
+	if (heredoc_fd != -1)
+	{
+		read_and_write(heredoc_fd, pipe_fd[1]);
+		close(heredoc_fd);
+	}
+	if (input_fd != -1)
+	{
+		read_and_write(input_fd, pipe_fd[1]);
+		close(input_fd);
+	}
+	close(pipe_fd[1]);
+	if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
+	{
+		perror("ERREUR : dup2 vers STDIN a échoué");
+	}
+	close(pipe_fd[0]);
+}
+
+void handle_heredoc_redirection(t_data *data, t_redirection *last_heredoc, int *heredoc_fd)
+{
+    if (!last_heredoc)
+        return;
+    *heredoc_fd = open(last_heredoc->file_name, O_RDONLY);
+	if (*heredoc_fd == -1)
+	{
+		exit_with_error(data, last_heredoc->file_name, "Erreur ouverture heredoc", 1);
+		return;
+	}	
+    dup2(*heredoc_fd, STDIN_FILENO);
+    close(*heredoc_fd);
+}
 
 // void	setup_io_redirections(t_pipe_data *pipe_data, t_cmd *cmd, t_data *data)// TODO : Plus utilisie a virer a la fin ?
 // {

@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 15:44:00 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/18 18:09:49 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 11:06:30 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	exec_simple_builtin_dir(t_cmd *cmd, t_data *data)
 
 void	exec_simple_builtin_heredoc(t_cmd *cmd, t_data *data)
 {
-	handle_heredocs_simple_cmd(cmd->redirection);
+	handle_heredocs_simple_cmd(data, cmd->redirection);
 	apply_redirections(cmd->redirection, data);
 	execute_builtin(cmd, data);
 	close_redirections(cmd->redirection);

@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 16:10:03 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/18 18:35:56 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 10:43:43 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ static void	handle_input_error(t_redirection *redirection, bool *output_created)
 		out = out->next;
 	}
 }
-
 static void	process_redirections(t_redirection *redirection,
 									t_redir_state *state,
 									t_data *data)
@@ -65,7 +64,8 @@ static void	process_redirections(t_redirection *redirection,
 			if (state->input_fd == -1)
 			{
 				handle_input_error(redirection, &state->output_created);
-				exit_with_error(data, current->file_name, 1);
+				exit_with_error(data, current->file_name,
+						"No such file or directory", 1);
 			}
 			close(state->input_fd);
 		}
@@ -78,7 +78,6 @@ static void	process_redirections(t_redirection *redirection,
 void	apply_redirections(t_redirection *redirection, t_data *data)
 {
 	t_redir_state	state;
-	t_redirection	*fake;
 	int				heredoc_fd;
 
 	state.last_output_fd = -1;
@@ -87,15 +86,39 @@ void	apply_redirections(t_redirection *redirection, t_data *data)
 	state.input_redir_found = true;
 	state.output_created = false;
 	process_redirections(redirection, &state, data);
-	handle_input_redirection(redirection, &state.input_fd, &fake,
-		&state.input_redir_found);
+	handle_input_redirection(redirection, data, &state);
 	heredoc_fd = -1;
 	if (state.last_heredoc)
 		heredoc_fd = open(state.last_heredoc->file_name, O_RDONLY);
 	handle_heredoc_and_input(heredoc_fd, state.input_fd);
 	if (state.last_heredoc)
-		handle_heredoc_redirection(state.last_heredoc, &state.input_fd);
+		handle_heredoc_redirection(data, state.last_heredoc, &state.input_fd);
 	if (!state.input_redir_found)
 		return ;
-	handle_output_redirections(redirection, &state.last_output_fd);
+	handle_output_redirections(redirection, data, &state.last_output_fd);
 }
+
+// void	apply_redirections(t_redirection *redirection, t_data *data)//TODO : A virer a la fin (Maj appel handle_ouput et handle_input_redirection)
+// {
+// 	t_redir_state	state;
+// 	t_redirection	*fake;
+// 	int				heredoc_fd;
+
+// 	state.last_output_fd = -1;
+// 	state.input_fd = -1;
+// 	state.last_heredoc = NULL;
+// 	state.input_redir_found = true;
+// 	state.output_created = false;
+// 	process_redirections(redirection, &state, data);
+// 	handle_input_redirection(redirection, &state.input_fd, &fake,
+// 			&state.input_redir_found);
+// 	heredoc_fd = -1;
+// 	if (state.last_heredoc)
+// 		heredoc_fd = open(state.last_heredoc->file_name, O_RDONLY);
+// 	handle_heredoc_and_input(heredoc_fd, state.input_fd);
+// 	if (state.last_heredoc)
+// 		handle_heredoc_redirection(data, state.last_heredoc, &state.input_fd);
+// 	if (!state.input_redir_found)
+// 		return ;
+// 	handle_output_redirections(redirection, &state.last_output_fd);
+// }

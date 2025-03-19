@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/18 18:30:42 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 11:04:13 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@
 # include <sys/wait.h>
 # include <unistd.h>
 # include <signal.h>
+#include <errno.h>
+
 
 //--------------------- DEFINES -----------------------------
 // # define FAILURE_L 0 // TODO: A virer a la fin
@@ -212,12 +214,9 @@ void						executer(t_data *data);
 void	apply_redirections(t_redirection *redirection, t_data *data);
 void						merge_heredoc_and_input(int heredoc_fd,
 								int input_fd);
-void						handle_input_redirection(t_redirection *redirection,
-								int *input_fd, t_redirection **last_heredoc,
-								bool *input_redirection_found);
-void						handle_output_redirections(
-								t_redirection *redirection,
-								int *last_output_fd);
+								void	handle_input_redirection(t_redirection *redirection, t_data *data,
+									t_redir_state *state);
+void	handle_output_redirections(t_redirection *redir, t_data *data, int *last_out_fd);
 void						handle_pipe_redirections(t_cmd *cmd, int pipe_in,
 								int pipe_fd[2]);
 void						close_redirections(t_redirection *redirection);
@@ -232,10 +231,9 @@ void						unlink_heredoc_temp(t_redirection *redirection);
 void						process_heredoc_input(int fd,
 								const char *delimiter);
 
-void						handle_heredocs_simple_cmd(
-								t_redirection *redirection);
+void	handle_heredocs_simple_cmd(t_data *data, t_redirection *redirection);
 void						handle_heredocs_pipeline(t_cmd *cmd_lst);
-void						handle_heredoc_redirection(
+void						handle_heredoc_redirection(t_data *data, 
 								t_redirection *last_heredoc,
 								int *heredoc_fd);
 void						setup_heredoc_fd(t_cmd *cmd, int *heredoc_fd);
@@ -322,6 +320,5 @@ void	handle_heredoc_and_input(int heredoc_fd, int input_fd);
 //EXIT
 char	*get_exit_status(t_varenv *varenv);
 void update_exit_status(t_varenv *varenv, int exit_status);
-void	exit_with_error(t_data *data, char *message, int exit_code);
-
+void	exit_with_error(t_data *data, char *context, char *error_message, int exit_code);
 #endif

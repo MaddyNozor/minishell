@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:24:45 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/17 16:04:27 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 11:03:52 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,7 @@ static void	read_and_write_heredoc(int heredoc_fd, int pipe_fd[2])
 		bytes_read = read(heredoc_fd, buffer, sizeof(buffer));
 	}
 }
-
-void	transfer_heredocs_to_pipe(t_redirection *redirection, int pipe_fd[2])
+static void	transfer_heredocs_to_pipe(t_data *data, t_redirection *redirection, int pipe_fd[2])
 {
 	t_redirection	*current;
 	int				heredoc_fd;
@@ -80,8 +79,8 @@ void	transfer_heredocs_to_pipe(t_redirection *redirection, int pipe_fd[2])
 			heredoc_fd = open(current->file_name, O_RDONLY);
 			if (heredoc_fd == -1)
 			{
-				perror("Erreur ouverture heredoc");
-				exit(1);
+				exit_with_error(data, current->file_name, strerror(errno), 1);
+				return;
 			}
 			read_and_write_heredoc(heredoc_fd, pipe_fd);
 			close(heredoc_fd);
@@ -90,7 +89,7 @@ void	transfer_heredocs_to_pipe(t_redirection *redirection, int pipe_fd[2])
 	}
 }
 
-void	handle_heredocs_simple_cmd(t_redirection *redirection)
+void	handle_heredocs_simple_cmd(t_data *data, t_redirection *redirection)
 {
 	int	pipe_fd[2];
 
@@ -100,7 +99,7 @@ void	handle_heredocs_simple_cmd(t_redirection *redirection)
 		exit(1);
 	}
 	create_and_fill_heredocs(redirection);
-	transfer_heredocs_to_pipe(redirection, pipe_fd);
+	transfer_heredocs_to_pipe(data, redirection, pipe_fd);
 	close(pipe_fd[1]);
 	dup2(pipe_fd[0], STDIN_FILENO);
 	close(pipe_fd[0]);

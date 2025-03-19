@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:24:19 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/18 14:27:47 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/18 19:20:03 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	handle_tokens(t_token *tok, t_cmd **cmd_list, t_varenv *varenv_lst)
 		else if (tok->type == VAR_ENV)
 		{
 			handle_var_env(tok, queue, current_cmd, varenv_lst);
+			
 			if (tok->next && tok->next->type == WORD)
 			{
 				tok = tok->next;
