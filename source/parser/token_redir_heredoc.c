@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 16:11:52 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 18:18:32 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 18:24:36 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,37 @@ static void	set_heredoc_delimiter(t_token **tok, t_redirection *redir, t_data *d
 	}
 }
 
-static void	process_heredoc_tokens(t_token **tok, t_cmd **current_cmd, t_varenv *varenv)
+static void	process_single_heredoc_token(t_token **tok, t_queue *queue, t_cmd *current_cmd, t_varenv *varenv)
 {
 	char	*expanded_value;
+	t_data	*data;
+
+	data = current_cmd->data;
+	if ((*tok)->type == WORD)
+	{
+		if (!enqueue_token(queue, (*tok)->content, data))
+			return ;
+		current_cmd->argc++;
+	}
+	else if ((*tok)->type == VAR_ENV)
+	{
+		expanded_value = ft_expand((*tok)->content + 1, varenv);
+		if (expanded_value)
+		{
+			if (!enqueue_token(queue, expanded_value, data))
+			{
+				free(expanded_value);
+				return ;
+			}
+			current_cmd->argc++;
+			free(expanded_value);
+		}
+	}
+	*tok = (*tok)->next;
+}
+
+static void	process_heredoc_tokens(t_token **tok, t_cmd **current_cmd, t_varenv *varenv)
+{
 	t_data	*data;
 	t_queue	*queue;
 
@@ -46,29 +74,7 @@ static void	process_heredoc_tokens(t_token **tok, t_cmd **current_cmd, t_varenv 
 		return ;
 	}
 	while (*tok && ((*tok)->type == WORD || (*tok)->type == VAR_ENV))
-	{
-		if ((*tok)->type == WORD)
-		{
-			if (!enqueue_token(queue, (*tok)->content, data))
-				return ;
-			(*current_cmd)->argc++;
-		}
-		else if ((*tok)->type == VAR_ENV)
-		{
-			expanded_value = ft_expand((*tok)->content + 1, varenv);
-			if (expanded_value)
-			{
-				if (!enqueue_token(queue, expanded_value, data))
-				{
-					free(expanded_value);
-					return ;
-				}
-				(*current_cmd)->argc++;
-				free(expanded_value);
-			}
-		}
-		*tok = (*tok)->next;
-	}
+		process_single_heredoc_token(tok, queue, *current_cmd, varenv);
 }
 
 static t_redirection	*create_heredoc_redirection(t_cmd **current_cmd, int redir_type)
@@ -112,8 +118,45 @@ void	handle_heredoc(t_token *tok, t_cmd **current_cmd, t_varenv *varenv, int red
 	process_heredoc_tokens(&tok, current_cmd, varenv);
 }
 
+// static void	process_heredoc_tokens(t_token **tok, t_cmd **current_cmd, t_varenv *varenv)//TODO : A virer, car refactor
+// {
+// 	char	*expanded_value;
+// 	t_data	*data;
+// 	t_queue	*queue;
 
-
+// 	data = (*current_cmd)->data;
+// 	queue = init_queue(data);
+// 	if (!queue)
+// 	{
+// 		printf("bash: allocation error\n");
+// 		data->lst_exit = 1;
+// 		return ;
+// 	}
+// 	while (*tok && ((*tok)->type == WORD || (*tok)->type == VAR_ENV))
+// 	{
+// 		if ((*tok)->type == WORD)
+// 		{
+// 			if (!enqueue_token(queue, (*tok)->content, data))
+// 				return ;
+// 			(*current_cmd)->argc++;
+// 		}
+// 		else if ((*tok)->type == VAR_ENV)
+// 		{
+// 			expanded_value = ft_expand((*tok)->content + 1, varenv);
+// 			if (expanded_value)
+// 			{
+// 				if (!enqueue_token(queue, expanded_value, data))
+// 				{
+// 					free(expanded_value);
+// 					return ;
+// 				}
+// 				(*current_cmd)->argc++;
+// 				free(expanded_value);
+// 			}
+// 		}
+// 		*tok = (*tok)->next;
+// 	}
+// } 
 // void	handle_heredoc(t_token *tok, t_cmd **current_cmd, t_varenv *varenv, int redir_type)//TODO : A virer ca refactor
 // {
 // 	t_redirection	*redir;
@@ -143,8 +186,6 @@ void	handle_heredoc(t_token *tok, t_cmd **current_cmd, t_varenv *varenv, int red
 // 		return ;
 // 	process_heredoc_tokens(&tok, current_cmd, varenv);
 // }
-
-
 
 // static void	process_heredoc_tokens(t_token **tok, t_cmd **current_cmd, t_varenv *varenv)
 // {
