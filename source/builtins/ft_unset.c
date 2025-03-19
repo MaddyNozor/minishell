@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 15:02:30 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/19 15:51:42 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 16:31:09 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,23 @@ void        ft_unset_utils(t_varenv *current, t_data *data)
     temp = NULL;
 }
 
+// static bool	ft_remove_var(t_data *data, char *var_name)
+// {
+// 	t_varenv	*current;
+
+// 	current = data->varenv_lst;
+// 	while (current)
+// 	{
+// 		if (ft_strcmp(var_name, current->name) == 0)
+// 		{
+// 			ft_unset_utils(current, data);
+// 			return (true);
+// 		}
+// 		current = current->next;
+// 	}
+// 	return (false);
+// }
+
 static bool	ft_remove_var(t_data *data, char *var_name)
 {
 	t_varenv	*current;
@@ -45,13 +62,16 @@ static bool	ft_remove_var(t_data *data, char *var_name)
 	{
 		if (ft_strcmp(var_name, current->name) == 0)
 		{
+			printf("🔍 Suppression de la variable : %s\n", var_name);
 			ft_unset_utils(current, data);
 			return (true);
 		}
 		current = current->next;
 	}
+	printf("❌ Variable non trouvée : %s\n", var_name);
 	return (false);
 }
+
 int	ft_unset(t_data *data, t_cmd *cmd)
 {
 	int	i;
@@ -64,10 +84,33 @@ int	ft_unset(t_data *data, t_cmd *cmd)
 		ft_remove_var(data, cmd->argv[i]);
 		i++;
 	}
+	// Si PATH est supprimé, tout programme externe devient introuvable
+	if (!get_env_value(data->varenv_lst, "PATH"))
+	{
+		printf("⚠️ Attention : PATH supprimé, les commandes externes ne fonctionneront plus !\n");
+	}
 	data->lst_exit = 0;
 	update_exit_status(data->varenv_lst, data->lst_exit);
 	return (0);
 }
+
+
+// int	ft_unset(t_data *data, t_cmd *cmd)
+// {
+// 	int	i;
+
+// 	if (cmd->argc < 2)
+// 		return (0);
+// 	i = 1;
+// 	while (i < cmd->argc)
+// 	{
+// 		ft_remove_var(data, cmd->argv[i]);
+// 		i++;
+// 	}
+// 	data->lst_exit = 0;
+// 	update_exit_status(data->varenv_lst, data->lst_exit);
+// 	return (0);
+// }
 
 /*
 Si absence d'arg > return

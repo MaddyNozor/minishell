@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/19 16:13:14 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 16:23:58 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,10 +138,9 @@ typedef struct s_varenv_data//ADDED Absolument necessaire pour lst_exit dans les
 //--------------------- FONCTIONS -----------------------------
 
 // SHELL INITIALIZATION
-t_varenv					*init_varenv(char **envp);
+t_varenv	*init_varenv(char **envp, t_data *data);
 void						init_minimalist_env(t_varenv **varenv_lst);
-void						init_existing_env(t_varenv **varenv_lst,
-								char **envp);
+
 void						free_envp_on_error(char **envp, int i);
 char	**convert_env_list_to_array(t_data *data, t_varenv *varenv_lst);
 int							count_env_vars(t_varenv *varenv_lst);

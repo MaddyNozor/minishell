@@ -6,18 +6,45 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 14:00:05 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 13:28:33 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 16:23:01 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
-void	init_existing_env(t_varenv **varenv_lst, char **envp)
+// void	init_existing_env(t_varenv **varenv_lst, char **envp)
+// {
+// 	char			*equal;
+// 	char			*name;
+// 	char			*value;
+// 	int				i;
+// 	t_varenv_data	var_data;
+
+// 	i = 0;
+// 	while (envp[i])
+// 	{
+// 		equal = ft_strchr(envp[i], '=');
+// 		if (equal)
+// 		{
+// 			name = ft_substr(envp[i], 0, equal - envp[i]);
+// 			value = ft_strdup(equal + 1);
+// 			if (name && value)
+// 			{
+// 				var_data = (t_varenv_data){name, value, false};
+// 				create_varenv(NULL, varenv_lst, var_data);
+// 			}
+// 			free(name);
+// 			free(value);
+// 		}
+// 		i++;
+// 	}
+// }
+
+void	init_existing_env(t_varenv **varenv_lst, char **envp, t_data *data)
 {
-	char			*equal;
-	char			*name;
-	char			*value;
-	int				i;
-	t_varenv_data	var_data;
+	char	*equal;
+	char	*name;
+	char	*value;
+	int		i;
 
 	i = 0;
 	while (envp[i])
@@ -28,16 +55,17 @@ void	init_existing_env(t_varenv **varenv_lst, char **envp)
 			name = ft_substr(envp[i], 0, equal - envp[i]);
 			value = ft_strdup(equal + 1);
 			if (name && value)
-			{
-				var_data = (t_varenv_data){name, value, false};
-				create_varenv(NULL, varenv_lst, var_data);
-			}
+			create_varenv(data, varenv_lst, (t_varenv_data){name, value, false});
 			free(name);
 			free(value);
 		}
 		i++;
 	}
+	// S'assurer que PATH est bien dans varenv_lst
+	if (!get_env_value(*varenv_lst, "PATH"))
+		create_varenv(NULL, varenv_lst, (t_varenv_data){"PATH", "/usr/bin:/bin", false});
 }
+
 
 void	init_minimalist_env(t_varenv **varenv_lst)
 {
@@ -57,7 +85,7 @@ void	init_minimalist_env(t_varenv **varenv_lst)
 }
 
 
-t_varenv	*init_varenv(char **envp)
+t_varenv	*init_varenv(char **envp, t_data *data)
 {
 	t_varenv	*varenv_lst;
 
@@ -65,7 +93,7 @@ t_varenv	*init_varenv(char **envp)
 	if (!envp || !*envp)
 		init_minimalist_env(&varenv_lst);
 	else
-		init_existing_env(&varenv_lst, envp);
+		init_existing_env(&varenv_lst, envp, data);
 	// t_varenv *tmp = varenv_lst;//Pour verifier les varenv existantes
 	// 	printf("---- Environnement chargé ----\n");
 	// 	while (tmp)
