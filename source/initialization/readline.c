@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:41:57 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/13 18:03:34 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/20 18:11:23 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,3 +75,6 @@ void ft_start_minishell(t_data *data)
 		}
 	}
 }
+// TODO:
+// else
+// data->lst_exit = FAILURE;

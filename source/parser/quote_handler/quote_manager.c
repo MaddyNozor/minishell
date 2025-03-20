@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/19 18:09:22 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/20 18:33:27 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,11 @@ char	*ft_cut_a_slice(char *content, int *i, t_varenv *lst, bool prev_hd)
 	{
 		quote_type = content[*i];
 		slice = ft_cut_quoted_text(content, i, lst, prev_hd);
-		printf("slice aft cut quoted txt: %s\n", slice);
-		// slice = ft_varenv_manager(slice, lst);
-		// printf("slice after varenv qu : %s\n", slice);
 	}
 	else
 	{
 		slice = ft_cut_normal_text(content, i, quote_type);
-		printf("slice aft cut normal txt: %s\n", slice);
 		slice = ft_varenv_manager(slice, lst);
-		printf("slice after varenv no : %s\n", slice);
 	}
 	if (slice == NULL)
 		return (NULL);
@@ -64,7 +59,7 @@ char	*ft_glue_the_slices_again(t_list *list_slice)
 	t_list	*current;
 
 	if (!list_slice)
-		return NULL;//return (ft_strdup(""));
+		return (NULL);
 	new_content = ft_strdup("");
 	if (!new_content)
 		return (NULL);
@@ -93,9 +88,8 @@ char	*ft_quote_manager(char *actual_content, t_varenv *lst, bool prev_hd)
 	while (actual_content[i])
 	{
 		slice = ft_cut_a_slice(actual_content, &i, lst, prev_hd);
-		printf("slice : %s\n", slice);
-		// if (slice == NULL)
-		// 	return(NULL);
+		if (slice == NULL)
+			return (NULL);
 		ft_stock_the_slice(&stock_list, slice);
 	}
 	new_content = ft_glue_the_slices_again(stock_list);
@@ -121,10 +115,8 @@ t_token	*ft_spot_the_quotes(t_data *data)
 			{
 				if (cur_token->prev && cur_token->prev->type == HEREDOC)
 					prev_is_heredoc = true;
-				// ft_printf("before: %s \n", cur_token->content); //TODO pour test a virer a terme
 				cur_token->content = ft_quote_manager(cur_token->content,
 						data->varenv_lst, prev_is_heredoc);
-				// ft_printf("after: %s \n", cur_token->content);
 			}
 		}
 		cur_token = cur_token->next;

@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/09 16:32:14 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/20 17:44:39 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,11 @@ t_token	*ft_tok_new(void *content, int type)
 {
 	t_token	*new;
 
-	new = (t_token *)malloc(sizeof(t_token) * 1);
+	new = (t_token *)ft_calloc(1, sizeof(t_token));
 	if (new == NULL)
 		return (NULL);
 	new->content = content;
-	new->next = NULL;
-	new->prev = NULL;
 	new->type = type;
-	new->nb_quote = 0;
 	return (new);
 }
 

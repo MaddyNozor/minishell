@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/19 15:36:10 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/20 18:08:54 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ bool	ft_is_whitespace(char c)
 
 int	have_to_close_tok(char c)
 {
-	if (c == '<' || c == '|' || c == '>'// || c == '$'
+	if (c == '<' || c == '|' || c == '>'
 		|| ft_is_whitespace(c) == true)
 		return (true);
 	return (false);

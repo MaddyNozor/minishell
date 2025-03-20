@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/19 14:19:55 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/20 17:41:23 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ typedef struct s_token
 	struct s_token			*prev;
 	int						type;
 	int						nb_quote;
+	bool					quote_added;
 }							t_token;
 
 typedef struct s_data
