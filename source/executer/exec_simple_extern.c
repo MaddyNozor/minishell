@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:09:14 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 11:29:06 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 15:10:50 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ void	handle_child_process(t_cmd *cmd, t_data *data)
 		input_fd = open(cmd->redirection->file_name, O_RDONLY);
 		if (input_fd == -1)
 		{
-			exit_with_error(data, cmd->redirection->file_name,
-					"No such file or directory", 1);
+			update_exit_status(data->varenv_lst, 1);
+			exit(data->lst_exit);
 		}
 		close(input_fd);
 	}
@@ -56,10 +56,10 @@ void	exec_simple_extern_cmd(t_cmd *cmd, t_data *data)
 	pid = fork();
 	if (pid == -1)
 	{
-		printf("bash: fork failed\n");
-			//TODO : Voir ailleurs quel code est utilise
+		// printf("bash: fork failed\n");
+		// 	//TODO : Voir ailleurs quel code est utilise
 		update_exit_status(data->varenv_lst, 1);
-		exit(1);
+		exit(1);//return dans l'ancienne version
 	}
 	if (pid == 0)
 		handle_child_process(cmd, data);

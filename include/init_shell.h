@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/19 17:51:18 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 14:13:31 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,8 +218,9 @@ void						executer(t_data *data);
 // REDIRECTIONS
 void						apply_redirections(t_redirection *redirection, t_data *data);
 void						merge_heredoc_and_input(t_data *data, int heredoc_fd, int input_fd);
-void						handle_input_redirection(t_redirection *redirection, t_data *data,
-									t_redir_state *state);
+// void						handle_input_redirection(t_redirection *redirection,
+// 									t_redir_state *state);
+void	handle_input_redirection(t_redirection *redirection, int *input_fd, t_redirection **last_heredoc, bool *input_redir_found);
 void						handle_output_redirections(t_redirection *redir, t_data *data, int *last_out_fd);
 void						handle_pipe_redirections(t_cmd *cmd, int pipe_in,
 								int pipe_fd[2]);

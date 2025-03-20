@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/19 16:24:45 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/19 19:43:43 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,13 @@ int	main(int ac, char **av, char **envp)
 	//ft_free_all(data);
 	return (0);
 }
+// // A GERER 
+// ➜  minishell git:(verif-exec) ✗ ./minishell             
+// minishell$ echo sara > ins
+// minishell$ cat < ins
+// sara
+// minishell$ echo sss < sjjsjs PLANTE
+// bash: sjjsjs: No such file or directory
 
 // #include "init_shell.h"
 

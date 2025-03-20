@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:04:30 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 13:14:39 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 14:38:18 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	execute_external_cmd(t_cmd *cmd, t_data *data)
 	if (!cmd_path || access(cmd_path, X_OK) == -1)
 	{
 		free(cmd_path);
-		exit_with_error(data, cmd->value, "No such file or directory", 127);
+		exit_with_error(data, cmd->value, "command not found", 127);
 	}
 	env_array = convert_env_list_to_array(data, data->varenv_lst);
 	if (!env_array)
@@ -37,44 +37,82 @@ void	execute_external_cmd(t_cmd *cmd, t_data *data)
 	perror("execve failed");
 	free(cmd_path);
 	free_tab(env_array);
-	exit_with_error(data, cmd->value, "Command execution failed", 127);
+	exit(127);
+	// exit_with_error(data, cmd->value, "Command execution failed", 127);
 }
-
-static void	handle_child_process_pipeline(t_cmd *cmd, t_data *data, int pipe_in,
-		int pipe_fd[2])
+static void	handle_child_process_pipeline(t_cmd *cmd, t_data *data, int pipe_in, int pipe_fd[2])
 {
 	char	*cmd_path;
 
+	// printf("🚀 [DEBUG] handle_child_process_pipeline: %s\n", cmd->value);
+
 	handle_pipe_redirections(cmd, pipe_in, pipe_fd);
 	apply_redirections(cmd->redirection, data);
+
 	if (is_builtin(cmd->value))
 	{
 		execute_builtin(cmd, data);
 		exit(data->lst_exit);
 	}
+
 	cmd_path = find_cmd_path(cmd->value, data->varenv_lst, data);
-	if (!cmd_path || access(cmd_path, X_OK) == -1)
+	if (!cmd_path) // ✅ Corrige la détection de commande invalide
 	{
-		printf("bash: %s: command not found\n", cmd->value);
+		fprintf(stderr, "bash: %s: command not found\n", cmd->value);
 		data->lst_exit = 127;
 		update_exit_status(data->varenv_lst, data->lst_exit);
+		close(pipe_fd[0]);
+		close(pipe_fd[1]);
 		exit(127);
 	}
+
 	execve(cmd_path, cmd->argv, convert_env_list_to_array(data, data->varenv_lst));
 	perror("execve failed");
 	data->lst_exit = 127;
 	update_exit_status(data->varenv_lst, data->lst_exit);
+	close(pipe_fd[0]);
+	close(pipe_fd[1]);
 	exit(127);
 }
 
-static void	handle_parent_process_pipeline_close_pipe(int *pipe_in,
-		int pipe_fd[2])
+
+// static void	handle_parent_process_pipeline_close_pipe(int *pipe_in,
+// 		int pipe_fd[2])
+// {
+// 	if (*pipe_in != 0)
+// 		close(*pipe_in);
+// 	*pipe_in = pipe_fd[0];
+// 	close(pipe_fd[1]);
+// }
+static void	handle_parent_process_pipeline_close_pipe(t_data *data, t_cmd *cmd, pid_t pid, int *pipe_in, int pipe_fd[2])
 {
+	int	status = 0; // ✅ Initialisation pour éviter un comportement indéfini
+
+	// ✅ Attendre le processus enfant
+	waitpid(pid, &status, 0);
+(void)cmd;
+	// ✅ Mettre à jour le statut d'exit en fonction de la sortie du processus
+	if (WIFEXITED(status))
+		data->lst_exit = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		data->lst_exit = 128 + WTERMSIG(status);
+
+	// ✅ Mettre à jour `$?`
+	update_exit_status(data->varenv_lst, data->lst_exit);
+
+	// ✅ Fermer l'ancien pipe d'entrée s'il existe
 	if (*pipe_in != 0)
 		close(*pipe_in);
+
+	// ✅ Rediriger le pipe d'entrée vers la sortie du pipe actuel
 	*pipe_in = pipe_fd[0];
+
+	// ✅ Fermer la sortie du pipe, car elle n'est plus nécessaire dans le parent
 	close(pipe_fd[1]);
 }
+
+
+
 static bool	check_input_existence(t_redirection *redirection, t_data *data)
 {
 	int				input_fd;
@@ -88,7 +126,7 @@ static bool	check_input_existence(t_redirection *redirection, t_data *data)
 			input_fd = open(redir->file_name, O_RDONLY);
 			if (input_fd == -1)
 			{
-				printf("bash: %s: No such file or directory\n",
+				printf("bash: %s: 4 No such file or directory\n",
 						redir->file_name);
 				data->lst_exit = 1;
 				update_exit_status(data->varenv_lst, data->lst_exit);
@@ -165,54 +203,117 @@ static pid_t	create_forked_process(t_data *data)
 		exit_with_error(data, "fork", "Resource temporarily unavailable", 1);
 	return (pid);
 }
-
-
-void	execute_pipeline_command(t_cmd *cmd, t_data *data, int *pipe_in,
-		int pipe_fd[2])
+void	execute_pipeline_command(t_cmd *cmd, t_data *data, int *pipe_in, int pipe_fd[2])
 {
 	pid_t	pid;
-	int		status;
 
-	// printf("Je passe par le execute pipeline command\n");
 	if (!handle_missing_input(cmd, data))
 		return ;
 	create_output_files(cmd->redirection, data);
 	setup_pipe(data, pipe_fd);
+
+	// printf("🛠️ Execution de la commande: %s\n", cmd->value);
+
+	// ✅ Utiliser `create_forked_process()` pour gérer le fork
 	pid = create_forked_process(data);
-	if (pid == 0)
-		handle_child_process_pipeline(cmd, data, *pipe_in, pipe_fd);
-	else
+
+	if (pid == 0) // Processus enfant
 	{
-		if (!cmd->next)
-		{
-			waitpid(pid, &status, 0);
-			while (wait(NULL) > 0)
-				;
-			if (WIFEXITED(status))
-				data->lst_exit = WEXITSTATUS(status);
-			else if (WIFSIGNALED(status))
-				data->lst_exit = 128 + WTERMSIG(status);
-			update_exit_status(data->varenv_lst, data->lst_exit);
-		}
-		handle_parent_process_pipeline_close_pipe(pipe_in, pipe_fd);
+		handle_child_process_pipeline(cmd, data, *pipe_in, pipe_fd);
+	}
+	else // Processus parent
+	{
+		cmd->pid = pid;
+		// ✅ Passer `cmd` en argument pour vérifier `cmd->next`
+		handle_parent_process_pipeline_close_pipe(data, cmd, pid, pipe_in, pipe_fd);
 	}
 }
 
+
+// void	execute_pipeline_command(t_cmd *cmd, t_data *data, int *pipe_in,
+// 		int pipe_fd[2])
+// {
+// 	pid_t	pid;
+// 	int		status;
+
+// 	// printf("Je passe par le execute pipeline command\n");
+// 	if (!handle_missing_input(cmd, data))
+// 		return ;
+// 	create_output_files(cmd->redirection, data);
+// 	setup_pipe(data, pipe_fd);
+	
+// 	printf("🛠️ Execution de la commande: %s\n", cmd->value);
+
+// 	pid = create_forked_process(data);
+// 	if (pid == 0)
+// 		handle_child_process_pipeline(cmd, data, *pipe_in, pipe_fd);
+// 	else
+// 	{
+// 		if (!cmd->next)
+// 		{
+// 			waitpid(pid, &status, 0);
+// 			while (wait(NULL) > 0)
+// 				;
+// 			if (WIFEXITED(status))
+// 				data->lst_exit = WEXITSTATUS(status);
+// 			else if (WIFSIGNALED(status))
+// 				data->lst_exit = 128 + WTERMSIG(status);
+// 			update_exit_status(data->varenv_lst, data->lst_exit);
+// 		}
+// 		handle_parent_process_pipeline_close_pipe(pipe_in, pipe_fd);
+// 	}
+// }
+
+
+
+
+
+// void	executer_pipeline_cmd(t_cmd *cmd_lst, t_data *data)
+// {
+// 	int pipe_fd[2];
+// 	int pipe_in;
+// 	t_cmd *current_cmd;
+// 	int cmd_index;
+// 	char *last_heredoc_files[256];
+
+// 	handle_heredocs_pipeline(data, cmd_lst);
+// 	create_heredoc_list(cmd_lst, last_heredoc_files);
+// 	pipe_in = 0;
+// 	current_cmd = cmd_lst;
+// 	cmd_index = 0;
+// 	if (!get_env_value(data->varenv_lst, "PATH"))
+// 		printf("🚨 ERREUR: La variable PATH est NULL dans executer_pipeline_cmd() !!\n");// TODO : À remplacer
+// 	while (current_cmd)
+// 	{
+// 		handle_heredoc_input(data, last_heredoc_files[cmd_index]);
+// 		execute_pipeline_command(current_cmd, data, &pipe_in, pipe_fd);
+// 		current_cmd = current_cmd->next;
+// 		cmd_index++;
+// 	}
+// 	if (cmd_lst->pid != 0)
+// 		data->lst_exit = cmd_lst->pid;
+// 	update_exit_status(data->varenv_lst, data->lst_exit);
+// 	cleanup_pipeline(data, cmd_lst);
+// }
 void	executer_pipeline_cmd(t_cmd *cmd_lst, t_data *data)
 {
-	int pipe_fd[2];
-	int pipe_in;
-	t_cmd *current_cmd;
-	int cmd_index;
-	char *last_heredoc_files[256];
+	int		pipe_fd[2];
+	int		pipe_in;
+	t_cmd	*current_cmd;
+	int		cmd_index;
+	char	*last_heredoc_files[256];
 
 	handle_heredocs_pipeline(data, cmd_lst);
 	create_heredoc_list(cmd_lst, last_heredoc_files);
 	pipe_in = 0;
 	current_cmd = cmd_lst;
 	cmd_index = 0;
+
+	// ✅ Vérifie la variable PATH avant l'exécution
 	if (!get_env_value(data->varenv_lst, "PATH"))
-		printf("🚨 ERREUR: La variable PATH est NULL dans executer_pipeline_cmd() !!\n");// TODO : À remplacer
+		printf("🚨 ERREUR: La variable PATH est NULL dans executer_pipeline_cmd() !!\n");
+
+	// ✅ Exécute toutes les commandes du pipeline
 	while (current_cmd)
 	{
 		handle_heredoc_input(data, last_heredoc_files[cmd_index]);
@@ -220,8 +321,28 @@ void	executer_pipeline_cmd(t_cmd *cmd_lst, t_data *data)
 		current_cmd = current_cmd->next;
 		cmd_index++;
 	}
-	if (cmd_lst->pid != 0)
-		data->lst_exit = cmd_lst->pid;
-	update_exit_status(data->varenv_lst, data->lst_exit);
+
+	// ✅ ATTENDRE CHAQUE PROCESSUS APRÈS L'EXÉCUTION
+	t_cmd *tmp = cmd_lst;
+	int status;
+	while (tmp)
+	{
+		if (tmp->pid > 0)
+		{
+			waitpid(tmp->pid, &status, 0);
+
+			// 🔥 Vérifie le statut de sortie
+			if (WIFEXITED(status))
+				data->lst_exit = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				data->lst_exit = 128 + WTERMSIG(status);
+
+			// 🔥 Met à jour `$?` avec le dernier statut
+			update_exit_status(data->varenv_lst, data->lst_exit);
+		}
+		tmp = tmp->next;
+	}
+
+	// ✅ Nettoyage après exécution
 	cleanup_pipeline(data, cmd_lst);
 }

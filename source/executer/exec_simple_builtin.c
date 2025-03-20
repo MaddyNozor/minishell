@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 15:44:00 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 16:52:39 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 11:45:46 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,8 @@ void	exec_simple_builtin_dir(t_cmd *cmd, t_data *data)
 	saved_stdout = dup(STDOUT_FILENO);
 	apply_redirections(cmd->redirection, data);
 	input_fd = open(cmd->redirection->file_name, O_RDONLY);
-	if (input_fd == -1)
-	{
-		printf("bash: %s: No such file or directory\n", cmd->redirection->file_name);
-		data->lst_exit = 1;
-		update_exit_status(data->varenv_lst, data->lst_exit);
+	if (input_fd == -1)// data->lst_exit = 1; update_exit_status(data->varenv_lst, data->lst_exit); vires car redondant
 		return;
-	}
 	execute_builtin(cmd, data);
 	dup2(saved_stdin, STDIN_FILENO);
 	dup2(saved_stdout, STDOUT_FILENO);

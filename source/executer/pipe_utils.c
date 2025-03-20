@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:04:28 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 11:42:11 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 11:29:41 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	setup_pipe(t_data *data, int pipe_fd[2])
 {
 	if (pipe(pipe_fd) == -1)
 	{
+		printf("Exit ici 6\n");
 		exit_with_error(data, "pipe", strerror(errno), 1);
 		return;
 	}

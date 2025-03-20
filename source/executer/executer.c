@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:38:39 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 15:43:43 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 11:45:39 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,8 @@ void	executer_simple_cmd(t_cmd *cmd, t_data *data)
     }
     if (is_builtin(cmd->value))
     {
-	// 	printf("On va utiliser un builtin\n");
         exec_simple_builtin(cmd, data);
-        update_exit_status(data->varenv_lst, data->lst_exit);
+        // update_exit_status(data->varenv_lst, data->lst_exit);
     }
     else
         exec_simple_extern_cmd(cmd, data);

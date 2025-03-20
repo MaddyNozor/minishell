@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 13:46:25 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 10:58:27 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 15:27:07 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,51 +36,86 @@ void	handle_output_redirections(t_redirection *redir, t_data *data, int *last_ou
 			*last_out_fd = open_output_file(curr);
 			if (*last_out_fd == -1)
 			{
-				exit_with_error(data, curr->file_name, strerror(errno), 1);
+				perror("ERREUR : Impossible d'ouvrir le fichier de sortie");
+				update_exit_status(data->varenv_lst, 1);
 				return;
+				// exit_with_error(data, curr->file_name, strerror(errno), 1);
+				// return;
 			}
 			if (dup2(*last_out_fd, STDOUT_FILENO) == -1)
 			{
-				exit_with_error(data, "dup2", strerror(errno), 1);
-				return;
+				perror("ERREUR : dup2 vers STDOUT a échoué");
+				update_exit_status(data->varenv_lst, 1);
+				// exit_with_error(data, "dup2", strerror(errno), 1);
+				// return;
 			}
 			close(*last_out_fd);
 		}
 		curr = curr->next;
 	}
 }
-
-void	handle_input_redirection(t_redirection *redirection, t_data *data,
-	t_redir_state *state)
+void	handle_input_redirection(t_redirection *redirection, int *input_fd, t_redirection **last_heredoc, bool *input_redir_found)
 {
 	t_redirection	*current;
-	int				input_fd;
 
 	current = redirection;
 	while (current)
 	{
 		if (current->type == REDIRECT_IN)
 		{
-			input_fd = open(current->file_name, O_RDONLY);
-			if (input_fd == -1)
+			*input_fd = open(current->file_name, O_RDONLY);
+			if (*input_fd == -1)
 			{
-				exit_with_error(data, current->file_name, "No such file or directory", 1);
-				state->input_redir_found = false;
-				return;
+				close(STDIN_FILENO);
+				*input_redir_found = false;
+				return ;
 			}
-			dup2(input_fd, STDIN_FILENO);
-			close(input_fd);
-			state->input_fd = input_fd;
-			state->input_redir_found = true;
+			dup2(*input_fd, STDIN_FILENO);
+			close(*input_fd);
+			*input_redir_found = true;
 		}
 		else if (current->type == HEREDOC)
 		{
-			state->last_heredoc = current;
-			state->input_redir_found = true;
+			*last_heredoc = current;
+			*input_redir_found = true;
 		}
 		current = current->next;
 	}
 }
+
+// void	handle_input_redirection(t_redirection *redirection,
+// 	t_redir_state *state)
+// {
+// 	t_redirection	*current;
+// 	int				input_fd;
+
+// 	current = redirection;
+// 	while (current)
+// 	{
+// 		if (current->type == REDIRECT_IN)
+// 		{
+// 			input_fd = open(current->file_name, O_RDONLY);
+// 			if (input_fd == -1)
+// 			{
+// 				// update_exit_status(data->varenv_lst, 1);
+// 				// close(STDIN_FILENO);
+// 				// state->input_redir_found = false;// vires car redondant
+// 				return ;
+// 			}
+// 			dup2(input_fd, STDIN_FILENO);
+// 			close(input_fd);
+// 			state->input_fd = input_fd;//pas dans lancienne version
+// 			state->input_redir_found = true;
+// 		}
+// 		else if (current->type == HEREDOC)
+// 		{
+// 			state->last_heredoc = current;
+// 			state->input_redir_found = true;
+// 		}
+// 		current = current->next;
+// 	}
+// }
+
 
 void	handle_pipe_redirections(t_cmd *cmd, int pipe_in, int pipe_fd[2])
 {
