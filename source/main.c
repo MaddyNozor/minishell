@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/20 16:04:39 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:23:01 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	main(int ac, char **av, char **envp)
 	//ft_free_all(data);
 	return (0);
 }
+
 // // A GERER 
 // ➜  minishell git:(verif-exec) ✗ ./minishell             
 // minishell$ echo sara > ins

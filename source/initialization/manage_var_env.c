@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:37:21 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 11:34:35 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:24:01 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ char	*create_env_entry(t_data *data, t_varenv *varenv_lst)
 	}
 	return (entry);
 }
+
 static bool	alloc_env_entry(t_data *data, char **envp, t_varenv *varenv, int i)
 {
 	envp[i] = create_env_entry(data, varenv);
@@ -80,7 +81,6 @@ char	**convert_env_list_to_array(t_data *data, t_varenv *varenv_lst)
 	return (envp);
 }
 
-
 void	append_varenv_node(t_varenv **varenv_lst, t_varenv *new_node)
 {
 	t_varenv	*current_node;
@@ -97,7 +97,6 @@ void	append_varenv_node(t_varenv **varenv_lst, t_varenv *new_node)
 void	create_varenv(t_data *data, t_varenv **varenv_lst, t_varenv_data var_data)
 {
 	t_varenv	*new_node;
-	// printf("🛠️ Création de la variable : %s=%s\n", var_data.name, var_data.value);
 
 	new_node = malloc(sizeof(t_varenv));
 	if (!new_node)

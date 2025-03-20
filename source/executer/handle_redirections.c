@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 13:46:25 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 15:27:07 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:20:11 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,22 +39,19 @@ void	handle_output_redirections(t_redirection *redir, t_data *data, int *last_ou
 				perror("ERREUR : Impossible d'ouvrir le fichier de sortie");
 				update_exit_status(data->varenv_lst, 1);
 				return;
-				// exit_with_error(data, curr->file_name, strerror(errno), 1);
-				// return;
 			}
 			if (dup2(*last_out_fd, STDOUT_FILENO) == -1)
 			{
 				perror("ERREUR : dup2 vers STDOUT a échoué");
 				update_exit_status(data->varenv_lst, 1);
-				// exit_with_error(data, "dup2", strerror(errno), 1);
-				// return;
 			}
 			close(*last_out_fd);
 		}
 		curr = curr->next;
 	}
 }
-void	handle_input_redirection(t_redirection *redirection, int *input_fd, t_redirection **last_heredoc, bool *input_redir_found)
+
+void	handle_input_redirection(t_redirection *redirection, int *in_fd, t_redirection **lst_hered, bool *in_redir)
 {
 	t_redirection	*current;
 
@@ -63,59 +60,25 @@ void	handle_input_redirection(t_redirection *redirection, int *input_fd, t_redir
 	{
 		if (current->type == REDIRECT_IN)
 		{
-			*input_fd = open(current->file_name, O_RDONLY);
-			if (*input_fd == -1)
+			*in_fd = open(current->file_name, O_RDONLY);
+			if (*in_fd == -1)
 			{
 				close(STDIN_FILENO);
-				*input_redir_found = false;
+				*in_redir = false;
 				return ;
 			}
-			dup2(*input_fd, STDIN_FILENO);
-			close(*input_fd);
-			*input_redir_found = true;
+			dup2(*in_fd, STDIN_FILENO);
+			close(*in_fd);
+			*in_redir = true;
 		}
 		else if (current->type == HEREDOC)
 		{
-			*last_heredoc = current;
-			*input_redir_found = true;
+			*lst_hered = current;
+			*in_redir = true;
 		}
 		current = current->next;
 	}
 }
-
-// void	handle_input_redirection(t_redirection *redirection,
-// 	t_redir_state *state)
-// {
-// 	t_redirection	*current;
-// 	int				input_fd;
-
-// 	current = redirection;
-// 	while (current)
-// 	{
-// 		if (current->type == REDIRECT_IN)
-// 		{
-// 			input_fd = open(current->file_name, O_RDONLY);
-// 			if (input_fd == -1)
-// 			{
-// 				// update_exit_status(data->varenv_lst, 1);
-// 				// close(STDIN_FILENO);
-// 				// state->input_redir_found = false;// vires car redondant
-// 				return ;
-// 			}
-// 			dup2(input_fd, STDIN_FILENO);
-// 			close(input_fd);
-// 			state->input_fd = input_fd;//pas dans lancienne version
-// 			state->input_redir_found = true;
-// 		}
-// 		else if (current->type == HEREDOC)
-// 		{
-// 			state->last_heredoc = current;
-// 			state->input_redir_found = true;
-// 		}
-// 		current = current->next;
-// 	}
-// }
-
 
 void	handle_pipe_redirections(t_cmd *cmd, int pipe_in, int pipe_fd[2])
 {
@@ -133,67 +96,3 @@ void	handle_pipe_redirections(t_cmd *cmd, int pipe_in, int pipe_fd[2])
 	}
 	close(pipe_fd[0]);
 }
-
-// void	handle_input_redirection(t_redirection *redirection, int *input_fd,
-// 	t_redirection **last_heredoc, bool *input_redir_found)// avant ajout lst_exit
-// {
-// t_redirection	*current;
-
-// current = redirection;
-// while (current)
-// {
-// 	if (current->type == REDIRECT_IN)
-// 	{
-// 		*input_fd = open(current->file_name, O_RDONLY);
-// 		if (*input_fd == -1)
-// 		{
-// 			fprintf(stderr, "bash: %s: No such file or directory\n", current->file_name);
-// 			close(STDIN_FILENO);
-// 			*input_redir_found = false;
-// 			return;
-			
-// 		}
-// 		dup2(*input_fd, STDIN_FILENO);
-// 		close(*input_fd);
-// 		*input_redir_found = true;
-// 	}
-// 	else if (current->type == HEREDOC)
-// 	{
-// 		*last_heredoc = current;
-// 		*input_redir_found = true;
-// 	}
-// 	current = current->next;
-// }
-// }
-
-// void	handle_output_redirections(t_redirection *redir, int *last_out_fd)//TODO : A virer a la fin (ajout de lst_exit)
-// {
-// 	t_redirection	*curr;
-// 	int				flags;
-
-// 	curr = redir;
-// 	while (curr)
-// 	{
-// 		if (curr->type == REDIRECT_OUT || curr->type == APPEND_OUT)
-// 		{
-// 			if (*last_out_fd != -1)
-// 				close(*last_out_fd);
-// 			flags = O_WRONLY | O_CREAT;
-// 			if (curr->type == REDIRECT_OUT)
-// 				*last_out_fd = open(curr->file_name, flags | O_TRUNC, 0644);
-// 			else if (curr->type == APPEND_OUT)
-// 				*last_out_fd = open(curr->file_name, flags | O_APPEND, 0644);
-// 			if (*last_out_fd == -1)
-// 			{
-// 				perror("ERREUR : Impossible d'ouvrir le fichier de sortie");
-// 				return ;
-// 			}
-// 			// printf("✅ Redirection STDOUT -> %s, FD = %d\n", curr->file_name, *last_out_fd);
-// 			// 🔥 Redirection vers STDOUT
-// 			if (dup2(*last_out_fd, STDOUT_FILENO) == -1)
-// 				perror("ERREUR : dup2 vers STDOUT a échoué");
-// 			close(*last_out_fd);
-// 		}
-// 		curr = curr->next;
-// 	}
-// }

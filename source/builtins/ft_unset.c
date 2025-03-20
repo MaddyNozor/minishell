@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 15:02:30 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/19 16:56:18 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:38:09 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static bool	ft_remove_var(t_data *data, char *var_name)
 	}
 	return (false);
 }
-int	ft_unset(t_data *data, t_cmd *cmd)
+int	ft_unset(t_data *data, t_cmd *cmd)//TODO : unset PATH
 {
 	int		i;
 	int		removed;

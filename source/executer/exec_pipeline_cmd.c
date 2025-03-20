@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:04:30 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 15:59:02 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:22:24 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void	handle_child_process_pipeline(t_cmd *cmd, t_data *data, int pipe_in,
 		exit(data->lst_exit);
 	}
 	cmd_path = find_cmd_path(cmd->value, data->varenv_lst, data);
-	if (!cmd_path) // ✅ Corrige la détection de commande invalide
+	if (!cmd_path)
 	{
 		fprintf(stderr, "bash: %s: command not found\n", cmd->value);
 		data->lst_exit = 127;
@@ -73,36 +73,6 @@ static void	handle_child_process_pipeline(t_cmd *cmd, t_data *data, int pipe_in,
 	close_pipe_fds(pipe_fd);
 	exit(127);
 }
-
-
-// static void	handle_parent_process_pipeline_close_pipe(t_data *data, t_cmd *cmd, pid_t pid, int *pipe_in, int pipe_fd[2])
-// {
-// 	int	status = 0; // ✅ Initialisation pour éviter un comportement indéfini
-
-// 	// ✅ Attendre le processus enfant
-// c
-// (void)cmd;
-// 	// ✅ Mettre à jour le statut d'exit en fonction de la sortie du processus
-// 	if (WIFEXITED(status))
-// 		data->lst_exit = WEXITSTATUS(status);
-// 	else if (WIFSIGNALED(status))
-// 		data->lst_exit = 128 + WTERMSIG(status);
-
-// 	// ✅ Mettre à jour `$?`
-// 	update_exit_status(data->varenv_lst, data->lst_exit);
-
-// 	// ✅ Fermer l'ancien pipe d'entrée s'il existe
-// 	if (*pipe_in != 0)
-// 		close(*pipe_in);
-
-// 	// ✅ Rediriger le pipe d'entrée vers la sortie du pipe actuel
-// 	*pipe_in = pipe_fd[0];
-
-// 	// ✅ Fermer la sortie du pipe, car elle n'est plus nécessaire dans le parent
-// 	close(pipe_fd[1]);
-// }
-
-
 
 static void	handle_parent_process_pipeline_close_pipe(pid_t pid, int *pipe_in, int pipe_fd[2])
 {
@@ -126,7 +96,7 @@ static bool	check_input_existence(t_redirection *redirection, t_data *data)
 			input_fd = open(redir->file_name, O_RDONLY);
 			if (input_fd == -1)
 			{
-				printf("bash: %s: 4 No such file or directory\n",
+				printf("bash: %s: No such file or directory\n",
 						redir->file_name);
 				data->lst_exit = 1;
 				update_exit_status(data->varenv_lst, data->lst_exit);
@@ -161,8 +131,6 @@ static void	create_output_files(t_redirection *redirection, t_data *data)
 	}
 }
 
-
-
 static bool	handle_missing_input(t_cmd *cmd, t_data *data)
 {
 	int	devnull_fd;
@@ -176,6 +144,7 @@ static bool	handle_missing_input(t_cmd *cmd, t_data *data)
 	}
 	return (true);
 }
+
 static pid_t	create_forked_process(t_data *data)
 {
 	pid_t	pid;
@@ -185,6 +154,7 @@ static pid_t	create_forked_process(t_data *data)
 		exit_with_error(data, "fork", "Resource temporarily unavailable", 1);
 	return (pid);
 }
+
 void	execute_pipeline_command(t_cmd *cmd, t_data *data, int *pipe_in, int pipe_fd[2])
 {
 	pid_t	pid;
@@ -205,6 +175,27 @@ void	execute_pipeline_command(t_cmd *cmd, t_data *data, int *pipe_in, int pipe_f
 	}
 }
 
+static void	wait_for_pipeline_processes(t_cmd *cmd_lst, t_data *data)
+{
+	t_cmd	*tmp;
+	int		status;
+
+	tmp = cmd_lst;
+	while (tmp)
+	{
+		if (tmp->pid > 0)
+		{
+			waitpid(tmp->pid, &status, 0);
+			if (WIFEXITED(status))
+				data->lst_exit = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				data->lst_exit = 128 + WTERMSIG(status);
+			update_exit_status(data->varenv_lst, data->lst_exit);
+		}
+		tmp = tmp->next;
+	}
+}
+
 void	executer_pipeline_cmd(t_cmd *cmd_lst, t_data *data)
 {
 	int		pipe_fd[2];
@@ -218,12 +209,8 @@ void	executer_pipeline_cmd(t_cmd *cmd_lst, t_data *data)
 	pipe_in = 0;
 	current_cmd = cmd_lst;
 	cmd_index = 0;
-
-	// ✅ Vérifie la variable PATH avant l'exécution
 	if (!get_env_value(data->varenv_lst, "PATH"))
 		printf("🚨 ERREUR: La variable PATH est NULL dans executer_pipeline_cmd() !!\n");
-
-	// ✅ Exécute toutes les commandes du pipeline
 	while (current_cmd)
 	{
 		handle_heredoc_input(data, last_heredoc_files[cmd_index]);
@@ -231,24 +218,6 @@ void	executer_pipeline_cmd(t_cmd *cmd_lst, t_data *data)
 		current_cmd = current_cmd->next;
 		cmd_index++;
 	}
-	t_cmd *tmp = cmd_lst;
-	int status;
-	while (tmp)
-	{
-		if (tmp->pid > 0)
-		{
-			waitpid(tmp->pid, &status, 0);
-
-			// 🔥 Vérifie le statut de sortie
-			if (WIFEXITED(status))
-				data->lst_exit = WEXITSTATUS(status);
-			else if (WIFSIGNALED(status))
-				data->lst_exit = 128 + WTERMSIG(status);
-
-			// 🔥 Met à jour `$?` avec le dernier statut
-			update_exit_status(data->varenv_lst, data->lst_exit);
-		}
-		tmp = tmp->next;
-	}
+	wait_for_pipeline_processes(cmd_lst, data);
 	cleanup_pipeline(data, cmd_lst);
 }

@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 15:44:00 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 11:45:46 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:18:38 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ void	exec_simple_builtin_dir(t_cmd *cmd, t_data *data)
 	close(saved_stdin);
 	close(saved_stdout);
 }
-
 
 void	exec_simple_builtin_heredoc(t_cmd *cmd, t_data *data)
 {

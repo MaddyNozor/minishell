@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:38:39 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 15:51:51 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:18:49 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ void	executer_simple_cmd(t_cmd *cmd, t_data *data)
     else
         exec_simple_extern_cmd(cmd, data);
 }
-
 
 void	executer(t_data *data)
 {

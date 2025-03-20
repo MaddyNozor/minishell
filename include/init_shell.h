@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/20 14:13:31 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:32:14 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -322,5 +322,6 @@ void	handle_heredoc_and_input(t_data *data, int heredoc_fd, int input_fd);
 char	*get_exit_status(t_varenv *varenv);
 void update_exit_status(t_varenv *varenv, int exit_status);
 void	exit_with_error(t_data *data, char *context, char *error_message, int exit_code);
+void	exit_with_error_readline(t_data *data, char *context, char *error_message, int exit_code);
 bool	update_env_var(t_varenv *varenv, char *key, char *value);
 #endif

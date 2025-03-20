@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:24:45 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 11:31:05 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:21:02 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	handle_heredocs_pipeline(t_data *data, t_cmd *cmd_lst)
 		{
 			if (redir->type == HEREDOC)
 			{
-				create_heredoc_file(data, redir, heredoc_index); // Correction ici
+				create_heredoc_file(data, redir, heredoc_index);
 				heredoc_index++;
 			}
 			redir = redir->next;
@@ -54,7 +54,6 @@ void	create_and_fill_heredocs(t_data *data, t_redirection *redirection)
 	}
 }
 
-
 static void	read_and_write_heredoc(int heredoc_fd, int pipe_fd[2])
 {
 	char	buffer[1024];
@@ -67,6 +66,7 @@ static void	read_and_write_heredoc(int heredoc_fd, int pipe_fd[2])
 		bytes_read = read(heredoc_fd, buffer, sizeof(buffer));
 	}
 }
+
 static void	transfer_heredocs_to_pipe(t_data *data, t_redirection *redirection, int pipe_fd[2])
 {
 	t_redirection	*current;
@@ -110,19 +110,3 @@ void	handle_heredocs_simple_cmd(t_data *data, t_redirection *redirection)
 	}
 	close(pipe_fd[0]);
 }
-
-// void	handle_heredocs_simple_cmd(t_redirection *redirection)// TODO : A virer a la fin (ajout de lst_exit)
-// {
-// 	int	pipe_fd[2];
-	
-// 	if (pipe(pipe_fd) == -1)
-// 	{
-// 		perror("Erreur lors de la création du pipe");
-// 		exit(1);
-// 	}
-// 	create_and_fill_heredocs(redirection);
-// 	transfer_heredocs_to_pipe(redirection, pipe_fd);
-// 	close(pipe_fd[1]);
-// 	dup2(pipe_fd[0], STDIN_FILENO);
-// 	close(pipe_fd[0]);
-// }

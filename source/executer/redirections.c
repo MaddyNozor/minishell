@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 16:10:03 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 14:19:29 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:22:26 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static void	process_redirections(t_redirection *redirection,
 			if (state->input_fd == -1)
 			{
 				handle_input_error(redirection, &state->output_created);
-				printf("bash: %s: 6 No such file or directory\n", current->file_name);
+				printf("bash: %s: No such file or directory\n", current->file_name);
 				update_exit_status(data->varenv_lst, 1);
 				state->input_fd = -1;
 				state->output_created = false;
@@ -103,55 +103,3 @@ void	apply_redirections(t_redirection *redirection, t_data *data)
 		return ;
 	handle_output_redirections(redirection, data, &state.last_output_fd);
 }
-
-// void	apply_redirections(t_redirection *redirection, t_data *data)//TODO : A virer a la fin (Maj appel handle_ouput et handle_input_redirection)
-// {
-// 	t_redir_state	state;
-// 	t_redirection	*fake;
-// 	int				heredoc_fd;
-
-// 	state.last_output_fd = -1;
-// 	state.input_fd = -1;
-// 	state.last_heredoc = NULL;
-// 	state.input_redir_found = true;
-// 	state.output_created = false;
-// 	process_redirections(redirection, &state, data);
-// 	handle_input_redirection(redirection, &state.input_fd, &fake,
-// 			&state.input_redir_found);
-// 	heredoc_fd = -1;
-// 	if (state.last_heredoc)
-// 		heredoc_fd = open(state.last_heredoc->file_name, O_RDONLY);
-// 	handle_heredoc_and_input(heredoc_fd, state.input_fd);
-// 	if (state.last_heredoc)
-// 		handle_heredoc_redirection(data, state.last_heredoc, &state.input_fd);
-// 	if (!state.input_redir_found)
-// 		return ;
-// 	handle_output_redirections(redirection, &state.last_output_fd);
-// }
-
-// static void	process_redirections(t_redirection *redirection,
-// 									t_redir_state *state,
-// 									t_data *data)
-// {
-// 	t_redirection	*current;
-
-// 	current = redirection;
-// 	while (current)
-// 	{
-// 		if (current->type == REDIRECT_IN)
-// 		{
-// 			state->last_heredoc = NULL;
-// 			state->input_fd = open(current->file_name, O_RDONLY);
-// 			if (state->input_fd == -1)
-// 			{
-// 				handle_input_error(redirection, &state->output_created);
-// 				exit_with_error(data, current->file_name,
-// 						"No such file or directory", 1);
-// 			}
-// 			close(state->input_fd);
-// 		}
-// 		else if (current->type == HEREDOC)
-// 			state->last_heredoc = current;
-// 		current = current->next;
-// 	}
-// }

@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 13:54:50 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 12:01:05 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:21:24 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,79 +93,3 @@ bool	contains_heredoc(t_redirection *redirection)
 	}
 	return (false);
 }
-
-
-// void	create_heredoc_file(t_redirection *redir, int index)
-// {
-// 	char	heredoc_filename[20];
-// 	int		fd;
-// 	char	*delimiter;
-
-// 	generate_heredoc_filename(heredoc_filename, index);
-// 	delimiter = strdup(redir->file_name);
-// 	if (!delimiter)
-// 	{
-// 		perror("Erreur malloc");
-// 		exit(1);
-// 	}
-// 	open_heredoc_file(redir, heredoc_filename);
-// 	fd = open(redir->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-// 	if (fd == -1)
-// 	{
-// 		perror("Erreur ouverture heredoc");
-// 		exit(1);
-// 	}
-// 	// fprintf(stderr,
-// 	// 	"🛠️ Debug : Remplissage du heredoc `%s` (Délimiteur attendu : `%s`)\n",
-// 	// 	redir->file_name, delimiter);
-// 	process_heredoc_input(fd, delimiter);
-// 	close(fd);
-// 	free(delimiter);
-// }
-
-// void	create_heredoc_file(t_redirection *redir, int index)//TODO : A virer a la fin (ajout de lst_exit)
-// {
-//     char    heredoc_filename[20];
-//     int     fd;
-//     char    *delimiter;
-
-//     generate_heredoc_filename(heredoc_filename, index);
-//     delimiter = strdup(redir->file_name);
-//     if (!delimiter)
-//     {
-//         perror("Erreur malloc");
-//         exit(1);
-//     }
-//     open_heredoc_file(redir, heredoc_filename);
-//     fd = open(redir->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-//     if (fd == -1)
-//     {
-//         perror("Erreur ouverture heredoc");
-//         exit(1);
-//     }
-//     process_heredoc_input(fd, delimiter);
-//     close(fd);
-//     free(delimiter);
-// }
-
-// void	unlink_heredoc_temp(t_redirection *redirection)//TODO : A virer a la fin (ajout de lst_exit)
-// {
-// 	t_redirection	*current;
-
-// 	current = redirection;
-// 	while (current)
-// 	{
-// 		if (current->type == HEREDOC)
-// 		{
-// 			if (unlink(current->file_name) == -1)
-// 			{
-// 				perror("unlink");
-// 			}
-// 			// else
-// 			// {
-// 			// 	printf("✅ Heredoc %s supprimé\n", current->file_name);
-// 			// }
-// 		}
-// 		current = current->next;
-// 	}
-// }
