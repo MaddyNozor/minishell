@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:38:18 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 16:22:21 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 17:03:17 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ int	ft_env(t_data *data, t_cmd *cmd)
 	update_exit_status(data->varenv_lst, data->lst_exit);
 	return (0);
 }
-
 
 //TODO = quid en cqs de vqleur sqns = comme ceux qu'on peut creer avec export ?
 //TODO es-ce qu'il faut pas ajouter env: devant chaque variable ?

@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 12:24:58 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/18 15:21:20 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 17:03:23 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	ft_exit(t_cmd *cmd, t_data *data)
 		printf("bash: exit: too many arguments\n");
 		data->lst_exit = 1;
 		update_exit_status(data->varenv_lst, 1);
-		return;
+		return ;
 	}
 	exit_code = data->lst_exit;
 	if (cmd->argv[1])
@@ -53,4 +53,3 @@ void	ft_exit(t_cmd *cmd, t_data *data)
 	free_varenv(data->varenv_lst);
 	exit(exit_code);
 }
-

@@ -6,47 +6,46 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 15:39:51 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 16:47:19 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 17:03:36 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
 
-void        ft_print_list_export(t_data *data)
+void	ft_print_list_export(t_data *data)
 {
-    t_varenv    *current;
+	t_varenv	*current;
 
-    current = data->varenv_lst;
-    while (current)
-    {
-        if (current->name)
-        {
-            printf("export %s", current->name); 
-            if (current->value)
-                printf("=\"%s\"", current->value);
-            printf("\n");
-        }
-        current = current->next;
-    }
-	data->lst_exit = 0;  // Assurer que `export` sans argument retourne toujours 0 ✅
+	current = data->varenv_lst;
+	while (current)
+	{
+		if (current->name)
+		{
+			printf("export %s", current->name);
+			if (current->value)
+				printf("=\"%s\"", current->value);
+			printf("\n");
+		}
+		current = current->next;
+	}
+	data->lst_exit = 0;
 	update_exit_status(data->varenv_lst, data->lst_exit);
 }
 
-int    found_sign_equal_in_word(char *str)
+int	found_sign_equal_in_word(char *str)
 {
-    int i;
-    
-    i = 0;
-    while (str[i])
-    {
-        if (str[i] == '=')
-        {
-            // printf("%d\n", i);
-            return (i);
-        }
-        i++;
-    }
-    return (-1);   
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '=')
+		{
+			return (i);
+		}
+		i++;
+	}
+	return (-1);
 }
 
 bool	extract_name_value(char *arg, char **name, char **value)
@@ -56,7 +55,6 @@ bool	extract_name_value(char *arg, char **name, char **value)
 	*name = NULL;
 	*value = NULL;
 	split_pos = found_sign_equal_in_word(arg);
-
 	if (split_pos >= 0)
 	{
 		*name = ft_substr(arg, 0, split_pos);

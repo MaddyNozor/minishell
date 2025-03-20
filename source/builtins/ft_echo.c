@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:46:35 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 16:12:48 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 17:03:09 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	ft_echo(t_cmd *cmd, t_data *data)
 {
-	int		i;
-	int		newline;
+	int	i;
+	int	newline;
 
 	i = 1;
 	newline = 1;
@@ -33,7 +33,7 @@ int	ft_echo(t_cmd *cmd, t_data *data)
 	}
 	if (newline)
 		write(STDOUT_FILENO, "\n", 1);
-	data->lst_exit = 0; // Bash retourne toujours 0 après echo
+	data->lst_exit = 0;
 	update_exit_status(data->varenv_lst, data->lst_exit);
 	return (0);
 }
