@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/19 19:43:43 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:04:39 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,54 +162,7 @@ int	main(int ac, char **av, char **envp)
 //  Desktop
 //  Documents
 //  Downloads
-//  fichier1
-//  goinfre
-//  ilona
-//  intra-uuid-853640af-6d79-45c8-965a-5726ed79af59-6151788-sabellil
-//  kdjkfdh
-//  Music
-//  output
-//  output2
-//  output_test_file1
-//  philo
-//  philotest
-//  Pictures
-//  pipex
-//  Public
-// 'Save changement'
-//  sgoinfre
-//  snap
-//  Templates
-//  try
-//  Videos
-//  zzzzzzzzzzzzzzzzzzzzz
-// bash-5.1$ echo Sara | ls
-//  biiinii
-//  c_formatter_42
-//  Desktop
-//  Documents
-//  Downloads
-//  fichier1
-//  goinfre
-//  ilona
-//  intra-uuid-853640af-6d79-45c8-965a-5726ed79af59-6151788-sabellil
-//  kdjkfdh
-//  Music
-//  output
-//  output2
-//  output_test_file1
-//  philo
-//  philotest
-//  Pictures
-//  pipex
-//  Public
-// 'Save changement'
-//  sgoinfre
-//  snap
-//  Templates
-//  try
-//  Videos
-//  zzzzzzzzzzzzzzzzzzzzz
+
 
 // bash-5.1$ ls | echo Sara
 // Sara
@@ -328,9 +281,7 @@ int	main(int ac, char **av, char **envp)
 
 
 
-// bash-5.1$ ls | lsssssssssss | echo Sara  // EXECUTE MAIS INVERSE LIGNE
-// Sara
-// bash: lsssssssssss: command not found
+
 
 
 // bash-5.1$ echo "Hello Minishell" | tr ' ' '_' > output.txt // affiche Hello Minishell en terminal
@@ -339,7 +290,7 @@ int	main(int ac, char **av, char **envp)
 // bash-5.1$ 
 
 
-// bash-5.1$ cat << A | tr 'a-z' 'A-Z' | lssssss | cat << B | rev // INVERSE le lsss commant not found et noN
+// bash-5.1$ cat << A | tr 'a-z' 'A-Z' | lssssss | cat << B | rev
 // > Oui
 // > A
 // > Non
@@ -348,7 +299,7 @@ int	main(int ac, char **av, char **envp)
 // noN
 // bash-5.1$ 
 
-// bash-5.1$ cat << EOF1 << EOF2 | tr 'a-z' 'A-Z' | lss |  rev << EOF3 << EOF4
+// bash-5.1$ cat << EOF1 << EOF2 | tr 'a-z' 'A-Z' | lss |  rev << EOF3 << EOF4 // 
 // > Oui
 // > EOF1
 // > Non
@@ -360,5 +311,22 @@ int	main(int ac, char **av, char **envp)
 // saP
 // bash: lss: command not found
 
+// cat << EOF1 << EOF2 | tr 'a-z' 'A-Z' | lss |  rev << EOF3 << EOF4
+// > Oui
+// > EOF1
+// > Non
+// > EOF2
+// > Pourquoi
+// > EOF3
+// > Pas
+// > EOF4
+// bash: lss: command not found
+// saP
 
-// A REGLER MARDI bash-5.1$ << EOF
+// << EOF
+
+//LES DERNIERS TRUCS MAIS IS IT REALLY A PROBLEM ????
+
+// bash-5.1$ ls | lsssssssssss | echo Sara  // EXECUTE MAIS INVERSE LIGNE, seul cas trouve
+// Sara
+// bash: lsssssssssss: command not found

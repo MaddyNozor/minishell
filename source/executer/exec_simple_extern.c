@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:09:14 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 15:10:50 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 15:52:00 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,8 @@ void	exec_simple_extern_cmd(t_cmd *cmd, t_data *data)
 	pid = fork();
 	if (pid == -1)
 	{
-		// printf("bash: fork failed\n");
-		// 	//TODO : Voir ailleurs quel code est utilise
 		update_exit_status(data->varenv_lst, 1);
-		exit(1);//return dans l'ancienne version
+		exit(1);
 	}
 	if (pid == 0)
 		handle_child_process(cmd, data);

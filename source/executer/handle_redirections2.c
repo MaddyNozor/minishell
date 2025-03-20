@@ -6,27 +6,12 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 12:36:45 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 15:31:23 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 15:51:27 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
-// void	read_and_write(t_data *data, int src_fd, int dest_fd)
-// {
-// 	char	buffer[1024];
-// 	ssize_t	bytes_read;
 
-// 	bytes_read = read(src_fd, buffer, sizeof(buffer));
-// 	while (bytes_read > 0)
-// 	{
-// 		if (write(dest_fd, buffer, bytes_read) == -1)
-// 		{
-// 			exit_with_error(data, "write", strerror(errno), 1);
-// 			return;
-// 		}
-// 		bytes_read = read(src_fd, buffer, sizeof(buffer));
-// 	}
-// }
 void	read_and_write(t_data *data, int src_fd, int dest_fd)
 {
 	char	buffer[1024];
@@ -37,12 +22,15 @@ void	read_and_write(t_data *data, int src_fd, int dest_fd)
 	{
 		if (write(dest_fd, buffer, bytes_read) == -1)
 		{
-			exit_with_error(data, "write", strerror(errno), 1);
-			return;
+			perror("ERREUR : Echec de l'écriture");
+			update_exit_status(data->varenv_lst, 1);
+			break;
 		}
 		bytes_read = read(src_fd, buffer, sizeof(buffer));
 	}
+	close(dest_fd);
 }
+
 
 void	handle_heredoc_and_input(t_data *data, int heredoc_fd, int input_fd)
 {
@@ -66,8 +54,6 @@ void merge_heredoc_and_input(t_data *data, int heredoc_fd, int input_fd)
 
 	if (pipe(pipe_fd) == -1)
 	{
-		// exit_with_error(data, "pipe", strerror(errno), 1);
-		// return;
 		perror("ERREUR : pipe a échoué");
 		update_exit_status(data->varenv_lst, 1);
 		return;
@@ -85,9 +71,6 @@ void merge_heredoc_and_input(t_data *data, int heredoc_fd, int input_fd)
 	close(pipe_fd[1]);
 	if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
 	{
-		// exit_with_error(data, "dup2", strerror(errno), 1);
-		// close(pipe_fd[0]);
-		// return;
 		perror("ERREUR : dup2 vers STDIN a échoué");
 		update_exit_status(data->varenv_lst, 1);
 	}
