@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:10:56 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 16:31:57 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 19:38:50 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,21 @@ void	free_tab(char **tab)
 		i++;
 	}
 	free(tab);
+}
+void	free_queue(t_queue *queue)
+{
+	t_node	*tmp;
+	t_node	*to_free;
+
+	if (!queue)
+		return;
+	tmp = queue->head;
+	while (tmp)
+	{
+		to_free = tmp;
+		tmp = tmp->next;
+		free(to_free->content);
+		free(to_free);
+	}
+	free(queue);
 }

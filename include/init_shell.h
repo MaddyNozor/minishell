@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/20 18:48:06 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 19:39:08 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -326,4 +326,6 @@ bool	update_env_var(t_varenv *varenv, char *key, char *value);
 
 //FREE THE MINISHELL
 void	ft_free_all(t_data *data);
+void	free_queue(t_queue *queue);
+
 #endif

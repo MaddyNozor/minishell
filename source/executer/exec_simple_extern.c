@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:09:14 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 15:52:00 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 19:47:59 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	handle_child_process(t_cmd *cmd, t_data *data)
 		if (input_fd == -1)
 		{
 			update_exit_status(data->varenv_lst, 1);
+			ft_free_all(data);
 			exit(data->lst_exit);
 		}
 		close(input_fd);

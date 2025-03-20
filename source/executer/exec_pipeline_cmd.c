@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:04:30 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 19:32:25 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 19:48:24 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	execute_external_cmd(t_cmd *cmd, t_data *data)
 	perror("execve failed");
 	free(cmd_path);
 	free_tab(env_array);
-	exit(127);
+	(ft_free_all(data), exit(127));
 }
 
 static void	close_pipe_fds(int pipe_fd[2])
@@ -55,7 +55,7 @@ static void	handle_child_process_pipeline(t_cmd *cmd, t_data *data, int pipe_in,
 	if (is_builtin(cmd->value))
 	{
 		execute_builtin(cmd, data);
-		exit(data->lst_exit);
+		(ft_free_all(data), exit(data->lst_exit));
 	}
 	cmd_path = find_cmd_path(cmd->value, data->varenv_lst, data);
 	if (!cmd_path)
@@ -64,14 +64,14 @@ static void	handle_child_process_pipeline(t_cmd *cmd, t_data *data, int pipe_in,
 		data->lst_exit = 127;
 		update_exit_status(data->varenv_lst, data->lst_exit);
 		close_pipe_fds(pipe_fd);
-		exit(127);
+		(ft_free_all(data), exit(127));
 	}
 	execve(cmd_path, cmd->argv, convert_env_list_to_array(data, data->varenv_lst));
 	perror("execve failed");
 	data->lst_exit = 127;
 	update_exit_status(data->varenv_lst, data->lst_exit);
 	close_pipe_fds(pipe_fd);
-	exit(127);
+	(ft_free_all(data), exit(127));
 }
 
 static void	handle_parent_process_pipeline_close_pipe(pid_t pid, int *pipe_in, int pipe_fd[2])

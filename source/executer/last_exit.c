@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:21:29 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 16:32:03 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 19:49:59 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	exit_with_error(t_data *data, char *context, char *error_message, int exit_
 	printf("bash: %s: %s\n", context, error_message);
 	data->lst_exit = exit_code;
 	update_exit_status(data->varenv_lst, data->lst_exit);
-	exit(exit_code);
+	(ft_free_all(data), exit(exit_code));
 }
 void	exit_with_error_readline(t_data *data, char *context, char *error_message, int exit_code)
 {
