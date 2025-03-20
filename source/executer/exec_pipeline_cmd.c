@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:04:30 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 16:22:24 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 19:32:25 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,6 +194,7 @@ static void	wait_for_pipeline_processes(t_cmd *cmd_lst, t_data *data)
 		}
 		tmp = tmp->next;
 	}
+	free(tmp);
 }
 
 void	executer_pipeline_cmd(t_cmd *cmd_lst, t_data *data)

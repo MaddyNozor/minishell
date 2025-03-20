@@ -1,37 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipe_utils.c                                       :+:      :+:    :+:   */
+/*   end1.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/21 14:04:28 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 19:31:33 by sabellil         ###   ########.fr       */
+/*   Created: 2025/03/20 18:30:39 by sabellil          #+#    #+#             */
+/*   Updated: 2025/03/20 19:28:55 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
 
-void	setup_pipe(t_data *data, int pipe_fd[2])
+void	ft_free_all(t_data *data)
 {
-	if (pipe(pipe_fd) == -1)
-	{
-		exit_with_error(data, "pipe", strerror(errno), 1);
+	
+	rl_clear_history();//GAB A DIT QUON A BIEN MONTRE QUON A CLEAR POUR LE PROBLEME DE ADD_HISTORY
+	if (!data)
 		return;
-	}
-}
-
-void	cleanup_pipeline(t_data *data, t_cmd *cmd_lst)
-{
-	t_cmd	*current_cmd;
-	int		status;
-
-	while (wait(&status) > 0)
-		;
-	current_cmd = cmd_lst;
-	while (current_cmd)
-	{
-		unlink_heredoc_temp(data, current_cmd->redirection);
-		current_cmd = current_cmd->next;
-	}
+	if (data->varenv_lst)
+		free_varenv(data->varenv_lst);
+	if (data->cmd_lst)
+		free_cmd_list(data->cmd_lst);
+	if (data->tok_lst)
+		free_token_list(data->tok_lst);
 }

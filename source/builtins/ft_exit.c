@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 12:24:58 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 17:03:23 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 18:50:12 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ void	ft_exit(t_cmd *cmd, t_data *data)
 	if (cmd->argv[1])
 		exit_code = ft_atoi(cmd->argv[1]) % 256;
 	update_exit_status(data->varenv_lst, exit_code);
-	free_cmd_list(data->cmd_lst);
-	free_varenv(data->varenv_lst);
+	// free_cmd_list(data->cmd_lst);
+	// free_varenv(data->varenv_lst);
+	ft_free_all(data);
 	exit(exit_code);
 }

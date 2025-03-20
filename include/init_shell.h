@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/20 16:32:14 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 18:48:06 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ typedef struct s_data
 	t_varenv				*varenv_lst;
 	t_token					*tok_lst;
 	int						lst_exit;
-	char					**histo;
 }							t_data;
 
 typedef struct s_node
@@ -324,4 +323,7 @@ void update_exit_status(t_varenv *varenv, int exit_status);
 void	exit_with_error(t_data *data, char *context, char *error_message, int exit_code);
 void	exit_with_error_readline(t_data *data, char *context, char *error_message, int exit_code);
 bool	update_env_var(t_varenv *varenv, char *key, char *value);
+
+//FREE THE MINISHELL
+void	ft_free_all(t_data *data);
 #endif

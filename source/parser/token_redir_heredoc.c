@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 16:11:52 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 18:24:36 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 19:03:21 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ static void	process_heredoc_tokens(t_token **tok, t_cmd **current_cmd, t_varenv 
 {
 	t_data	*data;
 	t_queue	*queue;
+	t_node	*tmp;
+	t_node	*to_free;
 
 	data = (*current_cmd)->data;
 	queue = init_queue(data);
@@ -75,6 +77,15 @@ static void	process_heredoc_tokens(t_token **tok, t_cmd **current_cmd, t_varenv 
 	}
 	while (*tok && ((*tok)->type == WORD || (*tok)->type == VAR_ENV))
 		process_single_heredoc_token(tok, queue, *current_cmd, varenv);
+	tmp = queue->head;
+	while (tmp)
+	{
+		to_free = tmp;
+		tmp = tmp->next;
+		free(to_free->content);
+		free(to_free);
+	}
+	free(queue);
 }
 
 static t_redirection	*create_heredoc_redirection(t_cmd **current_cmd, int redir_type)

@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:13:45 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 13:10:31 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/20 19:23:28 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	free_cmd_list(t_cmd *list)
 			free(redir_tmp->file_name);
 			free(redir_tmp);
 		}
-		free(tmp->argv);
+		free_tab(tmp->argv);
 		free(tmp);
 	}
 }
