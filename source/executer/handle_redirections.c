@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 13:46:25 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 19:34:24 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 20:15:03 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ static int	open_output_file(t_redirection *curr)
 	return (open(curr->file_name, flags | O_APPEND, 0644));
 }
 
-void	handle_output_redirections(t_redirection *redir, t_data *data, int *last_out_fd)
+void	handle_output_redirections(t_redirection *redir, t_data *data,
+		int *last_out_fd)
 {
 	t_redirection	*curr;
 
@@ -37,14 +38,12 @@ void	handle_output_redirections(t_redirection *redir, t_data *data, int *last_ou
 			if (*last_out_fd == -1)
 			{
 				perror("ERREUR : Impossible d'ouvrir le fichier de sortie");
-				// update_exit_status(data->varenv_lst, 1);
 				update_exit_status(data, 1);
-				return;
+				return ;
 			}
 			if (dup2(*last_out_fd, STDOUT_FILENO) == -1)
 			{
 				perror("ERREUR : dup2 vers STDOUT a échoué");
-				// update_exit_status(data->varenv_lst, 1);
 				update_exit_status(data, 1);
 			}
 			close(*last_out_fd);
@@ -53,7 +52,8 @@ void	handle_output_redirections(t_redirection *redir, t_data *data, int *last_ou
 	}
 }
 
-void	handle_input_redirection(t_redirection *redirection, int *in_fd, t_redirection **lst_hered, bool *in_redir)
+void	handle_input_redirection(t_redirection *redirection, int *in_fd,
+		t_redirection **lst_hered, bool *in_redir)
 {
 	t_redirection	*current;
 
@@ -93,37 +93,14 @@ bool	has_output_redirection(t_redirection *redir)
 	return (false);
 }
 
-// void	handle_pipe_redirections(t_cmd *cmd, int pipe_in, int pipe_fd[2])
-// {
-// 	if (pipe_in != -1 && pipe_in != STDIN_FILENO)
-// 	{
-// 		if (dup2(pipe_in, STDIN_FILENO) == -1)
-// 			perror("Erreur dup2 STDIN");
-// 	}
-// 	// if (cmd->next && pipe_fd[1] != -1 && pipe_fd[1] != STDOUT_FILENO)
-// 	// {
-// 	// 	if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
-// 	// 		perror("Erreur dup2 STDOUT");
-// 	// 	close(pipe_fd[1]);
-// 	// }
-// 	if (cmd->next && pipe_fd[1] != -1 && pipe_fd[1] != STDOUT_FILENO
-// 		&& !has_output_redirection(cmd->redirection))
-// 	{
-// 		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
-// 			perror("Erreur dup2 STDOUT");
-// 		close(pipe_fd[1]);
-// 	}
-
-// }
 void	handle_pipe_redirections(t_cmd *cmd, int pipe_in, int pipe_fd[2])
 {
 	if (pipe_in != -1 && pipe_in != STDIN_FILENO)
 	{
 		if (dup2(pipe_in, STDIN_FILENO) == -1)
 			perror("Erreur dup2 STDIN");
-		close(pipe_in); // ✅ sécurité
+		close(pipe_in);
 	}
-	
 	if (cmd->next && pipe_fd[1] != -1 && pipe_fd[1] != STDOUT_FILENO
 		&& !has_output_redirection(cmd->redirection))
 	{
@@ -135,21 +112,3 @@ void	handle_pipe_redirections(t_cmd *cmd, int pipe_in, int pipe_fd[2])
 	if (pipe_fd[1] != -1)
 		close(pipe_fd[1]);
 }
-
-
-// void	handle_pipe_redirections(t_cmd *cmd, int pipe_in, int pipe_fd[2])//A garder par securite, retire pour leaks ls | echo Sara
-// {
-// 	if (pipe_in != 0)
-// 	{
-// 		if (dup2(pipe_in, STDIN_FILENO) == -1)
-// 			perror("Erreur dup2 STDIN");
-// 		close(pipe_in);
-// 	}
-// 	if (cmd->next)
-// 	{
-// 		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
-// 			perror("Erreur dup2 STDOUT");
-// 		close(pipe_fd[1]);
-// 	}
-// 	close(pipe_fd[0]);
-// }

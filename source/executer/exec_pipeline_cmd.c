@@ -6,12 +6,12 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:04:30 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 19:33:28 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 20:07:39 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
- 
+
 void	execute_external_cmd(t_cmd *cmd, t_data *data)
 {
 	char	*cmd_path;
@@ -29,7 +29,7 @@ void	execute_external_cmd(t_cmd *cmd, t_data *data)
 		perror("env conversion failed");
 		free(cmd_path);
 		exit_with_error(data, "environment",
-				"Failed to convert environment variables", 127);
+			"Failed to convert environment variables", 127);
 	}
 	if (!cmd->argv || !cmd->argv[0])
 		exit_with_error(data, cmd->value, "Invalid arguments", 127);
@@ -46,7 +46,8 @@ static void	close_pipe_fds(int pipe_fd[2])
 	close(pipe_fd[1]);
 }
 
-static void	handle_child_process_pipeline(t_cmd *cmd, t_data *data, int pipe_in, int pipe_fd[2])
+static void	handle_child_process_pipeline(t_cmd *cmd, t_data *data, int pipe_in,
+		int pipe_fd[2])
 {
 	char	*cmd_path;
 
@@ -66,7 +67,8 @@ static void	handle_child_process_pipeline(t_cmd *cmd, t_data *data, int pipe_in,
 		close_pipe_fds(pipe_fd);
 		(ft_free_all(data), exit(127));
 	}
-	execve(cmd_path, cmd->argv, convert_env_list_to_array(data, data->varenv_lst));
+	execve(cmd_path, cmd->argv, convert_env_list_to_array(data,
+			data->varenv_lst));
 	perror("execve failed");
 	data->lst_exit = 127;
 	update_exit_status(data, data->lst_exit);
@@ -74,10 +76,10 @@ static void	handle_child_process_pipeline(t_cmd *cmd, t_data *data, int pipe_in,
 	(ft_free_all(data), exit(127));
 }
 
-static void	handle_parent_process_pipeline_close_pipe(pid_t pid, int *pipe_in, int pipe_fd[2])
+static void	handle_parent_process_pipeline_close_pipe(pid_t pid, int *pipe_in,
+		int pipe_fd[2])
 {
 	(void)pid;
-
 	if (*pipe_in != -1)
 		close(*pipe_in);
 	*pipe_in = pipe_fd[0];
@@ -99,9 +101,8 @@ static bool	check_input_existence(t_redirection *redirection, t_data *data)
 			if (input_fd == -1)
 			{
 				printf("bash: %s: No such file or directory\n",
-						redir->file_name);
+					redir->file_name);
 				data->lst_exit = 1;
-				// update_exit_status(data->varenv_lst, data->lst_exit);
 				update_exit_status(data, data->lst_exit);
 				return (false);
 			}
@@ -126,7 +127,7 @@ static void	create_output_files(t_redirection *redirection, t_data *data)
 			if (fd == -1)
 			{
 				exit_with_error(data, out->file_name, strerror(errno), 1);
-				return;
+				return ;
 			}
 			close(fd);
 		}
@@ -152,17 +153,13 @@ static pid_t	create_forked_process(t_data *data, int pipe_fd[2])
 {
 	pid_t	pid;
 
-	// pid = fork();
-	// if (pid == -1)
-	// 	exit_with_error(data, "fork", "Resource temporarily unavailable", 1);
 	pid = fork();
 	if (pid == -1)
 	{
-		close(pipe_fd[0]); // ← ajoute ça
-		close(pipe_fd[1]); // ← et ça aussi
+		close(pipe_fd[0]);
+		close(pipe_fd[1]);
 		exit_with_error(data, "fork", "Resource temporarily unavailable", 1);
 	}
-	
 	return (pid);
 }
 
@@ -172,7 +169,6 @@ static void	wait_for_pipeline_process(pid_t pid, t_data *data, bool is_last)
 
 	if (!is_last)
 		return ;
-
 	waitpid(pid, &status, 0);
 	while (wait(NULL) > 0)
 		;
@@ -182,7 +178,9 @@ static void	wait_for_pipeline_process(pid_t pid, t_data *data, bool is_last)
 		data->lst_exit = 128 + WTERMSIG(status);
 	update_exit_status(data, data->lst_exit);
 }
-void	execute_pipeline_command(t_cmd *cmd, t_data *data, int *pipe_in, int pipe_fd[2])
+
+void	execute_pipeline_command(t_cmd *cmd, t_data *data, int *pipe_in,
+		int pipe_fd[2])
 {
 	pid_t	pid;
 
@@ -199,8 +197,6 @@ void	execute_pipeline_command(t_cmd *cmd, t_data *data, int *pipe_in, int pipe_f
 		cmd->pid = pid;
 		wait_for_pipeline_process(pid, data, !cmd->next);
 		handle_parent_process_pipeline_close_pipe(pid, pipe_in, pipe_fd);
-
-		// Sécurité : si le prochain pipe_in ne l'utilise pas, on ferme ici
 		if (!cmd->next && *pipe_in != -1)
 		{
 			close(*pipe_in);
@@ -209,14 +205,14 @@ void	execute_pipeline_command(t_cmd *cmd, t_data *data, int *pipe_in, int pipe_f
 	}
 }
 
-
 static void	reset_pipe_fd(int pipe_fd[2])
 {
 	pipe_fd[0] = -1;
 	pipe_fd[1] = -1;
 }
 
-static void	finalize_pipeline_execution(t_cmd *cmd_lst, t_data *data, int pipe_in)
+static void	finalize_pipeline_execution(t_cmd *cmd_lst, t_data *data,
+		int pipe_in)
 {
 	cleanup_pipeline(data, cmd_lst);
 	if (pipe_in != -1)
@@ -237,7 +233,7 @@ void	executer_pipeline_cmd(t_cmd *cmd_lst, t_data *data)
 	current_cmd = cmd_lst;
 	cmd_index = 0;
 	if (!get_env_value(data->varenv_lst, "PATH"))
-		printf("🚨 ERREUR: La variable PATH est NULL dans executer_pipeline_cmd() !!\n");
+		;
 	while (current_cmd)
 	{
 		handle_heredoc_input(data, last_heredoc_files[cmd_index]);

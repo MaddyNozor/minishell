@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 13:54:50 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 16:21:24 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 20:19:49 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,40 +28,42 @@ void	generate_heredoc_filename(char *filename, int index)
 	ft_strlcat(filename, num, 20);
 }
 
-void	open_heredoc_file(t_data *data, t_redirection *redir, char *heredoc_filename)
+void	open_heredoc_file(t_data *data, t_redirection *redir,
+		char *heredoc_filename)
 {
 	free(redir->file_name);
 	redir->file_name = strdup(heredoc_filename);
 	if (!redir->file_name)
 	{
 		exit_with_error(data, "strdup", strerror(errno), 1);
-		return;
+		return ;
 	}
 }
+
 void	create_heredoc_file(t_data *data, t_redirection *redir, int index)
 {
-    char    heredoc_filename[20];
-    int     fd;
-    char    *delimiter;
+	char	heredoc_filename[20];
+	int		fd;
+	char	*delimiter;
 
-    generate_heredoc_filename(heredoc_filename, index);
-    delimiter = strdup(redir->file_name);
-    if (!delimiter)
-    {
-        exit_with_error(data, "strdup", strerror(errno), 1);
-        return;
-    }
-    open_heredoc_file(data, redir, heredoc_filename);
-    fd = open(redir->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (fd == -1)
-    {
-        exit_with_error(data, redir->file_name, strerror(errno), 1);
-        free(delimiter);
-        return;
-    }
-    process_heredoc_input(data, fd, delimiter);
-    close(fd);
-    free(delimiter);
+	generate_heredoc_filename(heredoc_filename, index);
+	delimiter = strdup(redir->file_name);
+	if (!delimiter)
+	{
+		exit_with_error(data, "strdup", strerror(errno), 1);
+		return ;
+	}
+	open_heredoc_file(data, redir, heredoc_filename);
+	fd = open(redir->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
+	{
+		exit_with_error(data, redir->file_name, strerror(errno), 1);
+		free(delimiter);
+		return ;
+	}
+	process_heredoc_input(data, fd, delimiter);
+	close(fd);
+	free(delimiter);
 }
 
 void	unlink_heredoc_temp(t_data *data, t_redirection *redirection)

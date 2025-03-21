@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:03:13 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 16:21:30 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 20:20:08 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,13 @@ void	handle_heredoc_input(t_data *data, char *heredoc_file)
 		if (fd == -1)
 		{
 			exit_with_error(data, heredoc_file, strerror(errno), 1);
-			return;
+			return ;
 		}
 		if (dup2(fd, STDIN_FILENO) == -1)
 		{
 			exit_with_error(data, "dup2", strerror(errno), 1);
 			close(fd);
-			return;
+			return ;
 		}
 		close(fd);
 	}

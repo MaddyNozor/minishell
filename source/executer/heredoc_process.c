@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 16:20:07 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 16:21:12 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 20:16:45 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,11 @@ void	process_heredoc_input(t_data *data, int fd, const char *delimiter)
 			free(line);
 			break ;
 		}
-		if (!safe_write(data, fd, line, strlen(line)) ||
-			!safe_write(data, fd, "\n", 1))
+		if (!safe_write(data, fd, line, strlen(line))
+			|| !safe_write(data, fd, "\n", 1))
 		{
 			free(line);
-			return;
+			return ;
 		}
 		free(line);
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:41:57 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 15:18:06 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/21 20:23:21 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char *read_user_input(t_data *data)
     if (!input)
     {
         clear_history();
-        exit_with_error_readline(data, "readline", "Error reading input", 1);
+        exit_error_rdl(data, "readline", "Error reading input", 1);
     }
     if (*input)
         add_history(input);

@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 12:36:45 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 11:19:41 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 20:16:01 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,8 @@ void	read_and_write(t_data *data, int src_fd, int dest_fd)
 		if (write(dest_fd, buffer, bytes_read) == -1)
 		{
 			perror("ERREUR : Echec de l'écriture");
-			// update_exit_status(data->varenv_lst, 1);
 			update_exit_status(data, 1);
-			break;
+			break ;
 		}
 		bytes_read = read(src_fd, buffer, sizeof(buffer));
 	}
@@ -48,16 +47,15 @@ void	handle_heredoc_and_input(t_data *data, int heredoc_fd, int input_fd)
 	}
 }
 
-void merge_heredoc_and_input(t_data *data, int heredoc_fd, int input_fd)
+void	merge_heredoc_and_input(t_data *data, int heredoc_fd, int input_fd)
 {
 	int	pipe_fd[2];
 
 	if (pipe(pipe_fd) == -1)
 	{
 		perror("ERREUR : pipe a échoué");
-		// update_exit_status(data->varenv_lst, 1);
 		update_exit_status(data, 1);
-	return;
+		return ;
 	}
 	if (heredoc_fd != -1)
 	{
@@ -73,22 +71,23 @@ void merge_heredoc_and_input(t_data *data, int heredoc_fd, int input_fd)
 	if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
 	{
 		perror("ERREUR : dup2 vers STDIN a échoué");
-		// update_exit_status(data->varenv_lst, 1);
 		update_exit_status(data, 1);
 	}
 	close(pipe_fd[0]);
 }
 
-void handle_heredoc_redirection(t_data *data, t_redirection *last_heredoc, int *heredoc_fd)
+void	handle_heredoc_redirection(t_data *data, t_redirection *last_heredoc,
+		int *heredoc_fd)
 {
-    if (!last_heredoc)
-        return;
-    *heredoc_fd = open(last_heredoc->file_name, O_RDONLY);
+	if (!last_heredoc)
+		return ;
+	*heredoc_fd = open(last_heredoc->file_name, O_RDONLY);
 	if (*heredoc_fd == -1)
 	{
-		exit_with_error(data, last_heredoc->file_name, "Erreur ouverture heredoc", 1);
-		return;
-	}	
-    dup2(*heredoc_fd, STDIN_FILENO);
-    close(*heredoc_fd);
+		exit_with_error(data, last_heredoc->file_name,
+			"Erreur ouverture heredoc", 1);
+		return ;
+	}
+	dup2(*heredoc_fd, STDIN_FILENO);
+	close(*heredoc_fd);
 }

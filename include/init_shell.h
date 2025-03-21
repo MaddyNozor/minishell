@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/21 15:00:57 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/21 20:22:50 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -323,7 +323,7 @@ char	*get_exit_status(t_varenv *varenv);
 
 void	update_exit_status(t_data *data, int exit_status);
 void	exit_with_error(t_data *data, char *context, char *error_message, int exit_code);
-void	exit_with_error_readline(t_data *data, char *context, char *error_message, int exit_code);
+void	exit_error_rdl(t_data *data, char *ctxt, char *err_msg, int exit_code);
 bool	update_env_var(t_varenv *varenv, char *key, char *value);
 
 //FREE THE MINISHELL
@@ -331,3 +331,4 @@ void	ft_free_all(t_data *data);
 void	free_queue(t_queue *queue);
 
 #endif
+
