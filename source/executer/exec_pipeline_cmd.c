@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:04:30 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 19:27:18 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 19:33:28 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,33 +74,16 @@ static void	handle_child_process_pipeline(t_cmd *cmd, t_data *data, int pipe_in,
 	(ft_free_all(data), exit(127));
 }
 
-// static void	handle_parent_process_pipeline_close_pipe(pid_t pid, int *pipe_in, int pipe_fd[2])
-// {
-// 	waitpid(pid, NULL, 0);
-// 	if (*pipe_in != 0)
-// 		close(*pipe_in);
-// 	*pipe_in = pipe_fd[0];
-// 	close(pipe_fd[1]);
-// }
-
 static void	handle_parent_process_pipeline_close_pipe(pid_t pid, int *pipe_in, int pipe_fd[2])
 {
 	(void)pid;
 
 	if (*pipe_in != -1)
 		close(*pipe_in);
-
 	*pipe_in = pipe_fd[0];
-
-	// Ferme pipe_fd[1] si encore ouvert
 	if (pipe_fd[1] != -1)
 		close(pipe_fd[1]);
-
-	// Ferme pipe_fd[0] aussi si la prochaine commande ne l'utilise pas
-	// (ce sera au prochain appel de handle_pipe_redirections de faire le dup2)
 }
-
-
 
 static bool	check_input_existence(t_redirection *redirection, t_data *data)
 {

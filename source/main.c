@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/21 13:07:59 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 19:42:51 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,6 @@ int	main(int ac, char **av, char **envp)
 
 //     return 0;
 // }
-
-
 
 
 // TODO RESTE A FAIRE

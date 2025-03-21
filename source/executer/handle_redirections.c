@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 13:46:25 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 19:03:04 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 19:34:24 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,28 +93,49 @@ bool	has_output_redirection(t_redirection *redir)
 	return (false);
 }
 
+// void	handle_pipe_redirections(t_cmd *cmd, int pipe_in, int pipe_fd[2])
+// {
+// 	if (pipe_in != -1 && pipe_in != STDIN_FILENO)
+// 	{
+// 		if (dup2(pipe_in, STDIN_FILENO) == -1)
+// 			perror("Erreur dup2 STDIN");
+// 	}
+// 	// if (cmd->next && pipe_fd[1] != -1 && pipe_fd[1] != STDOUT_FILENO)
+// 	// {
+// 	// 	if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+// 	// 		perror("Erreur dup2 STDOUT");
+// 	// 	close(pipe_fd[1]);
+// 	// }
+// 	if (cmd->next && pipe_fd[1] != -1 && pipe_fd[1] != STDOUT_FILENO
+// 		&& !has_output_redirection(cmd->redirection))
+// 	{
+// 		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+// 			perror("Erreur dup2 STDOUT");
+// 		close(pipe_fd[1]);
+// 	}
+
+// }
 void	handle_pipe_redirections(t_cmd *cmd, int pipe_in, int pipe_fd[2])
 {
 	if (pipe_in != -1 && pipe_in != STDIN_FILENO)
 	{
 		if (dup2(pipe_in, STDIN_FILENO) == -1)
 			perror("Erreur dup2 STDIN");
+		close(pipe_in); // ✅ sécurité
 	}
-	// if (cmd->next && pipe_fd[1] != -1 && pipe_fd[1] != STDOUT_FILENO)
-	// {
-	// 	if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
-	// 		perror("Erreur dup2 STDOUT");
-	// 	close(pipe_fd[1]);
-	// }
+	
 	if (cmd->next && pipe_fd[1] != -1 && pipe_fd[1] != STDOUT_FILENO
 		&& !has_output_redirection(cmd->redirection))
 	{
 		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
 			perror("Erreur dup2 STDOUT");
-		close(pipe_fd[1]);
 	}
-
+	if (pipe_fd[0] != -1)
+		close(pipe_fd[0]);
+	if (pipe_fd[1] != -1)
+		close(pipe_fd[1]);
 }
+
 
 // void	handle_pipe_redirections(t_cmd *cmd, int pipe_in, int pipe_fd[2])//A garder par securite, retire pour leaks ls | echo Sara
 // {
