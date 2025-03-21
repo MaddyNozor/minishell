@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:04:30 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 13:43:08 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 14:32:56 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,14 +76,31 @@ static void	handle_child_process_pipeline(t_cmd *cmd, t_data *data, int pipe_in,
 	(ft_free_all(data), exit(127));
 }
 
+// static void	handle_parent_process_pipeline_close_pipe(pid_t pid, int *pipe_in, int pipe_fd[2])
+// {
+// 	waitpid(pid, NULL, 0);
+// 	if (*pipe_in != 0)
+// 		close(*pipe_in);
+// 	*pipe_in = pipe_fd[0];
+// 	close(pipe_fd[1]);
+// }
+
 static void	handle_parent_process_pipeline_close_pipe(pid_t pid, int *pipe_in, int pipe_fd[2])
 {
 	waitpid(pid, NULL, 0);
-	if (*pipe_in != 0)
+
+	if (*pipe_in != -1)
 		close(*pipe_in);
+
+	// 👉 on garde pipe_fd[0] ouvert pour le prochain pipe_in
 	*pipe_in = pipe_fd[0];
-	close(pipe_fd[1]);
+
+	// 👉 on ferme uniquement pipe_fd[1]
+	if (pipe_fd[1] != -1)
+		close(pipe_fd[1]);
 }
+
+
 
 static bool	check_input_existence(t_redirection *redirection, t_data *data)
 {
@@ -165,31 +182,29 @@ static pid_t	create_forked_process(t_data *data, int pipe_fd[2])
 	
 	return (pid);
 }
+
 void execute_pipeline_command(t_cmd *cmd, t_data *data, int *pipe_in, int pipe_fd[2])
 {
-    pid_t pid;
+	pid_t pid;
 
-    if (!handle_missing_input(cmd, data))
-        return;
-    create_output_files(cmd->redirection, data);
-    setup_pipe(data, pipe_fd);
-        if (!handle_missing_input(cmd, data))
-    {
-        close_pipe_fds(pipe_fd); // Assure-toi de fermer les descripteurs
-        return;
-    }
-    pid = create_forked_process(data, pipe_fd);
-    if (pid == 0) // Processus enfant
-    {
-        handle_child_process_pipeline(cmd, data, *pipe_in, pipe_fd);
-        close_pipe_fds(pipe_fd); // Fermer la pipe dans le processus enfant
-    }
-    else // Processus parent
-    {
-        cmd->pid = pid;
-        handle_parent_process_pipeline_close_pipe(pid, pipe_in, pipe_fd);
-        close_pipe_fds(pipe_fd); // Fermer la pipe dans le processus enfant
-    }
+	if (!handle_missing_input(cmd, data))
+		return ;
+
+	create_output_files(cmd->redirection, data);
+
+	pid = create_forked_process(data, pipe_fd);
+
+	if (pid == 0)
+	{
+		handle_child_process_pipeline(cmd, data, *pipe_in, pipe_fd);
+	}
+	else
+	{
+		cmd->pid = pid;
+		handle_parent_process_pipeline_close_pipe(pid, pipe_in, pipe_fd);
+		if (pipe_fd[1] != -1)
+			close(pipe_fd[1]);
+	}
 }
 
 static void	wait_for_pipeline_processes(t_cmd *cmd_lst, t_data *data)
@@ -216,6 +231,18 @@ static void	wait_for_pipeline_processes(t_cmd *cmd_lst, t_data *data)
 	}
 }
 
+static void	reset_pipe_fd(int pipe_fd[2])
+{
+	pipe_fd[0] = -1;
+	pipe_fd[1] = -1;
+}
+static void	finalize_pipeline_execution(t_cmd *cmd_lst, t_data *data, int pipe_in)
+{
+	wait_for_pipeline_processes(cmd_lst, data);
+	cleanup_pipeline(data, cmd_lst);
+	if (pipe_in != -1)
+		close(pipe_in);
+}
 
 void	executer_pipeline_cmd(t_cmd *cmd_lst, t_data *data)
 {
@@ -227,7 +254,7 @@ void	executer_pipeline_cmd(t_cmd *cmd_lst, t_data *data)
 
 	handle_heredocs_pipeline(data, cmd_lst);
 	create_heredoc_list(cmd_lst, last_heredoc_files);
-	pipe_in = 0;
+	pipe_in = -1;
 	current_cmd = cmd_lst;
 	cmd_index = 0;
 	if (!get_env_value(data->varenv_lst, "PATH"))
@@ -235,12 +262,13 @@ void	executer_pipeline_cmd(t_cmd *cmd_lst, t_data *data)
 	while (current_cmd)
 	{
 		handle_heredoc_input(data, last_heredoc_files[cmd_index]);
+		if (current_cmd->next)
+			setup_pipe(data, pipe_fd);
+		else
+			reset_pipe_fd(pipe_fd);
 		execute_pipeline_command(current_cmd, data, &pipe_in, pipe_fd);
 		current_cmd = current_cmd->next;
 		cmd_index++;
 	}
-	wait_for_pipeline_processes(cmd_lst, data);
-	cleanup_pipeline(data, cmd_lst);
-	if (pipe_in != 0)//Ajout
-		close(pipe_in);
+	finalize_pipeline_execution(cmd_lst, data, pipe_in);
 }

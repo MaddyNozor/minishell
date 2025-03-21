@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 13:46:25 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 11:19:03 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 14:19:26 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,17 +84,33 @@ void	handle_input_redirection(t_redirection *redirection, int *in_fd, t_redirect
 
 void	handle_pipe_redirections(t_cmd *cmd, int pipe_in, int pipe_fd[2])
 {
-	if (pipe_in != 0)
+	if (pipe_in != -1 && pipe_in != STDIN_FILENO)
 	{
 		if (dup2(pipe_in, STDIN_FILENO) == -1)
 			perror("Erreur dup2 STDIN");
-		close(pipe_in);
 	}
-	if (cmd->next)
+
+	if (cmd->next && pipe_fd[1] != -1 && pipe_fd[1] != STDOUT_FILENO)
 	{
 		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
 			perror("Erreur dup2 STDOUT");
 		close(pipe_fd[1]);
 	}
-	close(pipe_fd[0]);
 }
+
+// void	handle_pipe_redirections(t_cmd *cmd, int pipe_in, int pipe_fd[2])//A garder par securite, retire pour leaks ls | echo Sara
+// {
+// 	if (pipe_in != 0)
+// 	{
+// 		if (dup2(pipe_in, STDIN_FILENO) == -1)
+// 			perror("Erreur dup2 STDIN");
+// 		close(pipe_in);
+// 	}
+// 	if (cmd->next)
+// 	{
+// 		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+// 			perror("Erreur dup2 STDOUT");
+// 		close(pipe_fd[1]);
+// 	}
+// 	close(pipe_fd[0]);
+// }

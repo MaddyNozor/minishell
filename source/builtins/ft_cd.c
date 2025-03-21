@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:21:32 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 11:14:41 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 13:45:09 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ int	ft_cd(t_cmd *cmd, t_data *data)
 		{
 			printf("bash: cd: HOME not set\n");
 			data->lst_exit = 1;
-			// update_exit_status(data->varenv_lst, data->lst_exit);
 			update_exit_status(data, data->lst_exit);
 			return (1);
 		}
@@ -84,7 +83,6 @@ int	ft_cd(t_cmd *cmd, t_data *data)
 		return (handle_cd_error(data, path));
 	ft_update_pwd(data);
 	data->lst_exit = 0;
-	// update_exit_status(data->varenv_lst, data->lst_exit);
 	update_exit_status(data, data->lst_exit);
 	return (0);
 }
