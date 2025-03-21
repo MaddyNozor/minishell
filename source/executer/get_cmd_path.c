@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmd_path.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:04:07 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 12:58:24 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 19:49:43 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,14 +76,17 @@ static char	*handle_cmd_not_found(t_data *data)
 	return (NULL);
 }
 
-static char	**get_paths_from_env(t_varenv *varenv_lst)
+static char	**get_paths_from_env(t_varenv *varenv_lst, t_data *data)
 {
 	char	*path_env;
 	char	**paths;
 
 	path_env = get_env_value(varenv_lst, "PATH");
+	if (!path_env && data->secret_path)
+		path_env = ft_strdup(data->secret_path);
 	if (!path_env)
 		return (NULL);
+	// printf("path_env: %s\n", path_env);
 	paths = ft_split(path_env, ':');
 	return (paths);
 }
@@ -100,10 +103,12 @@ char	*find_cmd_path(const char *cmd, t_varenv *varenv_lst, t_data *data)
 		else
 			return (handle_cmd_not_found(data));
 	}
-	paths = get_paths_from_env(varenv_lst);
+	paths = get_paths_from_env(varenv_lst, data);
+	// printf("paths: %s\n %s\n %s\n", paths[0], paths[1], paths[2]);
 	if (!paths)
 		return (handle_cmd_not_found(data));
 	full_path = find_cmd_in_paths(paths, cmd);
+	// printf("full path: %s\n", full_path);
 	if (full_path)
 		return (full_path);
 	free_tab(paths);
