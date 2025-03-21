@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:13:45 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 19:23:28 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 11:07:31 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,11 @@ void	free_varenv(t_varenv *varenv_lst)
 {
 	t_varenv	*current;
 	t_varenv	*next;
-
+	
 	current = varenv_lst;
 	while (current)
-	{
+	{	
+		// printf("free: %s=%s\n", current->name, current->value);
 		next = current->next;
 		free(current->name);
 		free(current->value);

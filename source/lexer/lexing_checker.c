@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/09 17:50:34 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 11:29:38 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	check_lexing(t_token *head_of_list)
 		if (is_an_operator(current_token->type) == true
 			&& is_an_operator(current_token->next->type) == true)
 		{
-			free_token_list(head_of_list);
+			free_token_list(&head_of_list);
 			return (FAILURE);
 		}
 		current_token = current_token->next;

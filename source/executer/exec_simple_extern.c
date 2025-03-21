@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:09:14 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 19:47:59 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 11:18:30 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ void	handle_child_process(t_cmd *cmd, t_data *data)
 		input_fd = open(cmd->redirection->file_name, O_RDONLY);
 		if (input_fd == -1)
 		{
-			update_exit_status(data->varenv_lst, 1);
+			// update_exit_status(data->varenv_lst, 1);
+			update_exit_status(data, data->lst_exit);
 			ft_free_all(data);
 			exit(data->lst_exit);
 		}
@@ -40,7 +41,8 @@ void	handle_parent_process(pid_t pid, t_cmd *cmd, t_data *data)
 		data->lst_exit = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
 		data->lst_exit = 128 + WTERMSIG(status);
-	update_exit_status(data->varenv_lst, data->lst_exit);
+	// update_exit_status(data->varenv_lst, data->lst_exit);
+	update_exit_status(data, data->lst_exit);
 	close_redirections(cmd->redirection);
 	unlink_heredoc_temp(data, cmd->redirection);
 	if (strcmp(cmd->value, "clear") == 0)
@@ -57,7 +59,8 @@ void	exec_simple_extern_cmd(t_cmd *cmd, t_data *data)
 	pid = fork();
 	if (pid == -1)
 	{
-		update_exit_status(data->varenv_lst, 1);
+		// update_exit_status(data->varenv_lst, 1);
+		update_exit_status(data, 1);
 		exit(1);
 	}
 	if (pid == 0)

@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 12:36:45 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 16:20:41 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 11:19:41 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ void	read_and_write(t_data *data, int src_fd, int dest_fd)
 		if (write(dest_fd, buffer, bytes_read) == -1)
 		{
 			perror("ERREUR : Echec de l'écriture");
-			update_exit_status(data->varenv_lst, 1);
+			// update_exit_status(data->varenv_lst, 1);
+			update_exit_status(data, 1);
 			break;
 		}
 		bytes_read = read(src_fd, buffer, sizeof(buffer));
@@ -54,8 +55,9 @@ void merge_heredoc_and_input(t_data *data, int heredoc_fd, int input_fd)
 	if (pipe(pipe_fd) == -1)
 	{
 		perror("ERREUR : pipe a échoué");
-		update_exit_status(data->varenv_lst, 1);
-		return;
+		// update_exit_status(data->varenv_lst, 1);
+		update_exit_status(data, 1);
+	return;
 	}
 	if (heredoc_fd != -1)
 	{
@@ -71,7 +73,8 @@ void merge_heredoc_and_input(t_data *data, int heredoc_fd, int input_fd)
 	if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
 	{
 		perror("ERREUR : dup2 vers STDIN a échoué");
-		update_exit_status(data->varenv_lst, 1);
+		// update_exit_status(data->varenv_lst, 1);
+		update_exit_status(data, 1);
 	}
 	close(pipe_fd[0]);
 }

@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 15:44:00 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 16:18:38 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 13:34:22 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,22 +32,52 @@ void execute_builtin(t_cmd *cmd, t_data *data)
         return;
     }
     else
-        data->lst_exit = 1;
-    update_exit_status(data->varenv_lst, data->lst_exit);
+	{
+		        data->lst_exit = 1;
+	}
+	update_exit_status(data, data->lst_exit);
+	// update_exit_status(data->varenv_lst, data->lst_exit);
 }
+
+// void	exec_simple_builtin_dir(t_cmd *cmd, t_data *data)
+// {
+// 	int	saved_stdout;
+// 	int	saved_stdin;
+// 	int input_fd;
+
+// 	saved_stdin = dup(STDIN_FILENO);
+// 	saved_stdout = dup(STDOUT_FILENO);
+// 	apply_redirections(cmd->redirection, data);
+// 	input_fd = open(cmd->redirection->file_name, O_RDONLY);
+// 	if (input_fd == -1)// data->lst_exit = 1; update_exit_status(data->varenv_lst, data->lst_exit); vires car redondant
+// 		return;
+// 	execute_builtin(cmd, data);
+// 	dup2(saved_stdin, STDIN_FILENO);
+// 	dup2(saved_stdout, STDOUT_FILENO);
+// 	close(saved_stdin);
+// 	close(saved_stdout);
+// }
 
 void	exec_simple_builtin_dir(t_cmd *cmd, t_data *data)
 {
 	int	saved_stdout;
 	int	saved_stdin;
-	int input_fd;
+	int	input_fd;
 
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
 	apply_redirections(cmd->redirection, data);
 	input_fd = open(cmd->redirection->file_name, O_RDONLY);
-	if (input_fd == -1)// data->lst_exit = 1; update_exit_status(data->varenv_lst, data->lst_exit); vires car redondant
+	if (input_fd == -1)
+	{
+		// On restaure les entrées/sorties même si l'ouverture échoue
+		dup2(saved_stdin, STDIN_FILENO);
+		dup2(saved_stdout, STDOUT_FILENO);
+		close(saved_stdin);
+		close(saved_stdout);
 		return;
+	}
+	close(input_fd); // ✅ Fermeture immédiate après usage
 	execute_builtin(cmd, data);
 	dup2(saved_stdin, STDIN_FILENO);
 	dup2(saved_stdout, STDOUT_FILENO);

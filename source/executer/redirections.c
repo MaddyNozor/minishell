@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 16:10:03 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 16:22:26 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 11:20:13 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ static void	process_redirections(t_redirection *redirection,
 			{
 				handle_input_error(redirection, &state->output_created);
 				printf("bash: %s: No such file or directory\n", current->file_name);
-				update_exit_status(data->varenv_lst, 1);
+				// update_exit_status(data->varenv_lst, 1);
+				update_exit_status(data, 1);
 				state->input_fd = -1;
 				state->output_created = false;
 				return ;

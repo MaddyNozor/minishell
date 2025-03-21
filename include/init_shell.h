@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/20 19:39:08 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 11:28:45 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,8 @@ void	create_varenv(t_data *data, t_varenv **varenv_lst, t_varenv_data var_data);
 void						free_varenv(t_varenv *varenv_lst);
 void						free_varenv_node(t_varenv *node);
 void						free_cmd_list(t_cmd *list);
-void						free_token_list(t_token *list);
+// void						free_token_list(t_token *list);
+void	free_token_list(t_token **list);
 
 // SIGNALS
 void						ft_init_signal_handlers(void);
@@ -319,7 +320,9 @@ void	handle_heredoc_and_input(t_data *data, int heredoc_fd, int input_fd);
 
 //EXIT
 char	*get_exit_status(t_varenv *varenv);
-void update_exit_status(t_varenv *varenv, int exit_status);
+// void update_exit_status(t_varenv *varenv, int exit_status);
+
+void	update_exit_status(t_data *data, int exit_status);
 void	exit_with_error(t_data *data, char *context, char *error_message, int exit_code);
 void	exit_with_error_readline(t_data *data, char *context, char *error_message, int exit_code);
 bool	update_env_var(t_varenv *varenv, char *key, char *value);

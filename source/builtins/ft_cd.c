@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:21:32 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 17:02:52 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 11:14:41 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,16 @@ void	ft_update_pwd(t_data *data)
 		printf("bash: getcwd: %s\n", strerror(errno));
 		data->lst_exit = 1;
 	}
-	update_exit_status(data->varenv_lst, data->lst_exit);
+	// update_exit_status(data->varenv_lst, data->lst_exit);
+	update_exit_status(data, data->lst_exit);
 }
 
 static int	handle_cd_error(t_data *data, char *path)
 {
 	printf("bash: cd: %s: %s\n", path, strerror(errno));
 	data->lst_exit = 1;
-	update_exit_status(data->varenv_lst, data->lst_exit);
+	// update_exit_status(data->varenv_lst, data->lst_exit);
+	update_exit_status(data, data->lst_exit);
 	return (1);
 }
 
@@ -70,7 +72,8 @@ int	ft_cd(t_cmd *cmd, t_data *data)
 		{
 			printf("bash: cd: HOME not set\n");
 			data->lst_exit = 1;
-			update_exit_status(data->varenv_lst, data->lst_exit);
+			// update_exit_status(data->varenv_lst, data->lst_exit);
+			update_exit_status(data, data->lst_exit);
 			return (1);
 		}
 		path = home;
@@ -81,6 +84,7 @@ int	ft_cd(t_cmd *cmd, t_data *data)
 		return (handle_cd_error(data, path));
 	ft_update_pwd(data);
 	data->lst_exit = 0;
-	update_exit_status(data->varenv_lst, data->lst_exit);
+	// update_exit_status(data->varenv_lst, data->lst_exit);
+	update_exit_status(data, data->lst_exit);
 	return (0);
 }

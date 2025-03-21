@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:04:30 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 10:29:00 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 13:43:08 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,16 @@ static void	handle_child_process_pipeline(t_cmd *cmd, t_data *data, int pipe_in,
 	{
 		fprintf(stderr, "bash: %s: command not found\n", cmd->value);
 		data->lst_exit = 127;
-		update_exit_status(data->varenv_lst, data->lst_exit);
+		// update_exit_status(data->varenv_lst, data->lst_exit);
+		update_exit_status(data, data->lst_exit);
 		close_pipe_fds(pipe_fd);
 		(ft_free_all(data), exit(127));
 	}
 	execve(cmd_path, cmd->argv, convert_env_list_to_array(data, data->varenv_lst));
 	perror("execve failed");
 	data->lst_exit = 127;
-	update_exit_status(data->varenv_lst, data->lst_exit);
+	// update_exit_status(data->varenv_lst, data->lst_exit);
+	update_exit_status(data, data->lst_exit);
 	close_pipe_fds(pipe_fd);
 	(ft_free_all(data), exit(127));
 }
@@ -99,7 +101,8 @@ static bool	check_input_existence(t_redirection *redirection, t_data *data)
 				printf("bash: %s: No such file or directory\n",
 						redir->file_name);
 				data->lst_exit = 1;
-				update_exit_status(data->varenv_lst, data->lst_exit);
+				// update_exit_status(data->varenv_lst, data->lst_exit);
+				update_exit_status(data, data->lst_exit);
 				return (false);
 			}
 			close(input_fd);
@@ -145,35 +148,48 @@ static bool	handle_missing_input(t_cmd *cmd, t_data *data)
 	return (true);
 }
 
-static pid_t	create_forked_process(t_data *data)
+static pid_t	create_forked_process(t_data *data, int pipe_fd[2])
 {
 	pid_t	pid;
 
+	// pid = fork();
+	// if (pid == -1)
+	// 	exit_with_error(data, "fork", "Resource temporarily unavailable", 1);
 	pid = fork();
 	if (pid == -1)
+	{
+		close(pipe_fd[0]); // ← ajoute ça
+		close(pipe_fd[1]); // ← et ça aussi
 		exit_with_error(data, "fork", "Resource temporarily unavailable", 1);
+	}
+	
 	return (pid);
 }
-
-void	execute_pipeline_command(t_cmd *cmd, t_data *data, int *pipe_in, int pipe_fd[2])
+void execute_pipeline_command(t_cmd *cmd, t_data *data, int *pipe_in, int pipe_fd[2])
 {
-	pid_t	pid;
+    pid_t pid;
 
-	if (!handle_missing_input(cmd, data))
-		return ;
-	create_output_files(cmd->redirection, data);
-	setup_pipe(data, pipe_fd);
-	
-	pid = create_forked_process(data);
-	if (pid == 0)
-	{
-		handle_child_process_pipeline(cmd, data, *pipe_in, pipe_fd);
-	}
-	else
-	{
-		cmd->pid = pid;
-		handle_parent_process_pipeline_close_pipe(pid, pipe_in, pipe_fd);
-	}
+    if (!handle_missing_input(cmd, data))
+        return;
+    create_output_files(cmd->redirection, data);
+    setup_pipe(data, pipe_fd);
+        if (!handle_missing_input(cmd, data))
+    {
+        close_pipe_fds(pipe_fd); // Assure-toi de fermer les descripteurs
+        return;
+    }
+    pid = create_forked_process(data, pipe_fd);
+    if (pid == 0) // Processus enfant
+    {
+        handle_child_process_pipeline(cmd, data, *pipe_in, pipe_fd);
+        close_pipe_fds(pipe_fd); // Fermer la pipe dans le processus enfant
+    }
+    else // Processus parent
+    {
+        cmd->pid = pid;
+        handle_parent_process_pipeline_close_pipe(pid, pipe_in, pipe_fd);
+        close_pipe_fds(pipe_fd); // Fermer la pipe dans le processus enfant
+    }
 }
 
 static void	wait_for_pipeline_processes(t_cmd *cmd_lst, t_data *data)
@@ -181,7 +197,9 @@ static void	wait_for_pipeline_processes(t_cmd *cmd_lst, t_data *data)
 	t_cmd	*tmp;
 	int		status;
 
+	status = 0;
 	tmp = cmd_lst;
+	data->lst_exit = 0;
 	while (tmp)
 	{
 		if (tmp->pid > 0)
@@ -191,12 +209,13 @@ static void	wait_for_pipeline_processes(t_cmd *cmd_lst, t_data *data)
 				data->lst_exit = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
 				data->lst_exit = 128 + WTERMSIG(status);
-			update_exit_status(data->varenv_lst, data->lst_exit);
+			// update_exit_status(data->varenv_lst, data->lst_exit);
+			update_exit_status(data, data->lst_exit);
 		}
 		tmp = tmp->next;
 	}
-	free(tmp);
 }
+
 
 void	executer_pipeline_cmd(t_cmd *cmd_lst, t_data *data)
 {
@@ -222,4 +241,6 @@ void	executer_pipeline_cmd(t_cmd *cmd_lst, t_data *data)
 	}
 	wait_for_pipeline_processes(cmd_lst, data);
 	cleanup_pipeline(data, cmd_lst);
+	if (pipe_in != 0)//Ajout
+		close(pipe_in);
 }

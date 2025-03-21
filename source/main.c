@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/20 18:49:37 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 13:07:59 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	main(int ac, char **av, char **envp)
 		return (1);
 	(void)av;
 	ft_bzero(&data, sizeof(t_data));
+	data.lst_exit = 0;//Ajout 21
 	data.varenv_lst = init_varenv(envp, &data);
 	ft_init_signal_handlers();
 	ft_start_minishell(&data);
@@ -141,9 +142,6 @@ int	main(int ac, char **av, char **envp)
 // bash-5.1$ cat jexiste | ls | cat jexiste2 | oui
 // bash: oui: command not found
 // bash-5.1$ 
-//  verifier ca
-//  minishell$ ls | echo Sara
-// minishell$ 
 
 // bash-5.1$ echo "Hello World" | cat
 // Hello World

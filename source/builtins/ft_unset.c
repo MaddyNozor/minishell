@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 15:02:30 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/20 17:07:24 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 11:17:12 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ int	ft_unset(t_data *data, t_cmd *cmd)
 		data->lst_exit = 0;
 	else
 		data->lst_exit = 1;
-	update_exit_status(data->varenv_lst, data->lst_exit);
+	// update_exit_status(data->varenv_lst, data->lst_exit);
+	update_exit_status(data, data->lst_exit);
 	return (data->lst_exit);
 }

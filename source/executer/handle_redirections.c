@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 13:46:25 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 16:20:11 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 11:19:03 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,15 @@ void	handle_output_redirections(t_redirection *redir, t_data *data, int *last_ou
 			if (*last_out_fd == -1)
 			{
 				perror("ERREUR : Impossible d'ouvrir le fichier de sortie");
-				update_exit_status(data->varenv_lst, 1);
+				// update_exit_status(data->varenv_lst, 1);
+				update_exit_status(data, 1);
 				return;
 			}
 			if (dup2(*last_out_fd, STDOUT_FILENO) == -1)
 			{
 				perror("ERREUR : dup2 vers STDOUT a échoué");
-				update_exit_status(data->varenv_lst, 1);
+				// update_exit_status(data->varenv_lst, 1);
+				update_exit_status(data, 1);
 			}
 			close(*last_out_fd);
 		}
