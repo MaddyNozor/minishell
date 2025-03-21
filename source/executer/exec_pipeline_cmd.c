@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:04:30 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 18:58:24 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 19:14:07 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,18 +85,21 @@ static void	handle_child_process_pipeline(t_cmd *cmd, t_data *data, int pipe_in,
 
 static void	handle_parent_process_pipeline_close_pipe(pid_t pid, int *pipe_in, int pipe_fd[2])
 {
-	// waitpid(pid, NULL, 0);
-(void)pid;
+	(void)pid;
+
 	if (*pipe_in != -1)
 		close(*pipe_in);
 
-	// 👉 on garde pipe_fd[0] ouvert pour le prochain pipe_in
 	*pipe_in = pipe_fd[0];
 
-	// 👉 on ferme uniquement pipe_fd[1]
+	// Ferme pipe_fd[1] si encore ouvert
 	if (pipe_fd[1] != -1)
 		close(pipe_fd[1]);
+
+	// Ferme pipe_fd[0] aussi si la prochaine commande ne l'utilise pas
+	// (ce sera au prochain appel de handle_pipe_redirections de faire le dup2)
 }
+
 
 
 
@@ -197,26 +200,32 @@ static void	wait_for_pipeline_process(pid_t pid, t_data *data, bool is_last)
 		data->lst_exit = 128 + WTERMSIG(status);
 	update_exit_status(data, data->lst_exit);
 }
-void execute_pipeline_command(t_cmd *cmd, t_data *data, int *pipe_in, int pipe_fd[2])
+
+void	execute_pipeline_command(t_cmd *cmd, t_data *data, int *pipe_in, int pipe_fd[2])
 {
-	pid_t pid;
-	
+	pid_t	pid;
+
 	if (!handle_missing_input(cmd, data))
 		return ;
 	create_output_files(cmd->redirection, data);
 	pid = create_forked_process(data, pipe_fd);
 	if (pid == 0)
+	{
 		handle_child_process_pipeline(cmd, data, *pipe_in, pipe_fd);
-		else
+	}
+	else
+	{
+		cmd->pid = pid;
+		wait_for_pipeline_process(pid, data, !cmd->next);
+		handle_parent_process_pipeline_close_pipe(pid, pipe_in, pipe_fd);
+		if (!cmd->next && *pipe_in != -1)
 		{
-			cmd->pid = pid;
-			wait_for_pipeline_process(pid, data, !cmd->next);
-			handle_parent_process_pipeline_close_pipe(pid, pipe_in, pipe_fd);
-			if (pipe_fd[1] != -1)
-				close(pipe_fd[1]);
+			close(*pipe_in);
+			*pipe_in = -1;
 		}
-	
+	}
 }
+
 
 static void	reset_pipe_fd(int pipe_fd[2])
 {

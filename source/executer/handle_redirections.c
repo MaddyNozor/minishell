@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirections.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 13:46:25 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 15:28:51 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/21 19:03:04 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,17 @@ void	handle_input_redirection(t_redirection *redirection, int *in_fd, t_redirect
 	}
 }
 
+bool	has_output_redirection(t_redirection *redir)
+{
+	while (redir)
+	{
+		if (redir->type == REDIRECT_OUT || redir->type == APPEND_OUT)
+			return (true);
+		redir = redir->next;
+	}
+	return (false);
+}
+
 void	handle_pipe_redirections(t_cmd *cmd, int pipe_in, int pipe_fd[2])
 {
 	if (pipe_in != -1 && pipe_in != STDIN_FILENO)
@@ -89,13 +100,20 @@ void	handle_pipe_redirections(t_cmd *cmd, int pipe_in, int pipe_fd[2])
 		if (dup2(pipe_in, STDIN_FILENO) == -1)
 			perror("Erreur dup2 STDIN");
 	}
-
-	if (cmd->next && pipe_fd[1] != -1 && pipe_fd[1] != STDOUT_FILENO)
+	// if (cmd->next && pipe_fd[1] != -1 && pipe_fd[1] != STDOUT_FILENO)
+	// {
+	// 	if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+	// 		perror("Erreur dup2 STDOUT");
+	// 	close(pipe_fd[1]);
+	// }
+	if (cmd->next && pipe_fd[1] != -1 && pipe_fd[1] != STDOUT_FILENO
+		&& !has_output_redirection(cmd->redirection))
 	{
 		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
 			perror("Erreur dup2 STDOUT");
 		close(pipe_fd[1]);
 	}
+
 }
 
 // void	handle_pipe_redirections(t_cmd *cmd, int pipe_in, int pipe_fd[2])//A garder par securite, retire pour leaks ls | echo Sara
