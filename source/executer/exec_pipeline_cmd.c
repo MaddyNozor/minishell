@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:04:30 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 15:10:03 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/21 16:04:37 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,6 +236,7 @@ static void	reset_pipe_fd(int pipe_fd[2])
 	pipe_fd[0] = -1;
 	pipe_fd[1] = -1;
 }
+
 static void	finalize_pipeline_execution(t_cmd *cmd_lst, t_data *data, int pipe_in)
 {
 	wait_for_pipeline_processes(cmd_lst, data);
