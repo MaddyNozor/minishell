@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:04:30 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 18:31:26 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 18:58:24 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ static void	handle_child_process_pipeline(t_cmd *cmd, t_data *data, int pipe_in,
 	{
 		fprintf(stderr, "bash: %s: command not found\n", cmd->value);
 		data->lst_exit = 127;
-		// update_exit_status(data->varenv_lst, data->lst_exit);
 		update_exit_status(data, data->lst_exit);
 		close_pipe_fds(pipe_fd);
 		(ft_free_all(data), exit(127));
@@ -70,7 +69,6 @@ static void	handle_child_process_pipeline(t_cmd *cmd, t_data *data, int pipe_in,
 	execve(cmd_path, cmd->argv, convert_env_list_to_array(data, data->varenv_lst));
 	perror("execve failed");
 	data->lst_exit = 127;
-	// update_exit_status(data->varenv_lst, data->lst_exit);
 	update_exit_status(data, data->lst_exit);
 	close_pipe_fds(pipe_fd);
 	(ft_free_all(data), exit(127));
@@ -87,8 +85,8 @@ static void	handle_child_process_pipeline(t_cmd *cmd, t_data *data, int pipe_in,
 
 static void	handle_parent_process_pipeline_close_pipe(pid_t pid, int *pipe_in, int pipe_fd[2])
 {
-	waitpid(pid, NULL, 0);
-
+	// waitpid(pid, NULL, 0);
+(void)pid;
 	if (*pipe_in != -1)
 		close(*pipe_in);
 
@@ -183,52 +181,41 @@ static pid_t	create_forked_process(t_data *data, int pipe_fd[2])
 	return (pid);
 }
 
+static void	wait_for_pipeline_process(pid_t pid, t_data *data, bool is_last)
+{
+	int	status;
+
+	if (!is_last)
+		return ;
+
+	waitpid(pid, &status, 0);
+	while (wait(NULL) > 0)
+		;
+	if (WIFEXITED(status))
+		data->lst_exit = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		data->lst_exit = 128 + WTERMSIG(status);
+	update_exit_status(data, data->lst_exit);
+}
 void execute_pipeline_command(t_cmd *cmd, t_data *data, int *pipe_in, int pipe_fd[2])
 {
 	pid_t pid;
-
+	
 	if (!handle_missing_input(cmd, data))
 		return ;
-
 	create_output_files(cmd->redirection, data);
-
 	pid = create_forked_process(data, pipe_fd);
-
 	if (pid == 0)
-	{
 		handle_child_process_pipeline(cmd, data, *pipe_in, pipe_fd);
-	}
-	else
-	{
-		cmd->pid = pid;
-		handle_parent_process_pipeline_close_pipe(pid, pipe_in, pipe_fd);
-		if (pipe_fd[1] != -1)
-			close(pipe_fd[1]);
-	}
-}
-
-static void	wait_for_pipeline_processes(t_cmd *cmd_lst, t_data *data)
-{
-	t_cmd	*tmp;
-	int		status;
-
-	status = 0;
-	tmp = cmd_lst;
-	data->lst_exit = 0;
-	while (tmp)
-	{
-		if (tmp->pid > 0)
+		else
 		{
-			waitpid(tmp->pid, &status, 0);
-			if (WIFEXITED(status))
-				data->lst_exit = WEXITSTATUS(status);
-			else if (WIFSIGNALED(status))
-				data->lst_exit = 128 + WTERMSIG(status);
-			// update_exit_status(data->varenv_lst, data->lst_exit);
-			update_exit_status(data, data->lst_exit);
+			cmd->pid = pid;
+			wait_for_pipeline_process(pid, data, !cmd->next);
+			handle_parent_process_pipeline_close_pipe(pid, pipe_in, pipe_fd);
+			if (pipe_fd[1] != -1)
+				close(pipe_fd[1]);
 		}
-		tmp = tmp->next;
-	}
+	
 }
 
 static void	reset_pipe_fd(int pipe_fd[2])
@@ -239,7 +226,6 @@ static void	reset_pipe_fd(int pipe_fd[2])
 
 static void	finalize_pipeline_execution(t_cmd *cmd_lst, t_data *data, int pipe_in)
 {
-	wait_for_pipeline_processes(cmd_lst, data);
 	cleanup_pipeline(data, cmd_lst);
 	if (pipe_in != -1)
 		close(pipe_in);
