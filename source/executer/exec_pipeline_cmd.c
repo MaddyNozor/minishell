@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:04:30 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 19:48:24 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 10:29:00 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,7 @@ void	execute_pipeline_command(t_cmd *cmd, t_data *data, int *pipe_in, int pipe_f
 		return ;
 	create_output_files(cmd->redirection, data);
 	setup_pipe(data, pipe_fd);
+	
 	pid = create_forked_process(data);
 	if (pid == 0)
 	{
