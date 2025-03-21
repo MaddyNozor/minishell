@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 15:39:51 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 11:16:46 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 15:05:28 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,3 +94,70 @@ bool	is_valid_identifier(char *name)
 	}
 	return (true);
 }
+// int    found_sign_equal_in_word(char *str)
+// {
+//     int i;
+    
+//     i = 0;
+//     while (str[i])
+//     {
+//         if (str[i] == '=')
+//             return (i);
+//         i++;
+//     }
+//     return (-1);   
+// }
+
+// bool    is_valid_name(char *name)
+// {
+//     int i;
+    
+//     if (!name)
+//         return (false);
+//     i = 1;
+//     while (name [i])
+//     {
+//         if(!ft_isalnum(name[i]) && name[i] != '_')
+//             return (false);
+//         i++;
+//     }
+//     return (true);
+// }
+
+// t_varenv *ft_check_if_varenv_exist(t_varenv *list, char *name)
+// {
+//     t_varenv *current;
+
+//     current = list;
+//     while (current)
+//     {
+//         if (ft_strcmp(current->name, name) == 0 )
+//             return current;
+//         current = current->next;
+//     }
+//     return (NULL);
+// }
+
+// void    free_name_value_if_invalid(char **name, char **value)
+// {
+//     if (*name)
+//     {
+//         printf("export: '%s' : not a valid identifier \n", *name);
+//         free(*name);
+//     }
+//     else if (*value)
+//         free(*value);
+//     return;
+// }
+
+// int    ft_replace_varenv_value(char **name, char **value, t_varenv *varenv)
+// {
+//     if (*value)
+//     {
+//         free(varenv->value);
+//         varenv->value = *value;
+//     }
+//     free(*name);
+//     return (SUCCESS);
+// >>>>>>> built-in-maddy
+// }

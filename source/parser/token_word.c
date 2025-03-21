@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_word.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:19:05 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/19 17:43:08 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 15:24:15 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	handle_token_word(t_queue *queue, t_token **tok, t_cmd *current_cmd)
 
 	data = current_cmd->data;
 	current_tok = *tok;
-	if (!current_cmd->value) // Si c'est le premier token WORD dans cette commande
+	if (!current_cmd->value)
 	{
 		current_cmd->value = ft_strdup(current_tok->content);
 		if (!current_cmd->value)
@@ -47,5 +47,5 @@ void	handle_token_word(t_queue *queue, t_token **tok, t_cmd *current_cmd)
 		current_tok = current_tok->next;
 		add_word_to_queue(queue, current_tok->content, current_cmd);
 	}
-	*tok = current_tok; // Mise à jour du pointeur pour `handle_tokens`
+	*tok = current_tok;
 }

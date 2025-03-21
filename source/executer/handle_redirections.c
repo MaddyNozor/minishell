@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirections.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 13:46:25 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 14:19:26 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 15:11:10 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	handle_input_redirection(t_redirection *redirection, int *in_fd, t_redirect
 {
 	t_redirection	*current;
 
+	printf("📌 Je rentre dans handle_input_redirection\n");
 	current = redirection;
 	while (current)
 	{

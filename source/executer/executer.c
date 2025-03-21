@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:38:39 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/20 16:18:49 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 15:10:23 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,7 @@ extern volatile sig_atomic_t g_sig_caught;
 static void	sig_quit_handler()
 {
 	g_sig_caught = SIGQUIT;
-	// rl_redisplay();
-	ft_printf("\nIs it a bird ? Is it a plane ? No ! It's Super-SIGQUIT!\n");
-	// rl_on_new_line();
-	// rl_on_new_line();
+	ft_printf("Quit (core dumped)\n");
 	rl_redisplay();
 }
 

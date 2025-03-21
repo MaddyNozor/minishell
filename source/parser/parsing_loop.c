@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_loop.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:24:19 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 13:45:36 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 15:21:35 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,5 +104,27 @@ t_cmd	*parser(t_token *tok, t_varenv *varenv_lst, t_data *data)
 		return (NULL);
 	}
 	handle_tokens(tok, &cmd_list, varenv_lst, data);
+	// t_cmd *current_cmd = cmd_list;
+	// while (current_cmd)
+	// {
+	// 	printf("\n🔹 Commande trouvée : %s\n", current_cmd->value);
+	// 	printf("   📌 Nombre d'arguments : %d\n", current_cmd->argc);
+	// 	if (current_cmd->argv)
+	// 	{
+	// 		printf("   📌 Arguments : ");
+	// 		for (int i = 0; current_cmd->argv[i]; i++)
+	// 			printf("[%s] ", current_cmd->argv[i]);
+	// 		printf("\n");
+	// 	}
+		// t_redirection *redir = current_cmd->redirection;
+		// while (redir)
+		// {
+		// 	printf("   🔍 Redirection détectée : fichier = %s, type = %d\n",
+		// 		   redir->file_name, redir->type);
+		// 	redir = redir->next;
+		// }
+		// current_cmd = current_cmd->next;
+	// }
+	// printf("\nParsing completed. On move on to executer!!\n");
 	return (cmd_list);
 }

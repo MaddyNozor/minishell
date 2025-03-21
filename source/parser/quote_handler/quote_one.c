@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/11 14:03:02 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/18 18:07:18 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	*ft_trim_quote(char const *s1, char const q)
 	end = ft_strlen(s1);
 	if (s1[end - 1] == q)
 		end--;
-	new_s = malloc(((end - start) + 1) * sizeof(char));
+	new_s = malloc(((end - start) + 2) * sizeof(char));
 	if (new_s == 0)
 		return (0);
 	i = 0;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/21 11:28:45 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 15:00:57 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 //--------------------- INCLUDES -----------------------------
 # include "../libft/libft.h"
 # include <fcntl.h>
-# include <limits.h> // pour PATH_MAX dans ft_pwd
+# include <limits.h> 
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdbool.h>
@@ -32,8 +32,6 @@
 
 
 //--------------------- DEFINES -----------------------------
-// # define FAILURE_L 0 // TODO: A virer a la fin
-// # define SUCCESS_L 1
 # define FALSE 0
 # define TRUE 1
 # define FAILURE 0
@@ -76,6 +74,7 @@ typedef struct s_token
 	struct s_token			*prev;
 	int						type;
 	int						nb_quote;
+	bool					quote_added;
 }							t_token;
 
 typedef struct s_cmd
@@ -86,7 +85,7 @@ typedef struct s_cmd
 	pid_t					pid;
 	t_redirection			*redirection;
 	struct s_cmd			*next;
-	struct s_data			*data; // Stocke un pointeur vers t_data
+	struct s_data			*data;
 }							t_cmd;
 
 typedef struct s_data
@@ -149,24 +148,22 @@ void	create_varenv(t_data *data, t_varenv **varenv_lst, t_varenv_data var_data);
 void						free_varenv(t_varenv *varenv_lst);
 void						free_varenv_node(t_varenv *node);
 void						free_cmd_list(t_cmd *list);
-// void						free_token_list(t_token *list);
 void	free_token_list(t_token **list);
 
 // SIGNALS
 void						ft_init_signal_handlers(void);
-//void						sig_quit_handler(void);
 
 // READLINE MAIN LOOP
 void						ft_start_minishell(t_data *data);
 
 // LEXING
-// Lexer
 t_token						*lexer(char *line);
 
 // utils
 bool						ft_is_whitespace(char c);
 int							have_to_close_tok(char c);
 int							is_an_operator(int type);
+int							ft_size_according_to_type(int type);
 
 // utils token
 t_token						*ft_tok_new(void *content, int type);
@@ -208,7 +205,6 @@ char						*ft_varenv_slicing(char *content, int *i,
 char						*ft_cut_varenv(char *content, int *i);
 char						*ft_cut_normal_text_but_varenv(char *content,
 								int *i);
-// char 		*ft_fake_expand_varenv(char *var_found);
 char						*ft_expand_varenv(char *var_found,
 								t_varenv *varenv);
 
@@ -218,19 +214,16 @@ void						executer(t_data *data);
 // REDIRECTIONS
 void						apply_redirections(t_redirection *redirection, t_data *data);
 void						merge_heredoc_and_input(t_data *data, int heredoc_fd, int input_fd);
-// void						handle_input_redirection(t_redirection *redirection,
-// 									t_redir_state *state);
-void	handle_input_redirection(t_redirection *redirection, int *input_fd, t_redirection **last_heredoc, bool *input_redir_found);
+void						handle_input_redirection(t_redirection *redirection, int *input_fd,
+								t_redirection **last_heredoc, bool *input_redir_found);
 void						handle_output_redirections(t_redirection *redir, t_data *data, int *last_out_fd);
 void						handle_pipe_redirections(t_cmd *cmd, int pipe_in,
 								int pipe_fd[2]);
 void						close_redirections(t_redirection *redirection);
 int							ft_strcmp(const char *s1, const char *s2);
-// void	setup_io_redirections(t_pipe_data *pipe_data, t_cmd *cmd, t_data *data);// TODO : plus utilise ? a virer a la fin
 void	read_and_write(t_data *data, int src_fd, int dest_fd);
 
 // REDIRECTIONS - HEREDOC
-// int							ft_create_heredoc(const char *delimiter, int index);
 bool						contains_heredoc(t_redirection *redirection);
 void						unlink_heredoc_temp(t_data *data, t_redirection *redirection);
 void	process_heredoc_input(t_data *data, int fd, const char *delimiter);
@@ -241,7 +234,6 @@ void	handle_heredocs_pipeline(t_data *data, t_cmd *cmd_lst);
 void						handle_heredoc_redirection(t_data *data, 
 								t_redirection *last_heredoc,
 								int *heredoc_fd);
-// void	setup_heredoc_fd(t_data *data, t_cmd *cmd, int *heredoc_fd);
 void						create_heredoc_list(t_cmd *cmd_lst,
 								char *last_heredoc_files[]);
 void	handle_heredoc_input(t_data *data, char *heredoc_file);
@@ -272,7 +264,6 @@ void						free_tab(char **tab);
 int	ft_echo(t_cmd *cmd, t_data *data);
 int	ft_pwd(t_data *data);
 int							ft_env(t_data *data, t_cmd *cmd);
-// char						**dup_env(t_data *data, char **envp);//TODO : A virer a la fin, on lappelle jamais
 int	ft_cd(t_cmd *cmd, t_data *data);
 void						ft_exit(t_cmd *cmd, t_data *data);
 int	ft_unset(t_data *data, t_cmd *cmd);
@@ -283,7 +274,15 @@ bool	extract_name_value(char *arg, char **name, char **value);
 bool	is_valid_identifier(char *name);
 void        ft_print_list_export(t_data *data);
 
-// PARSER SARA
+// bool    					is_valid_name(char *name);
+// t_varenv 					*ft_check_if_varenv_exist(t_varenv *list, 
+// 								char *name);
+// void    					free_name_value_if_invalid(char **name, 
+// 								char **value);
+// int    						ft_replace_varenv_value(char **name, char **value,
+// 								t_varenv *varenv);
+// int    						found_sign_equal_in_word(char *str);
+
 
 // PARSER - QUEUE
 void						transfer_queue_to_argv(t_queue *queue, t_cmd *cmd);

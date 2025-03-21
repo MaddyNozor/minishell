@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lex_utils_token.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/21 11:28:30 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/21 15:18:41 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,11 @@ t_token	*ft_tok_new(void *content, int type)
 {
 	t_token	*new;
 
-	new = (t_token *)malloc(sizeof(t_token) * 1);
+	new = (t_token *)ft_calloc(1, sizeof(t_token));
 	if (new == NULL)
 		return (NULL);
 	new->content = content;
-	new->next = NULL;
-	new->prev = NULL;
 	new->type = type;
-	new->nb_quote = 0;
 	return (new);
 }
 
@@ -89,24 +86,6 @@ t_token	*init_type_token_with_x_char_of_line(int type, int x, char *line, int i)
 	}
 	return (new_token);
 }
-
-// void	free_token_list(t_token *list)
-// {
-// 	t_token	*tmp_current;
-// 	t_token	*tmp_next;
-
-// 	if (!list)
-// 		return ;
-// 	tmp_current = list;
-// 	while (tmp_current)
-// 	{
-// 		tmp_next = tmp_current->next;
-// 		free(tmp_current->content);
-// 		free(tmp_current);
-// 		tmp_current = tmp_next;
-// 	}
-// 	list = NULL;
-// }
 
 void	free_token_list(t_token **list)
 {
