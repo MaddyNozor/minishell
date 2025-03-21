@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/20 17:41:23 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/21 12:57:03 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@
 # include <signal.h>
 
 //--------------------- DEFINES -----------------------------
-// # define FAILURE_L 0 // TODO: A virer a la fin
-// # define SUCCESS_L 1
 # define FALSE 0
 # define TRUE 1
 # define FAILURE 0
