@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lex_utils_token.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/21 15:18:41 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/22 13:23:59 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,23 +69,29 @@ void	ft_tokadd_back(t_token **lst, t_token *new)
 	}
 	return ;
 }
-
-t_token	*init_type_token_with_x_char_of_line(int type, int x, char *line, int i)
+t_token	*init_type_token_with_x_char_of_line(t_data *data, t_tok_params p)
 {
 	t_token	*new_token;
 	char	*content;
 
-	content = ft_substr(line, i, x);
+	content = ft_substr(p.line, p.i, p.x);
 	if (content == NULL)
+	{
+		data->lst_exit = 1;
+		update_exit_status(data, 1);
 		return (NULL);
-	new_token = ft_tok_new(content, type);
+	}
+	new_token = ft_tok_new(content, p.type);
 	if (new_token == NULL)
 	{
 		free(content);
+		data->lst_exit = 1;
+		update_exit_status(data, 1);
 		return (NULL);
 	}
 	return (new_token);
 }
+
 
 void	free_token_list(t_token **list)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/22 12:46:42 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/22 13:27:49 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,24 @@ typedef struct s_token
 	int						type;
 	int						nb_quote;
 	bool					quote_added;
+	int						nb_chars_read;
 }							t_token;
+
+typedef struct s_quote_ctx
+{
+	int						*len;
+	int						*nb_pair_quote;
+	int						i;
+}	t_quote_ctx;
+
+typedef struct s_tok_params
+{
+	int		type;
+	int		x;
+	char	*line;
+	int		i;
+}	t_tok_params;
+
 
 typedef struct s_cmd
 {
@@ -166,18 +183,18 @@ int			ft_size_according_to_type(int type);
 t_token		*ft_tok_new(void *content, int type);
 t_token		*ft_toklast(t_token *lst);
 void		ft_tokadd_back(t_token **lst, t_token *new);
-t_token		*init_type_token_with_x_char_of_line(int type, int x,
-				char *line, int i);
+t_token		*init_type_token_with_x_char_of_line(t_data *data, t_tok_params p);
 
 // id_and_create_token
 int			ft_type_detector(char *line, int i);
-t_token		*token_type_operators(char *line, int i, t_token *new_token);
+t_token		*token_type_operators(t_data *data, char *line, int i,
+				t_token *new_token);
 t_token		*token_type_word(t_data *data, char *line, int i,
 				t_token *new_token);
-t_token		*create_token(t_data *data, char *line, int i, t_token *new_token);
+t_token	*create_token(t_data *data, char *line, int i, t_token *new_token);
 
 // checker
-int			check_lexing(t_token *head_of_list);
+int			check_lexing(t_data *data, t_token *head_of_list);
 
 // PARSING QUOTES
 char		*ft_trim_quote(char const *s1, char const q);
