@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 13:54:50 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 20:19:49 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/22 12:34:13 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	open_heredoc_file(t_data *data, t_redirection *redir,
 		char *heredoc_filename)
 {
 	free(redir->file_name);
-	redir->file_name = strdup(heredoc_filename);
+	redir->file_name = ft_strdup(heredoc_filename);
 	if (!redir->file_name)
 	{
 		exit_with_error(data, "strdup", strerror(errno), 1);
@@ -47,7 +47,7 @@ void	create_heredoc_file(t_data *data, t_redirection *redir, int index)
 	char	*delimiter;
 
 	generate_heredoc_filename(heredoc_filename, index);
-	delimiter = strdup(redir->file_name);
+	delimiter = ft_strdup(redir->file_name);
 	if (!delimiter)
 	{
 		exit_with_error(data, "strdup", strerror(errno), 1);

@@ -6,25 +6,13 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/20 18:30:17 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/22 12:44:55 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
 
-// /// tempo pour test
-// /// @param lst pointeur sur la tete de la liste
-// void	print_list(t_token *lst)
-// {
-// 	while (lst)
-// 	{
-// 		printf("Token: %s, Type: %d\n", lst->content, lst->type);
-// 		lst = lst->next;
-// 	}
-// 	printf("--List Printed--\n");
-// } //TODO  pour test a virer a terme
-
-t_token	*lexer(char *line)
+t_token	*lexer(t_data *data, char *line)
 {
 	int		i;
 	t_token	*head_of_list;

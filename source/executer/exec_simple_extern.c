@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:09:14 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/22 11:18:17 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/22 12:33:09 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	handle_parent_process(pid_t pid, t_cmd *cmd, t_data *data)
 	update_exit_status(data, data->lst_exit);
 	close_redirections(cmd->redirection);
 	unlink_heredoc_temp(data, cmd->redirection);
-	if (strcmp(cmd->value, "clear") == 0)
+	if (ft_strcmp(cmd->value, "clear") == 0)
 		printf("\033[H\033[J");
 }
 

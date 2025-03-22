@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/22 12:20:47 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/22 12:46:42 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ void		sig_int_handler_fork(sig_atomic_t g_sig_caught);
 void		ft_start_minishell(t_data *data);
 
 // LEXING
-t_token		*lexer(char *line);
+t_token		*lexer(t_data *data, char *line);
 
 // utils
 bool		ft_is_whitespace(char c);
@@ -172,8 +172,9 @@ t_token		*init_type_token_with_x_char_of_line(int type, int x,
 // id_and_create_token
 int			ft_type_detector(char *line, int i);
 t_token		*token_type_operators(char *line, int i, t_token *new_token);
-t_token		*token_type_word(char *line, int i, t_token *new_token);
-t_token		*create_token(char *line, int i, t_token *new_token);
+t_token		*token_type_word(t_data *data, char *line, int i,
+				t_token *new_token);
+t_token		*create_token(t_data *data, char *line, int i, t_token *new_token);
 
 // checker
 int			check_lexing(t_token *head_of_list);
@@ -238,8 +239,16 @@ void		execute_external_cmd(t_cmd *cmd, t_data *data);
 void		executer_pipeline_cmd(t_cmd *cmd_lst, t_data *data);
 void		setup_pipe(t_data *data, int pipe_fd[2]);
 void		cleanup_pipeline(t_data *data, t_cmd *cmd_lst);
-
-
+void		wait_for_pipeline_process(pid_t pid, t_data *data, bool is_last);
+pid_t		create_forked_process(t_data *data, int pipe_fd[2]);
+bool		check_input_existence(t_redirection *redirection, t_data *data);
+void		create_output_files(t_redirection *redirection, t_data *data);
+bool		handle_missing_input(t_cmd *cmd, t_data *data);
+void		reset_pipe_fd(int pipe_fd[2]);
+void		finalize_pipeline_execution(t_cmd *cmd_lst, t_data *data,
+				int pipe_in);
+void		close_pipe_fds(int pipe_fd[2]);
+	
 // EXECUTER - COMMAND PATH
 char		*find_cmd_path(const char *cmd, t_varenv *varenv_lst, t_data *data);
 int			count_env_vars(t_varenv *varenv_lst);

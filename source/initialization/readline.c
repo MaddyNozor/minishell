@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:41:57 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/22 11:40:32 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/22 12:44:26 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	ft_start_minishell(t_data *data)
 			free(input);
 			continue ;
 		}
-		data->tok_lst = lexer(input);
+		data->tok_lst = lexer(data, input);
 		free(input);
 		if (!data->tok_lst)
 			continue ;
