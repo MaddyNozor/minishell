@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:04:30 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 16:04:37 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/22 11:07:41 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,7 @@ static pid_t	create_forked_process(t_data *data, int pipe_fd[2])
 	// pid = fork();
 	// if (pid == -1)
 	// 	exit_with_error(data, "fork", "Resource temporarily unavailable", 1);
+	signal(SIGINT, sig_int_handler_fork);
 	pid = fork();
 	if (pid == -1)
 	{

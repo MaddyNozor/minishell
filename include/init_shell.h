@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/21 19:46:17 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/22 11:05:04 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,8 @@ void	free_token_list(t_token **list);
 
 // SIGNALS
 void						ft_init_signal_handlers(void);
+void						sig_int_handler(sig_atomic_t g_sig_caught);
+void						sig_int_handler_fork(sig_atomic_t g_sig_caught);
 
 // READLINE MAIN LOOP
 void						ft_start_minishell(t_data *data);
