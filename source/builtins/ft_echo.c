@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:46:35 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 15:01:49 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/22 11:10:02 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ int	ft_echo(t_cmd *cmd, t_data *data)
 	if (newline)
 		write(STDOUT_FILENO, "\n", 1);
 	data->lst_exit = 0;
-	// update_exit_status(data->varenv_lst, data->lst_exit);//TODO Virer tous les appels obsoletes de update
 	update_exit_status(data, 0);
 	return (0);
 }

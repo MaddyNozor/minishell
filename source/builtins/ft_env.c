@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:38:18 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 11:15:02 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/22 11:10:08 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ static int	handle_env_error(t_data *data, char *arg, int exit_code)
 	else
 		printf("bash: env: No such file or directory\n");
 	data->lst_exit = exit_code;
-	// update_exit_status(data->varenv_lst, data->lst_exit);
 	update_exit_status(data, data->lst_exit);
 	return (exit_code);
 }
@@ -42,10 +41,6 @@ int	ft_env(t_data *data, t_cmd *cmd)
 		current = current->next;
 	}
 	data->lst_exit = 0;
-	// update_exit_status(data->varenv_lst, data->lst_exit);
 	update_exit_status(data, data->lst_exit);
 	return (0);
 }
-
-//TODO = quid en cqs de vqleur sqns = comme ceux qu'on peut creer avec export ?
-//TODO es-ce qu'il faut pas ajouter env: devant chaque variable ?

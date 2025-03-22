@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:04:30 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 20:07:39 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/22 10:59:40 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,9 @@ static void	handle_child_process_pipeline(t_cmd *cmd, t_data *data, int pipe_in,
 	(ft_free_all(data), exit(127));
 }
 
-static void	handle_parent_process_pipeline_close_pipe(pid_t pid, int *pipe_in,
+static void	handle_parent_process_pipeline_close_pipe(int *pipe_in,
 		int pipe_fd[2])
 {
-	(void)pid;
 	if (*pipe_in != -1)
 		close(*pipe_in);
 	*pipe_in = pipe_fd[0];
@@ -196,7 +195,7 @@ void	execute_pipeline_command(t_cmd *cmd, t_data *data, int *pipe_in,
 	{
 		cmd->pid = pid;
 		wait_for_pipeline_process(pid, data, !cmd->next);
-		handle_parent_process_pipeline_close_pipe(pid, pipe_in, pipe_fd);
+		handle_parent_process_pipeline_close_pipe(pipe_in, pipe_fd);
 		if (!cmd->next && *pipe_in != -1)
 		{
 			close(*pipe_in);

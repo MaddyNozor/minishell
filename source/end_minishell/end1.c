@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 18:30:39 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 11:29:03 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/22 11:11:53 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	ft_free_all(t_data *data)
 {
 	
-	rl_clear_history();//GAB A DIT QUON A BIEN MONTRE QUON A CLEAR POUR LE PROBLEME DE ADD_HISTORY
+	rl_clear_history();
 	if (!data)
 		return;
 	if (data->varenv_lst)

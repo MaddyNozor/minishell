@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:38:32 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 11:17:05 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/22 11:10:59 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int	ft_pwd(t_data *data)
 		perror("pwd");
 		data->lst_exit = 1;
 	}
-	// update_exit_status(data->varenv_lst, data->lst_exit);
 	update_exit_status(data, data->lst_exit);
 	return (data->lst_exit);
 }

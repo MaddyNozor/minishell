@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:21:32 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 13:45:09 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/22 11:09:51 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ bool	update_env_var(t_varenv *varenv, char *key, char *value)
 		{
 			free(current->value);
 			current->value = ft_strdup(value);
-			return (true); // Indique que la variable a été mise à jour
+			return (true);
 		}
 		current = current->next;
 	}
-	return (false); // La variable n'existait pas
+	return (false);
 }
 
 void	ft_update_pwd(t_data *data)
@@ -46,7 +46,6 @@ void	ft_update_pwd(t_data *data)
 		printf("bash: getcwd: %s\n", strerror(errno));
 		data->lst_exit = 1;
 	}
-	// update_exit_status(data->varenv_lst, data->lst_exit);
 	update_exit_status(data, data->lst_exit);
 }
 
@@ -54,7 +53,6 @@ static int	handle_cd_error(t_data *data, char *path)
 {
 	printf("bash: cd: %s: %s\n", path, strerror(errno));
 	data->lst_exit = 1;
-	// update_exit_status(data->varenv_lst, data->lst_exit);
 	update_exit_status(data, data->lst_exit);
 	return (1);
 }
