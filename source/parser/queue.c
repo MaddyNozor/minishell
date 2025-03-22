@@ -3,14 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   queue.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:42:31 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 15:22:01 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/22 11:59:19 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
+
+t_cmd	*init_cmd_structs(t_data *data)
+{
+	t_cmd	*cmd;
+
+	cmd = malloc(sizeof(t_cmd));
+	if (!cmd)
+	{
+		printf("bash: allocation error\n");
+		data->lst_exit = 1;
+		return (NULL);
+	}
+	cmd->value = NULL;
+	cmd->argv = NULL;
+	cmd->argc = 0;
+	cmd->pid = 0;
+	cmd->redirection = NULL;
+	cmd->next = NULL;
+	cmd->data = data;
+	return (cmd);
+}
 
 t_queue	*init_queue(t_data *data)
 {
