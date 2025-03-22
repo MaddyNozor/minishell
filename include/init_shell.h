@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/21 20:22:50 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/22 11:16:02 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ typedef struct s_data
 	t_cmd					*cmd_lst;
 	t_varenv				*varenv_lst;
 	t_token					*tok_lst;
+	char					*secret_path;
 	int						lst_exit;
 }							t_data;
 
@@ -136,7 +137,7 @@ typedef struct s_varenv_data
 
 // SHELL INITIALIZATION
 t_varenv	*init_varenv(char **envp, t_data *data);
-void						init_minimalist_env(t_varenv **varenv_lst);
+void						init_minimalist_env(t_varenv **varenv_lst, t_data *data);
 
 void						free_envp_on_error(char **envp, int i);
 char	**convert_env_list_to_array(t_data *data, t_varenv *varenv_lst);
@@ -152,6 +153,8 @@ void	free_token_list(t_token **list);
 
 // SIGNALS
 void						ft_init_signal_handlers(void);
+void						sig_int_handler(sig_atomic_t g_sig_caught);
+void						sig_int_handler_fork(sig_atomic_t g_sig_caught);
 
 // READLINE MAIN LOOP
 void						ft_start_minishell(t_data *data);

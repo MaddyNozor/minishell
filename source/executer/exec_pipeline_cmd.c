@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipeline_cmd.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:04:30 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/22 10:59:40 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/22 11:17:15 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,6 +152,7 @@ static pid_t	create_forked_process(t_data *data, int pipe_fd[2])
 {
 	pid_t	pid;
 
+	signal(SIGINT, sig_int_handler_fork);
 	pid = fork();
 	if (pid == -1)
 	{

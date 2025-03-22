@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_simple_extern.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:09:14 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 20:11:36 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/22 11:18:17 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	exec_simple_extern_cmd(t_cmd *cmd, t_data *data)
 		return ;
 	if (contains_heredoc(cmd->redirection))
 		handle_heredocs_simple_cmd(data, cmd->redirection);
+	signal(SIGINT, sig_int_handler_fork);
 	pid = fork();
 	if (pid == -1)
 	{
