@@ -6,25 +6,11 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:37:21 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 15:14:32 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/22 11:40:00 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
-
-int	count_env_vars(t_varenv *varenv_lst)
-{
-	int	count;
-
-	count = 0;
-	while (varenv_lst)
-	{
-		if (!varenv_lst->hiden)
-			count++;
-		varenv_lst = varenv_lst->next;
-	}
-	return (count);
-}
 
 char	*create_env_entry(t_data *data, t_varenv *varenv_lst)
 {
@@ -94,7 +80,8 @@ void	append_varenv_node(t_varenv **varenv_lst, t_varenv *new_node)
 	new_node->prev = current_node;
 }
 
-void	create_varenv(t_data *data, t_varenv **varenv_lst, t_varenv_data var_data)
+void	create_varenv(t_data *data, t_varenv **varenv_lst,
+			t_varenv_data var_data)
 {
 	t_varenv	*new_node;
 
@@ -102,7 +89,7 @@ void	create_varenv(t_data *data, t_varenv **varenv_lst, t_varenv_data var_data)
 	if (!new_node)
 	{
 		exit_with_error(data, "malloc", strerror(errno), 1);
-		return;
+		return ;
 	}
 	new_node->name = ft_strdup(var_data.name);
 	new_node->value = ft_strdup(var_data.value);
@@ -113,7 +100,7 @@ void	create_varenv(t_data *data, t_varenv **varenv_lst, t_varenv_data var_data)
 	{
 		free_varenv_node(new_node);
 		exit_with_error(data, "ft_strdup", strerror(errno), 1);
-		return;
+		return ;
 	}
 	if (!*varenv_lst)
 		*varenv_lst = new_node;

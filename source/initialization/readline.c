@@ -6,40 +6,39 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:41:57 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/22 11:31:56 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/22 11:40:32 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
 
-
-char *read_user_input(t_data *data)
+char	*read_user_input(t_data *data)
 {
-    char *input;
-    int new_stdin;
+	char	*input;
+	int		new_stdin;
 
-    ft_init_signal_handlers();
-    if (isatty(STDIN_FILENO) == 0) // Évite d'afficher un prompt après un heredoc
-    {
-        new_stdin = open("/dev/tty", O_RDONLY);
-        if (new_stdin == -1)
-            exit_with_error(data, "STDIN", "Erreur réouverture", 1);
-        if (dup2(new_stdin, STDIN_FILENO) == -1)
-        {
-            close(new_stdin);
-            exit_with_error(data, "dup2", "Erreur de duplication", 1);
-        }
-        close(new_stdin);
-    }
-    input = readline("minishell$ ");
-    if (!input)
-    {
-        clear_history();
-        exit_error_rdl(data, "readline", "Error reading input", 1);
-    }
-    if (*input)
-        add_history(input);
-    return input;
+	ft_init_signal_handlers();
+	if (isatty(STDIN_FILENO) == 0)
+	{
+		new_stdin = open("/dev/tty", O_RDONLY);
+		if (new_stdin == -1)
+			exit_with_error(data, "STDIN", "Erreur réouverture", 1);
+		if (dup2(new_stdin, STDIN_FILENO) == -1)
+		{
+			close(new_stdin);
+			exit_with_error(data, "dup2", "Erreur de duplication", 1);
+		}
+		close(new_stdin);
+	}
+	input = readline("minishell$ ");
+	if (!input)
+	{
+		clear_history();
+		exit_error_rdl(data, "readline", "Error reading input", 1);
+	}
+	if (*input)
+		add_history(input);
+	return (input);
 }
 
 void	ft_start_minishell(t_data *data)

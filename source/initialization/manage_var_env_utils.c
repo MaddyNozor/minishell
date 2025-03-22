@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_var_env_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:13:45 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 11:07:31 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/22 11:38:50 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,10 @@ void	free_varenv(t_varenv *varenv_lst)
 {
 	t_varenv	*current;
 	t_varenv	*next;
-	
+
 	current = varenv_lst;
 	while (current)
 	{	
-		// printf("free: %s=%s\n", current->name, current->value);
 		next = current->next;
 		free(current->name);
 		free(current->value);
@@ -66,4 +65,18 @@ void	free_envp_on_error(char **envp, int i)
 	while (i > 0)
 		free(envp[--i]);
 	free(envp);
+}
+
+int	count_env_vars(t_varenv *varenv_lst)
+{
+	int	count;
+
+	count = 0;
+	while (varenv_lst)
+	{
+		if (!varenv_lst->hiden)
+			count++;
+		varenv_lst = varenv_lst->next;
+	}
+	return (count);
 }

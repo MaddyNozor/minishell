@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 19:28:31 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/22 11:06:02 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/22 11:35:32 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	sig_int_handler(sig_atomic_t g_sig_caught)
 	rl_redisplay();
 }
 
+// manage SIGINT in fork (ctrl +c)
 void	sig_int_handler_fork(sig_atomic_t g_sig_caught)
 {
 	g_sig_caught = SIGINT;
@@ -51,4 +52,3 @@ static void	sig_int_handler(int signo)
     rl_redisplay();
 }
 */
-
