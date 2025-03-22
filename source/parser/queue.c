@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:42:31 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/22 11:59:19 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/22 13:34:16 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,25 +49,58 @@ t_queue	*init_queue(t_data *data)
 	return (queue);
 }
 
+// bool	enqueue_token(t_queue *queue, char *content, t_data *data)
+// {
+// 	t_node	*new_node;
+
+// 	new_node = malloc(sizeof(t_node));
+// 	if (!new_node)
+// 	{
+// 		printf("bash: allocation error\n");
+// 		data->lst_exit = 1;
+// 		return (false);
+// 	}
+// 	new_node->content = ft_strdup(content);
+// 	if (!new_node->content)
+// 	{
+// 		printf("bash: allocation error\n");
+// 		data->lst_exit = 1;
+// 		free(new_node);
+// 		return (false);
+// 	}
+// 	new_node->next = NULL;
+// 	if (!queue->head)
+// 		queue->head = new_node;
+// 	else
+// 		queue->tail->next = new_node;
+// 	queue->tail = new_node;
+// 	return (true);
+// }
+
 bool	enqueue_token(t_queue *queue, char *content, t_data *data)
 {
 	t_node	*new_node;
+	char	*to_store;
 
+	if (!content)
+		to_store = ft_strdup("");
+	else
+		to_store = ft_strdup(content);
+	if (!to_store)
+	{
+		printf("bash: allocation error\n");
+		data->lst_exit = 1;
+		return (false);
+	}
 	new_node = malloc(sizeof(t_node));
 	if (!new_node)
 	{
 		printf("bash: allocation error\n");
 		data->lst_exit = 1;
+		free(to_store);
 		return (false);
 	}
-	new_node->content = ft_strdup(content);
-	if (!new_node->content)
-	{
-		printf("bash: allocation error\n");
-		data->lst_exit = 1;
-		free(new_node);
-		return (false);
-	}
+	new_node->content = to_store;
 	new_node->next = NULL;
 	if (!queue->head)
 		queue->head = new_node;
@@ -76,6 +109,7 @@ bool	enqueue_token(t_queue *queue, char *content, t_data *data)
 	queue->tail = new_node;
 	return (true);
 }
+
 
 static void	copy_and_free_node(t_node **tmp, char **argv, int *count)
 {
