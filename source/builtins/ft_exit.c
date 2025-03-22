@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 12:24:58 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/22 11:10:24 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/22 15:14:00 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,14 @@ void	ft_exit(t_cmd *cmd, t_data *data)
 	{
 		printf("bash: exit: %s: numeric argument required\n", cmd->argv[1]);
 		update_exit_status(data, 2);
+		ft_free_all(data);
 		exit(2);
 	}
 	if (cmd->argv[1] && cmd->argv[2])
 	{
 		printf("bash: exit: too many arguments\n");
 		data->lst_exit = 1;
-		update_exit_status(data, 1);
-		return ;
+		return (update_exit_status(data, 1));
 	}
 	exit_code = 0;
 	if (data && data->lst_exit >= 0 && data->lst_exit <= 255)

@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/22 12:44:55 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/22 15:13:33 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_token	*lexer(t_data *data, char *line)
 		{
 			new_token = create_token(line, i, new_token);
 			if (new_token == NULL)
-				return (ft_printf("bash: Cannot allocate memory\n"), NULL);
+				return (NULL);
 			ft_tokadd_back(&head_of_list, new_token);
 			i += ft_strlen(new_token->content) - (new_token->quote_added * 2);
 		}
