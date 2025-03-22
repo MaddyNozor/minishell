@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/22 11:16:02 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/22 12:04:50 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,12 +256,22 @@ void						execute_external_cmd(t_cmd *cmd, t_data *data);
 void						executer_pipeline_cmd(t_cmd *cmd_lst, t_data *data);
 void	setup_pipe(t_data *data, int pipe_fd[2]);
 void	cleanup_pipeline(t_data *data, t_cmd *cmd_lst);
-
+void	reset_pipe_fd(int pipe_fd[2]);
+void	finalize_pipeline_execution(t_cmd *cmd_lst, t_data *data,
+	int pipe_in);
+void	create_output_files(t_redirection *redirection, t_data *data);
+bool	check_input_existence(t_redirection *redirection, t_data *data);
+void	close_pipe_fds(int pipe_fd[2]);
+bool	handle_missing_input(t_cmd *cmd, t_data *data);
+pid_t	create_forked_process(t_data *data, int pipe_fd[2]);
+void	wait_for_pipeline_process(pid_t pid, t_data *data, bool is_last);
 
 // EXECUTER - COMMAND PATH
 char						*find_cmd_path(const char *cmd, t_varenv *varenv_lst, t_data *data);
 int							count_env_vars(t_varenv *varenv_lst);
 void						free_tab(char **tab);
+char	*check_direct_path(const char *cmd, t_varenv *varenv_lst);
+char	*get_env_value(t_varenv *varenv_lst, const char *key);
 
 // BUILT-IN COMMANDS
 int	ft_echo(t_cmd *cmd, t_data *data);
@@ -300,7 +310,7 @@ t_cmd	*init_cmd_structs(t_data *data);
 // PARSER - TOKEN_PIPE
 void	handle_token_pipe(t_cmd **current_cmd, t_queue *queue);
 // PARSER - TOKEN_VAR_ENV
-void						handle_var_env(t_token *tok, t_queue *queue,
+void						hvar(t_token *tok, t_queue *queue,
 								t_cmd *current_cmd, t_varenv *varenv);
 void						replace_var(t_token *tok, char *new_content);
 bool						ft_var_exists(char *var_name, t_varenv *varenv);

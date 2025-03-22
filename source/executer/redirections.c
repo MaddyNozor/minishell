@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 16:10:03 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 15:14:04 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/22 11:56:56 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,13 @@ static void	process_redirections(t_redirection *redirection,
 			if (state->input_fd == -1)
 			{
 				handle_input_error(redirection, &state->output_created);
-				printf("bash: %s: No such file or directory\n", current->file_name);
-				// update_exit_status(data->varenv_lst, 1);
+				printf("bash: %s: No such file or directory\n",
+					current->file_name);
 				update_exit_status(data, 1);
 				state->input_fd = -1;
 				state->output_created = false;
 				return ;
-			}
+			}			
 			close(state->input_fd);
 		}
 		else if (current->type == HEREDOC)
@@ -84,7 +84,7 @@ void	apply_redirections(t_redirection *redirection, t_data *data)
 {
 	t_redir_state	state;
 	int				heredoc_fd;
-	t_redirection	*fake;
+	t_redirection	*temp_input;
 
 	state.last_output_fd = -1;
 	state.input_fd = -1;
@@ -92,7 +92,7 @@ void	apply_redirections(t_redirection *redirection, t_data *data)
 	state.input_redir_found = true;
 	state.output_created = false;
 	process_redirections(redirection, &state, data);
-	handle_input_redirection(redirection, &state.input_fd, &fake, 
+	handle_input_redirection(redirection, &state.input_fd, &temp_input,
 		&state.input_redir_found);
 	heredoc_fd = -1;
 	if (state.last_heredoc)

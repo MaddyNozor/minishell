@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_var_env.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:18:44 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 15:23:40 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/22 12:03:08 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,13 @@ void	replace_var(t_token *tok, char *new_content)
 		tok->content = ft_strdup(new_content);
 }
 
-void	handle_var_env(t_token *tok, t_queue *queue, t_cmd *current_cmd, t_varenv *varenv)
+void	hvar(t_token *tok, t_queue *queue, t_cmd *current_cmd, t_varenv *varenv)
 {
 	char	*expanded_value;
 	char	*var_name;
 	t_data	*data;
 
-	data = current_cmd->data; 
+	data = current_cmd->data;
 	expanded_value = NULL;
 	if (tok->content[0] == '$')
 		var_name = tok->content + 1;
@@ -66,10 +66,9 @@ void	handle_var_env(t_token *tok, t_queue *queue, t_cmd *current_cmd, t_varenv *
 		if (expanded_value)
 		{
 			enqueue_token(queue, expanded_value, data);
-			current_cmd->argc++; 
+			current_cmd->argc++;
 			free(expanded_value);
 		}
 	}
 	tok->type = WORD;
 }
-

@@ -3,40 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_loop.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:24:19 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/22 11:33:09 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/22 12:02:28 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
 
-t_cmd	*init_cmd_structs(t_data *data)
-{
-	t_cmd	*cmd;
-
-	cmd = malloc(sizeof(t_cmd));
-	if (!cmd)
-	{
-		printf("bash: allocation error\n");
-		data->lst_exit = 1;
-		return (NULL);
-	}
-	cmd->value = NULL;
-	cmd->argv = NULL;
-	cmd->argc = 0;
-	cmd->pid = 0;
-	cmd->redirection = NULL;
-	cmd->next = NULL;
-	cmd->data = data;
-	return (cmd);
-}
-
 void	handle_var_env_token(t_token **tok, t_queue *queue, t_cmd *current_cmd,
 		t_varenv *varenv_lst)
 {
-	handle_var_env(*tok, queue, current_cmd, varenv_lst);
+	hvar(*tok, queue, current_cmd, varenv_lst);
 	if ((*tok)->next && (*tok)->next->type == WORD)
 	{
 		*tok = (*tok)->next;
@@ -54,7 +33,7 @@ void	handle_token_type(t_token **tok, t_cmd **current_cmd, t_queue *queue,
 	else if ((*tok)->type == WORD)
 		handle_token_word(queue, tok, *current_cmd);
 	else if ((*tok)->type == REDIRECT_IN || (*tok)->type == REDIRECT_OUT
-			|| (*tok)->type == APPEND_OUT || (*tok)->type == HEREDOC)
+		|| (*tok)->type == APPEND_OUT || (*tok)->type == HEREDOC)
 	{
 		handle_redirections(*tok, current_cmd, varenv_lst);
 		*tok = (*tok)->next;
@@ -90,7 +69,6 @@ void	handle_tokens(t_token *tok, t_cmd **cmd_list, t_varenv *varenv_lst,
 	process_tokens(&tok, &current_cmd, queue, varenv_lst);
 	transfer_queue_to_argv(queue, current_cmd);
 	free_queue(queue);
-	// free(queue);
 }
 
 t_cmd	*parser(t_token *tok, t_varenv *varenv_lst, t_data *data)

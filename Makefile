@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+         #
+#    By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/10 15:29:24 by mairivie          #+#    #+#              #
-#    Updated: 2025/03/21 14:49:23 by mairivie         ###   ########.fr        #
+#    Updated: 2025/03/22 12:05:29 by sabellil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,13 +25,14 @@ SRC_LIST =  main.c \
 			builtins/ft_export.c \
             builtins/ft_export_utils.c \
             builtins/ft_unset.c \
-            end_minishell/end1.c \
+            executer/exec_pipeline_cmd_utils.c \
             executer/exec_pipeline_cmd.c \
             executer/exec_simple_builtin.c \
             executer/exec_simple_extern.c \
             executer/executer.c \
             executer/exit_and_free.c \
             executer/get_cmd_path.c \
+            executer/get_cmd_path_utils.c \
             executer/handle_redirections.c \
             executer/handle_redirections2.c \
             executer/heredoc_handler.c \
