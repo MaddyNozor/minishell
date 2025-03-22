@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   quote_two.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/11 14:15:16 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/22 15:07:09 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/init_shell.h"
 
-char	*ft_varenv_manager(char *string, t_varenv *lst)
+char	*ft_varenv_manager(char *string, t_quote_ctx ctx)
 {
 	t_list	*stock_list;
 	char	*new_content;
@@ -21,31 +21,41 @@ char	*ft_varenv_manager(char *string, t_varenv *lst)
 
 	stock_list = NULL;
 	i = 0;
+	ctx.i = &i;
 	while (string[i])
 	{
-		slice = ft_varenv_slicing(string, &i, lst);
+		slice = ft_varenv_slicing(string, ctx);
+		if (!slice)
+		{
+			ctx.data->lst_exit = 1;
+			update_exit_status(ctx.data, 1);
+			ft_lstclear(&stock_list, free);
+			free(string);
+			return (NULL);
+		}
 		ft_stock_the_slice(&stock_list, slice);
 	}
 	new_content = ft_glue_the_slices_again(stock_list);
 	ft_lstclear(&stock_list, free);
-	stock_list = NULL;
 	free(string);
 	return (new_content);
 }
 
-char	*ft_varenv_slicing(char *content, int *i, t_varenv *lst)
+char	*ft_varenv_slicing(char *content, t_quote_ctx ctx)
 {
 	char	*slice;
 
 	slice = NULL;
-	if (content[*i] == '$')
+	if (content[*ctx.i] == '$')
 	{
-		slice = ft_cut_varenv(content, i);
-		slice = ft_expand_varenv(slice, lst);
+		slice = ft_cut_varenv(content, ctx.i);
+		if (!slice)
+			return (NULL);
+		slice = ft_expand_varenv(slice, ctx);
 	}
 	else
-		slice = ft_cut_normal_text_but_varenv(content, i);
-	if (slice == NULL)
+		slice = ft_cut_normal_text_but_varenv(content, ctx.i);
+	if (!slice)
 		return (NULL);
 	return (slice);
 }

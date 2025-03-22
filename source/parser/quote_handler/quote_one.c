@@ -3,22 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   quote_one.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/18 18:07:18 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/22 15:34:34 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/init_shell.h"
 
-// Vire uniquement les quotes en debut et fin de token.
-// Pour les token multiquotes c'est pqs qdqpté.
+static void	cpy_trim_ctn(char *dst, const char *src, size_t start, size_t end)
+{
+	size_t	i;
+
+	i = 0;
+	while (end > (start + i))
+	{
+		dst[i] = src[start + i];
+		i++;
+	}
+	dst[i] = '\0';
+}
+
 char	*ft_trim_quote(char const *s1, char const q)
 {
 	size_t	start;
 	size_t	end;
-	size_t	i;
 	char	*new_s;
 
 	if (s1 == NULL || !q)
@@ -27,18 +37,14 @@ char	*ft_trim_quote(char const *s1, char const q)
 	if (s1[start] && s1[start] == q)
 		start++;
 	end = ft_strlen(s1);
-	if (s1[end - 1] == q)
+	if (end > 0 && s1[end - 1] == q)
 		end--;
-	new_s = malloc(((end - start) + 2) * sizeof(char));
-	if (new_s == 0)
-		return (0);
-	i = 0;
-	while (end > (start + i))
-	{
-		new_s[i] = s1[start + i];
-		i++;
-	}
-	new_s[i] = '\0';
+	if (end < start)
+		end = start;
+	new_s = malloc(((end - start) + 1) * sizeof(char));
+	if (new_s == NULL)
+		return (NULL);
+	cpy_trim_ctn(new_s, s1, start, end);
 	return (new_s);
 }
 
@@ -65,28 +71,74 @@ char	*ft_cut_normal_text(char *content, int *i, char quote_type)
 	return (slice);
 }
 
-char	*ft_cut_quoted_text(char *content, int *i, t_varenv *lst, bool prev_hd)
+char	*ft_cut_quoted_text(char *content, t_quote_ctx ctx)
 {
 	char	quote;
 	int		start;
 	char	*slice;
 	char	*tmp;
 
-	quote = content[*i];
-	start = *i;
-	slice = NULL;
-	tmp = NULL;
-	(*i)++;
-	while (content[*i] && content[*i] != quote)
-		(*i)++;
-	slice = ft_substr(content, start + 1, *i - start);
+	quote = content[*ctx.i];
+	start = *ctx.i;
+	(*ctx.i)++;
+	while (content[*ctx.i] && content[*ctx.i] != quote)
+		(*ctx.i)++;
+	slice = ft_substr(content, start + 1, *ctx.i - start);
+	if (!slice)
+		return (return_null_and_set_exit(ctx.data, 1));
+	if (quote == '"' && ctx.prev_hd == false)
+		slice = expand_and_check(slice, ctx);
 	if (!slice)
 		return (NULL);
-	if (quote == '"' && prev_hd == false)
-		slice = ft_varenv_manager(slice, lst);
 	tmp = ft_trim_quote(slice, quote);
 	free(slice);
+	if (!tmp)
+		return (return_null_and_set_exit(ctx.data, 1));
 	slice = tmp;
-	(*i)++;
+	(*ctx.i)++;
 	return (slice);
 }
+
+// char	*ft_cut_quoted_text(char *content, t_quote_ctx ctx)
+// {
+// 	char	quote;
+// 	int		start;
+// 	char	*slice;
+// 	char	*tmp;
+
+// 	quote = content[*ctx.i];
+// 	start = *ctx.i;
+// 	slice = NULL;
+// 	tmp = NULL;
+// 	(*ctx.i)++;
+// 	while (content[*ctx.i] && content[*ctx.i] != quote)
+// 		(*ctx.i)++;
+// 	slice = ft_substr(content, start + 1, *ctx.i - start);
+// 	if (!slice)
+// 	{
+// 		ctx.data->lst_exit = 1;
+// 		update_exit_status(ctx.data, 1);
+// 		return (NULL);
+// 	}
+// 	if (quote == '"' && ctx.prev_hd == false)
+// 	{
+// 		slice = ft_varenv_manager(slice, ctx);
+// 		if (!slice)
+// 		{
+// 			ctx.data->lst_exit = 1;
+// 			update_exit_status(ctx.data, 1);
+// 			return (NULL);
+// 		}
+// 	}
+// 	tmp = ft_trim_quote(slice, quote);
+// 	free(slice);
+// 	if (!tmp)
+// 	{
+// 		ctx.data->lst_exit = 1;
+// 		update_exit_status(ctx.data, 1);
+// 		return (NULL);
+// 	}
+// 	slice = tmp;
+// 	(*ctx.i)++;
+// 	return (slice);
+// }

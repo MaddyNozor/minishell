@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/22 13:23:59 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/22 15:28:56 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void	ft_tokadd_back(t_token **lst, t_token *new)
 	}
 	return ;
 }
+
 t_token	*init_type_token_with_x_char_of_line(t_data *data, t_tok_params p)
 {
 	t_token	*new_token;
@@ -91,7 +92,6 @@ t_token	*init_type_token_with_x_char_of_line(t_data *data, t_tok_params p)
 	}
 	return (new_token);
 }
-
 
 void	free_token_list(t_token **list)
 {

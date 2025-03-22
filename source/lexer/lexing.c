@@ -3,41 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   lexing.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/22 15:20:19 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/22 15:38:28 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/init_shell.h"
-
-// t_token	*lexer(char *line)
-// {
-// 	int		i;
-// 	t_token	*head_of_list;
-// 	t_token	*new_token;
-
-// 	i = 0;
-// 	new_token = NULL;
-// 	head_of_list = NULL;
-// 	while (line[i])
-// 	{
-// 		if (ft_is_whitespace(line[i]) == true)
-// 			i++;
-// 		else
-// 		{
-// 			new_token = create_token(line, i, new_token);
-// 			if (new_token == NULL)
-// 				return (ft_printf("bash: Cannot allocate memory\n"), NULL);
-// 			ft_tokadd_back(&head_of_list, new_token);
-// 			i += ft_strlen(new_token->content) - (new_token->quote_added * 2);
-// 		}
-// 	}
-// 	if (check_lexing(head_of_list) == FAILURE)
-// 		(ft_printf("Syntax error \n"), head_of_list = NULL);
-// 	return (head_of_list);
-// }
 
 t_token	*return_malloc_error(t_data *data)
 {
@@ -54,32 +27,40 @@ void	handle_lexer_syntax_error(t_data *data)
 	update_exit_status(data, 2);
 }
 
+t_token	*check_lexer_and_cleanup(t_data *data, t_token **head)
+{
+	if (check_lexing(data, *head) == FAILURE)
+	{
+		handle_lexer_syntax_error(data);
+		free_token_list(head);
+		return (NULL);
+	}
+	return (*head);
+}
+
 t_token	*lexer(t_data *data, char *line)
 {
 	int		i;
-	t_token	*head_of_list;
+	t_token	*head;
 	t_token	*new_token;
 
 	i = 0;
-	new_token = NULL;
-	head_of_list = NULL;
+	head = NULL;
 	while (line[i])
 	{
-		if (ft_is_whitespace(line[i]) == true)
+		if (ft_is_whitespace(line[i]))
 			i++;
 		else
 		{
-			new_token = create_token(data, line, i, new_token);
-			if (new_token == NULL)
+			new_token = create_token(data, line, i, NULL);
+			if (!new_token)
+			{
+				free_token_list(&head);
 				return (return_malloc_error(data));
-			ft_tokadd_back(&head_of_list, new_token);
+			}
+			ft_tokadd_back(&head, new_token);
 			i += new_token->nb_chars_read;
 		}
 	}
-	if (check_lexing(data, head_of_list) == FAILURE)
-	{
-		handle_lexer_syntax_error(data);
-		head_of_list = NULL;
-	}
-	return (head_of_list);
+	return (check_lexer_and_cleanup(data, &head));
 }

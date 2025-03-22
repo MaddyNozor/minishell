@@ -6,7 +6,7 @@
 /*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:50:26 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/22 13:27:49 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/22 15:33:15 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,12 +76,13 @@ typedef struct s_token
 	int						nb_chars_read;
 }							t_token;
 
-typedef struct s_quote_ctx
+typedef struct s_quote_pair_ctx
 {
-	int						*len;
-	int						*nb_pair_quote;
-	int						i;
-}	t_quote_ctx;
+	int		*len;
+	int		*nb_pair_quote;
+	int		i;
+}	t_quote_pair_ctx;
+
 
 typedef struct s_tok_params
 {
@@ -90,7 +91,6 @@ typedef struct s_tok_params
 	char	*line;
 	int		i;
 }	t_tok_params;
-
 
 typedef struct s_cmd
 {
@@ -111,6 +111,16 @@ typedef struct s_data
 	char					*secret_path;
 	int						lst_exit;
 }							t_data;
+
+
+typedef struct s_quote_ctx
+{
+	int		*i;
+	t_varenv *lst;
+	bool	prev_hd;
+	t_data	*data;
+}	t_quote_ctx;
+
 
 typedef struct s_node
 {
@@ -184,6 +194,9 @@ t_token		*ft_tok_new(void *content, int type);
 t_token		*ft_toklast(t_token *lst);
 void		ft_tokadd_back(t_token **lst, t_token *new);
 t_token		*init_type_token_with_x_char_of_line(t_data *data, t_tok_params p);
+int			compute_word_len(t_data *data, char *line, int i, int *nb_pair_quote);
+t_token		*free_token(t_token *tok);
+char		*sub_ft_type_word(t_data *data, char *line, t_quote_pair_ctx ctx);
 
 // id_and_create_token
 int			ft_type_detector(char *line, int i);
@@ -200,19 +213,22 @@ int			check_lexing(t_data *data, t_token *head_of_list);
 char		*ft_trim_quote(char const *s1, char const q);
 char		*ft_glue_the_slices_again(t_list *list_slice);
 char		*ft_cut_normal_text(char *content, int *i, char quote_type);
-char		*ft_cut_quoted_text(char *content, int *i,
-				t_varenv *lst, bool prev_hd);
-char		*ft_cut_a_slice(char *content, int *i, t_varenv *lst,
-				bool prev_hd);
+char		*ft_cut_quoted_text(char *content, t_quote_ctx ctx);
+char		*ft_cut_a_slice(char *content, t_quote_ctx ctx);
+
 void		ft_stock_the_slice(t_list **stock_list, char *slice);
-char		*ft_quote_manager(char *actual_content, t_varenv *lst,
+char		*ft_quote_manager(t_data *data, char *actual_content, t_varenv *lst,
 				bool prev_hd);
 t_token		*ft_spot_the_quotes(t_data *data);
-char		*ft_varenv_manager(char *string, t_varenv *lst);
-char		*ft_varenv_slicing(char *content, int *i, t_varenv *lst);
+char		*ft_varenv_manager(char *string, t_quote_ctx ctx);
+char		*ft_varenv_slicing(char *content, t_quote_ctx ctx);
 char		*ft_cut_varenv(char *content, int *i);
 char		*ft_cut_normal_text_but_varenv(char *content, int *i);
-char		*ft_expand_varenv(char *var_found, t_varenv *varenv);
+char		*ft_expand_varenv(char *var_found, t_quote_ctx ctx);
+char		*handle_quote_error(t_data *data, t_list **stock_list);
+char		*return_null_and_set_exit(t_data *data, int code);
+char		*expand_and_check(char *slice, t_quote_ctx ctx);
+
 
 // EXECUTER
 void		executer(t_data *data);

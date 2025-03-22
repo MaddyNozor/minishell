@@ -3,34 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   quote_manager.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:41:25 by mairivie          #+#    #+#             */
-/*   Updated: 2025/03/20 18:33:27 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/22 15:30:52 by sabellil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/init_shell.h"
 
-char	*ft_cut_a_slice(char *content, int *i, t_varenv *lst, bool prev_hd)
+char	*ft_cut_a_slice(char *content, t_quote_ctx ctx)
 {
 	char	*slice;
 	char	quote_type;
 
 	slice = NULL;
 	quote_type = BLANK;
-	if (content[*i] == '\'' || content[*i] == '"')
-	{
-		quote_type = content[*i];
-		slice = ft_cut_quoted_text(content, i, lst, prev_hd);
-	}
+	if (content[*ctx.i] == '\'' || content[*ctx.i] == '"')
+		slice = ft_cut_quoted_text(content, ctx);
 	else
 	{
-		slice = ft_cut_normal_text(content, i, quote_type);
-		slice = ft_varenv_manager(slice, lst);
+		slice = ft_cut_normal_text(content, ctx.i, quote_type);
+		slice = ft_varenv_manager(slice, ctx);
 	}
 	if (slice == NULL)
-		return (NULL);
+	{
+		ctx.data->lst_exit = 1;
+		update_exit_status(ctx.data, 1);
+	}
 	return (slice);
 }
 
@@ -76,20 +76,26 @@ char	*ft_glue_the_slices_again(t_list *list_slice)
 	return (new_content);
 }
 
-char	*ft_quote_manager(char *actual_content, t_varenv *lst, bool prev_hd)
+char	*ft_quote_manager(t_data *data, char *actual_content, t_varenv *lst,
+		bool prev_hd)
 {
-	t_list	*stock_list;
-	char	*new_content;
-	char	*slice;
-	int		i;
+	t_list		*stock_list;
+	char		*new_content;
+	char		*slice;
+	int			i;
+	t_quote_ctx	ctx;
 
 	stock_list = NULL;
 	i = 0;
+	ctx.i = &i;
+	ctx.lst = lst;
+	ctx.prev_hd = prev_hd;
+	ctx.data = data;
 	while (actual_content[i])
 	{
-		slice = ft_cut_a_slice(actual_content, &i, lst, prev_hd);
+		slice = ft_cut_a_slice(actual_content, ctx);
 		if (slice == NULL)
-			return (NULL);
+			return (handle_quote_error(data, &stock_list));
 		ft_stock_the_slice(&stock_list, slice);
 	}
 	new_content = ft_glue_the_slices_again(stock_list);
@@ -115,8 +121,10 @@ t_token	*ft_spot_the_quotes(t_data *data)
 			{
 				if (cur_token->prev && cur_token->prev->type == HEREDOC)
 					prev_is_heredoc = true;
-				cur_token->content = ft_quote_manager(cur_token->content,
+				cur_token->content = ft_quote_manager(data, cur_token->content,
 						data->varenv_lst, prev_is_heredoc);
+				if (!cur_token->content)
+					return (NULL);
 			}
 		}
 		cur_token = cur_token->next;

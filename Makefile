@@ -6,7 +6,7 @@
 #    By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/10 15:29:24 by mairivie          #+#    #+#              #
-#    Updated: 2025/03/22 12:05:29 by sabellil         ###   ########.fr        #
+#    Updated: 2025/03/22 15:22:12 by sabellil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,6 +51,7 @@ SRC_LIST =  main.c \
             lexer/lex_utils_type_char_detector.c \
             lexer/lexing_checker.c \
             lexer/lexing.c \
+            lexer/lexer_utils.c \
             parser/parsing_loop.c \
             parser/queue.c \
             parser/token_pipe.c \
