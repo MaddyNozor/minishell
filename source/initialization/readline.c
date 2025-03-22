@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 13:41:57 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 20:23:21 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/22 11:31:56 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,11 @@ void	ft_start_minishell(t_data *data)
 		free(input);
 		if (!data->tok_lst)
 			continue ;
-
 		data->tok_lst = ft_spot_the_quotes(data);
 		data->cmd_lst = parser(data->tok_lst, data->varenv_lst, data);
 		if (data->cmd_lst)
 		{
 			executer(data);
-			// update_exit_status(data->varenv_lst, data->lst_exit);
 			update_exit_status(data, data->lst_exit);
 			free_cmd_list(data->cmd_lst);
 			data->cmd_lst = NULL;
@@ -72,5 +70,3 @@ void	ft_start_minishell(t_data *data)
 		free_token_list(&data->tok_lst);
 	}
 }
-
-

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   end1.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabellil <sabellil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 18:30:39 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/22 11:11:53 by sabellil         ###   ########.fr       */
+/*   Updated: 2025/03/22 11:29:31 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,9 @@
 
 void	ft_free_all(t_data *data)
 {
-	
 	rl_clear_history();
 	if (!data)
-		return;
+		return ;
 	if (data->varenv_lst)
 		free_varenv(data->varenv_lst);
 	if (data->cmd_lst)

@@ -6,7 +6,7 @@
 /*   By: mairivie <mairivie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 14:00:05 by sabellil          #+#    #+#             */
-/*   Updated: 2025/03/21 20:13:18 by mairivie         ###   ########.fr       */
+/*   Updated: 2025/03/22 11:28:14 by mairivie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,7 @@ void	init_existing_env(t_varenv **varenv_lst, char **envp, t_data *data)
 	}
 	if (!get_env_value(*varenv_lst, "PATH"))
 		create_varenv(NULL, varenv_lst, (t_varenv_data){"PATH", "/usr/bin:/bin", false});
-	create_varenv(NULL, varenv_lst, (t_varenv_data){"?", "0", false});//Est-ce qu'on a tjr besoin de cette ligne ? 
-	//Genre est-ce qu'on utilise encore $? ou juste le int dans data ?
+	create_varenv(NULL, varenv_lst, (t_varenv_data){"?", "0", false});
 	}
 
 void	init_minimalist_env(t_varenv **varenv_lst, t_data *data)
@@ -67,9 +66,9 @@ t_varenv	*init_varenv(char **envp, t_data *data)
 	{
 		printf("Ce minishell ne supporte pas un environnement absent \n");
 		return (NULL);
-		//init_minimalist_env(&varenv_lst, data);
 	}
 	else
-		init_existing_env(&varenv_lst, envp, data);
+	init_existing_env(&varenv_lst, envp, data);
 	return (varenv_lst);
 }
+//init_minimalist_env(&varenv_lst, data);
